@@ -16,8 +16,14 @@ export function Section({ id, eyebrow, title, children, className = "" }: Props)
     <section
       id={id}
       aria-labelledby={`${id}-title`}
-      className={`border-line border-t py-[clamp(64px,12vw,160px)] ${className}`}
+      className={`border-line relative overflow-x-clip border-t py-[clamp(64px,12vw,160px)] ${className}`}
     >
+      <span
+        aria-hidden="true"
+        className="text-outline font-display pointer-events-none absolute top-6 right-[var(--gutter)] hidden text-[clamp(8rem,22vw,20rem)] leading-none font-semibold tracking-tighter opacity-60 select-none md:block"
+      >
+        {eyebrow.match(/^d+/)?.[0]}
+      </span>
       <RevealScope className="mx-auto max-w-[1280px] px-[var(--gutter)]">
         <Eyebrow className="mb-4">{eyebrow}</Eyebrow>
         <SplitHeading

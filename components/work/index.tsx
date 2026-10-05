@@ -7,7 +7,17 @@ import { Gallery } from "./gallery";
 
 export function Work() {
   return (
-    <section id="work" aria-labelledby="work-title" className="border-line border-t">
+    <section
+      id="work"
+      aria-labelledby="work-title"
+      className="border-line relative overflow-x-clip border-t"
+    >
+      <span
+        aria-hidden="true"
+        className="text-outline font-display pointer-events-none absolute top-6 right-[var(--gutter)] hidden text-[clamp(8rem,22vw,20rem)] leading-none font-semibold tracking-tighter opacity-60 select-none md:block"
+      >
+        01
+      </span>
       <RevealScope className="mx-auto max-w-[1280px] px-[var(--gutter)] pt-[clamp(64px,12vw,160px)] pb-[clamp(40px,6vw,80px)]">
         <Eyebrow className="mb-4">01 / Work</Eyebrow>
         <SplitHeading
