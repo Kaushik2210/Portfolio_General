@@ -25,7 +25,7 @@ function Fallback() {
       <svg
         viewBox="0 0 100 100"
         preserveAspectRatio="xMidYMid slice"
-        className="fallback-drift absolute inset-0 size-full opacity-60"
+        className="absolute inset-0 size-full opacity-60"
       >
         <g stroke="var(--fg-muted)" strokeWidth="0.12" opacity="0.5">
           {NETWORK.edges.map(([a, b], i) => (
