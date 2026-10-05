@@ -20,6 +20,7 @@ work.
 - **Skills**: an interactive constellation (hover or focus a skill to light the projects that use it), with the same content as a plain accessible list.
 - **GitHub**: contribution heatmap, language share and recent activity from `data/github.json`, refreshed by `npm run sync`.
 - **Ask my portfolio**: streaming chat grounded in the data files, with a fit-check mode for pasting a job description. Falls back to data-derived answers when no API key is set.
+- **Motion layer**: a scroll-velocity marquee that speeds up, reverses and skews with your scroll; kinetic split-text headings; scramble-in section labels; 3D card tilt with a following glare; a gallery progress counter; hero depth parallax against the pointer; an ambient colour field that travels with scroll; contextual cursor labels. GSAP (ScrollTrigger, SplitText, ScrambleText, Flip) drives these, and anime.js drives the nav indicator that slides to the hovered or active section, click ripples, skill-chip waves on role change, and the drawn architecture connectors. Every one is skipped for reduced-motion, and pointer-driven ones for touch.
 - **Command palette** (`Ctrl/Cmd+K`), **terminal mode** (`~`), contact form (server action, Resend), dark/light theme, custom cursor, scroll progress, 404 page.
 
 ## Stack, and where it deviates from the brief
@@ -114,11 +115,11 @@ Measured with Lighthouse 12.6.1 against the production deployment, default simul
 
 | Page       | Preset  | Performance | Accessibility | Best practices | SEO |
 | ---------- | ------- | ----------- | ------------- | -------------- | --- |
-| Home       | Mobile  | 92, 91, 91  | 100           | 100            | 100 |
+| Home       | Mobile  | 95, 90, 89  | 100           | 100            | 100 |
 | Home       | Desktop | 97          | 100           | 100            | 100 |
-| Case study | Mobile  | 92          | 100           | 100            | 100 |
+| Case study | Mobile  | 91          | 100           | 100            | 100 |
 
-All three pages clear the targets (performance 90+, accessibility 95+, SEO 95+); desktop and case studies have headroom, the home page on mobile is the tightest at 91 to 92. Getting the home page there took several rounds, and what the investigation found is worth keeping:
+Measured again after the motion layer above was added. Desktop and case studies clear the targets (performance 90+, accessibility 95+, SEO 95+); mobile home sits right on the line (89 to 95 across runs); desktop and case studies have headroom, the home page on mobile is the tightest at 91 to 92. Getting the home page there took several rounds, and what the investigation found is worth keeping:
 
 - Under real CPU throttling, the dominant cost was one synchronous React hydration task. About 55% of the first-load DOM was decorative SVG (heatmap cells, tooltips, cover art), so those now mount only as they near the viewport. First-load DOM went from 2,065 to 838 nodes and mobile TBT in my 4x-CPU harness from about 2.0s to 0.4s. Lazily mounting the skills graph (never mounted on phones, where it is hidden) took the home page from 62-76 to 91-92.
 - Splitting sections into `<Suspense>` slices made production worse (TBT up to 1.7s), so it was reverted.
