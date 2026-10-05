@@ -1,9 +1,10 @@
 import { ViewTransition } from "react";
 import { About } from "@/components/about";
 import { Hero } from "@/components/hero";
+import { Skills } from "@/components/skills";
 import { Work } from "@/components/work";
 
-const PLACEHOLDERS = ["skills", "github", "contact"];
+const PLACEHOLDERS = ["github", "contact"];
 
 const slide = {
   enter: { "nav-forward": "nav-forward", "nav-back": "nav-back", default: "none" },
@@ -18,6 +19,7 @@ export default function Home() {
           <Hero />
           <Work />
           <About />
+          <Skills />
           {PLACEHOLDERS.map((id) => (
             <Placeholder key={id} id={id} />
           ))}
