@@ -107,3 +107,8 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* Set by the boot script when the intro already played this session. */
+html[data-intro-seen] .preloader {
+  display: none;
+}
