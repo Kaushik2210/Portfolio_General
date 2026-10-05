@@ -1,0 +1,269 @@
+[
+  {
+    "slug": "orbital-sentinel",
+    "title": "Orbital Sentinel",
+    "tagline": "Was that spacecraft anomaly a broken sensor, a solar storm, a failing bearing, or an attack?",
+    "weight": { "sde": 0.6, "data": 0.95, "ai": 0.9 },
+    "problem": "Spacecraft anomalies have look-alike causes. Stale data from a stuck sensor looks like a replay attack, radiation bit-flips look like injected glitches, and a vanished signal could be jamming. Telling them apart is the hard part, and a wrong call is expensive.",
+    "role": "TODO_VERIFY",
+    "approach": [
+      "Treat the spacecraft as a distributed system: ingest a telemetry stream and run a layered detection engine.",
+      "Classify each event into one of five outcomes: mechanical failure, environmental upset, sensor malfunction, cyberattack, or nothing.",
+      "Separate confusable cases with the right evidence: sequence counters and timestamps for replay, correlation with NASA DONKI space-weather events for glitches, link SNR/BER against frame rate for jamming.",
+      "When the evidence does not separate the hypotheses, say so and hand the case to a human instead of guessing."
+    ],
+    "stack": ["Python", "FastAPI", "PyTorch", "ONNX", "Next.js", "Railway"],
+    "outcome": "A demo-ready platform running on real NASA telemetry, with explainable attribution, AI-written incident reports and a public read-only demo.",
+    "metrics": [
+      { "label": "Outcome classes", "value": "5" },
+      { "label": "Data", "value": "Real NASA telemetry and DONKI space-weather events" },
+      { "label": "Detection accuracy", "value": "TODO_VERIFY" }
+    ],
+    "links": {
+      "repo": "https://github.com/Kaushik2210/ORBITAL-SENTINEL",
+      "demo": "https://web-production-ddd02.up.railway.app"
+    },
+    "visual": "TODO_SCREENSHOT",
+    "architecture": [
+      "Telemetry ingest",
+      "Layered detectors",
+      "Space-weather correlation",
+      "Attribution",
+      "Human review"
+    ]
+  },
+  {
+    "slug": "veriframe",
+    "title": "VeriFrame",
+    "tagline": "Deepfake detection that reports a calibrated probability and the evidence, never a bare verdict.",
+    "weight": { "sde": 0.6, "data": 0.55, "ai": 1 },
+    "problem": "Detectors degrade hard on generators they were not trained on, so a model with a strong benchmark score can be much weaker on real-world media. A tool that returns one word asks users to trust a black box.",
+    "role": "TODO_VERIFY",
+    "approach": [
+      "Return a calibrated probability with an explicit uncertainty band and a plain-language label, never a FAKE or REAL stamp.",
+      "Ship visual evidence with every number: a Grad-CAM heatmap, a per-frame timeline and a frequency-spectrum plot.",
+      "Keep one detection core behind three surfaces: a web app, a Chrome extension and a REST API.",
+      "Keep the band table in one file read by both the TypeScript and Python sides so thresholds cannot drift between API and UI."
+    ],
+    "stack": [
+      "Python",
+      "PyTorch",
+      "FastAPI",
+      "Next.js",
+      "TypeScript",
+      "Chrome extension"
+    ],
+    "outcome": "A single detection core exposed as a web app, Chrome extension and REST API, with CI and an MIT license.",
+    "metrics": [
+      { "label": "Surfaces", "value": "3 (web, extension, API)" },
+      { "label": "Benchmark results", "value": "TODO_VERIFY" }
+    ],
+    "links": { "repo": "https://github.com/Kaushik2210/Deepfake-Detector" },
+    "visual": "TODO_SCREENSHOT",
+    "architecture": [
+      "Media input",
+      "Detection core",
+      "Calibration and bands",
+      "Evidence (Grad-CAM, timeline, spectrum)",
+      "Web / Extension / API"
+    ]
+  },
+  {
+    "slug": "portcullis",
+    "title": "PORTCULLIS",
+    "tagline": "A prompt-injection detection gateway for LLM apps. Think WAF, but the payloads are natural language.",
+    "weight": { "sde": 0.65, "data": 0.55, "ai": 1 },
+    "problem": "LLM applications are exposed to adversarial prompts that target the model's instruction hierarchy, and most teams have no equivalent of a web application firewall in front of the model.",
+    "role": "TODO_VERIFY",
+    "approach": [
+      "Put a real-time gateway in front of the model that scores each request through a layered cascade: rule matching, a nearest-known-attack (kNN) sidecar and score fusion.",
+      "Expose three dashboard surfaces: live traffic, a decision inspector showing matched rules and per-layer fusion arithmetic, and a red-team console.",
+      "Evaluate against a roughly 20k-row test set through the deployed cascade and publish the unflattering findings alongside the headline table."
+    ],
+    "stack": ["Python", "Gateway + dashboard", "GitHub Actions CI"],
+    "outcome": "All 11 milestones complete, with an eval report that is candid about its limits: the regex-only baseline matches the full learned system at low false-positive rate, and full-cascade latency is over budget.",
+    "metrics": [
+      { "label": "Milestones", "value": "11 of 11" },
+      { "label": "Eval set", "value": "~20k rows" },
+      { "label": "Detection rate at fixed FPR", "value": "TODO_VERIFY" }
+    ],
+    "links": { "repo": "https://github.com/Kaushik2210/PORTCULLIS" },
+    "visual": "TODO_SCREENSHOT",
+    "architecture": [
+      "Request",
+      "L1 rules",
+      "kNN sidecar",
+      "Score fusion",
+      "Allow / flag / block"
+    ]
+  },
+  {
+    "slug": "attesta",
+    "title": "ATTESTA",
+    "tagline": "An autonomous SOC where every verdict is reproducible and re-adjudicable.",
+    "weight": { "sde": 0.85, "data": 0.35, "ai": 0.9 },
+    "problem": "Agentic SOC products let a language model read telemetry and write a verdict, so re-running the process after a model upgrade or new data gives a different answer. The audit trail is a transcript, not a proof.",
+    "role": "TODO_VERIFY",
+    "approach": [
+      "Split reasoning from deciding: an LLM only proposes typed, evidence-cited claims.",
+      "A pure Adjudication Kernel turns the admitted claims into a verdict under a versioned policy, so the same inputs give byte-identical output.",
+      "Content-address the evidence and pin it to epochs so a verdict can be re-derived months later.",
+      "Re-adjudicate old cases against new threat intelligence without re-running inference (Retro-Verdict Drift Detection)."
+    ],
+    "stack": ["TypeScript", "Multi-tenant platform", "LLM reasoning layer"],
+    "outcome": "Pre-release: built in gated phases where each phase has tests designed to fail if it is incomplete.",
+    "metrics": [
+      { "label": "Status", "value": "Pre-release" },
+      {
+        "label": "Design guarantee",
+        "value": "Byte-identical verdicts for identical inputs"
+      }
+    ],
+    "links": { "repo": "https://github.com/Kaushik2210/ATTESTA---AI-powered-SOC-" },
+    "visual": "TODO_SCREENSHOT",
+    "architecture": [
+      "Evidence corpus (content-addressed)",
+      "LLM claim proposals",
+      "Admission",
+      "Adjudication Kernel",
+      "Verdict and re-adjudication"
+    ]
+  },
+  {
+    "slug": "net-sentinel",
+    "title": "NetSentinel",
+    "tagline": "An explainable network digital twin for threat detection and attack reconstruction.",
+    "weight": { "sde": 0.5, "data": 0.85, "ai": 0.7 },
+    "problem": "Alert-centric tools say that something fired, but rarely why, what evidence supports it, or how activity evolved over time.",
+    "role": "TODO_VERIFY",
+    "approach": [
+      "Turn network telemetry into per-device behavioural baselines and transparent risk scores that list their contributing factors.",
+      "Correlate detections into attack chains mapped to MITRE ATT&CK, keeping rule hits, behavioural anomalies, ML anomalies and incidents distinct.",
+      "Consume telemetry from existing engines (Zeek, Suricata, PCAP, NetFlow, syslog) rather than replacing them.",
+      "Offer a no-login detection playground with generated scenarios and tunable thresholds."
+    ],
+    "stack": ["Python", "MITRE ATT&CK", "Zeek / Suricata inputs"],
+    "outcome": "An MCA research project with a public playground where visitors can tune detectors and see what is flagged and why.",
+    "metrics": [{ "label": "Detection results", "value": "TODO_VERIFY" }],
+    "links": { "repo": "https://github.com/Kaushik2210/Net-Sentinel" },
+    "visual": "TODO_SCREENSHOT"
+  },
+  {
+    "slug": "overrank",
+    "title": "Overrank",
+    "tagline": "A live house-competition platform for campuses with a leaderboard that reacts in real time.",
+    "weight": { "sde": 1, "data": 0.3, "ai": 0.1 },
+    "problem": "Campus house and team competitions are tracked in spreadsheets, so nobody can watch the standings move or trust how points were awarded.",
+    "role": "TODO_VERIFY",
+    "approach": [
+      "Make the leaderboard, team pages, player profiles and events public and read-only so students never need to sign in.",
+      "Restrict sign-in to faculty, who award points, run events and manage the roster.",
+      "Keep an append-only points ledger: mistakes are fixed with a compensating entry, never by rewriting history.",
+      "Enforce access in the database with Supabase Postgres row-level security."
+    ],
+    "stack": [
+      "Next.js 16",
+      "TypeScript (strict)",
+      "Supabase",
+      "Tailwind CSS",
+      "Framer Motion"
+    ],
+    "outcome": "Live in production with CI, a scroll-driven 3D landing page, and a season replay view.",
+    "metrics": [
+      { "label": "Status", "value": "Live" },
+      { "label": "Real-world usage", "value": "TODO_VERIFY" }
+    ],
+    "links": {
+      "repo": "https://github.com/Kaushik2210/Overrank",
+      "demo": "https://overrank.vercel.app"
+    },
+    "visual": "TODO_SCREENSHOT",
+    "architecture": [
+      "Faculty console",
+      "Append-only ledger (Postgres + RLS)",
+      "Realtime leaderboard",
+      "Public read-only site"
+    ]
+  },
+  {
+    "slug": "gitvisualise",
+    "title": "gitVisualise",
+    "tagline": "Paste a GitHub link, get an interactive, narrated architecture tour of the repo.",
+    "weight": { "sde": 0.95, "data": 0.3, "ai": 0.4 },
+    "problem": "Onboarding onto a codebase means reading a hundred files to learn what talks to what. Hand-drawn architecture diagrams go stale.",
+    "role": "TODO_VERIFY",
+    "approach": [
+      "Analyse a repository and generate an animated, click-through map of how it works, entirely in the browser with no server or API keys.",
+      "Ship the same engine as a website, a CLI, an agent skill and a GitHub Action.",
+      "Keep it dependency-free and open for contributions with good-first-issue labels."
+    ],
+    "stack": ["JavaScript", "Node.js", "GitHub Actions", "GitHub Pages"],
+    "outcome": "A zero-dependency open-source tool with four surfaces and a public demo on GitHub Pages.",
+    "metrics": [
+      { "label": "Runtime dependencies", "value": "0" },
+      { "label": "Surfaces", "value": "4 (web, CLI, skill, Action)" },
+      { "label": "GitHub stars", "value": "1" }
+    ],
+    "links": {
+      "repo": "https://github.com/Kaushik2210/gitVisualise",
+      "demo": "https://kaushik2210.github.io/gitVisualise/"
+    },
+    "visual": "TODO_SCREENSHOT"
+  },
+  {
+    "slug": "algoverse",
+    "title": "AlgoVerse",
+    "tagline": "A DSA visualisation and interview-prep platform with a real step-through debugger for every algorithm.",
+    "weight": { "sde": 1, "data": 0.25, "ai": 0 },
+    "problem": "Most DSA visualisers either look dated or bury the learning under gimmicks, and every topic ends up with its own one-off animation code.",
+    "role": "TODO_VERIFY",
+    "approach": [
+      "Drive every visualisation from one reusable step-sequence engine with play, pause, step, scrub and speed controls.",
+      "Use a consistent visual language where colour always means something (active pointer, visited, found).",
+      "Add Supabase-backed gamification: XP, badges, streaks, solved-problem tracking and a leaderboard."
+    ],
+    "stack": [
+      "Next.js 16",
+      "TypeScript (strict)",
+      "Tailwind CSS v4",
+      "Supabase",
+      "Zustand",
+      "Framer Motion"
+    ],
+    "outcome": "A live app covering 25 data-structure modules, 13 pattern guides and 635+ explained LeetCode solutions.",
+    "metrics": [
+      { "label": "Data-structure modules", "value": "25" },
+      { "label": "Pattern guides", "value": "13" },
+      { "label": "Explained solutions", "value": "635+" }
+    ],
+    "links": {
+      "repo": "https://github.com/Kaushik2210/AlgoVerse",
+      "demo": "https://algoverse-lovat-seven.vercel.app"
+    },
+    "visual": "TODO_SCREENSHOT"
+  },
+  {
+    "slug": "glyphforge",
+    "title": "GLYPHFORGE",
+    "tagline": "A GPU-native ASCII art engine that matches glyph shapes instead of using a brightness ramp.",
+    "weight": { "sde": 0.85, "data": 0.35, "ai": 0.2 },
+    "problem": "Nearly every image-to-ASCII converter indexes a fixed character ramp by tile brightness, so the output reads as scratchy noise rather than a picture.",
+    "role": "TODO_VERIFY",
+    "approach": [
+      "Choose each character by structure-correlated glyph matching, not brightness lookup.",
+      "Do colour work in linear light and cluster colours perceptually in Oklab.",
+      "Render the whole grid with a GPU-instanced renderer in a single draw call."
+    ],
+    "stack": ["TypeScript", "WebGL", "React", "Canvas"],
+    "outcome": "A live browser demo whose output is real, selectable text that preserves hard edges and fine texture.",
+    "metrics": [
+      { "label": "Draw calls per frame", "value": "1" },
+      { "label": "Performance numbers", "value": "TODO_VERIFY" }
+    ],
+    "links": {
+      "repo": "https://github.com/Kaushik2210/GLYPHFORGE",
+      "demo": "https://glyphforge-web.vercel.app"
+    },
+    "visual": "TODO_SCREENSHOT"
+  }
+]
