@@ -1,4 +1,4 @@
-import { Suspense, ViewTransition } from "react";
+import { ViewTransition } from "react";
 import { About } from "@/components/about";
 import { Contact } from "@/components/contact";
 import { GitHubSection } from "@/components/github";
@@ -41,22 +41,11 @@ export default function Home() {
       <ViewTransition enter={slide.enter} exit={slide.exit} default="none">
         <div>
           <Hero />
-          {/* Suspense lets React hydrate each section in its own interruptible slice. */}
-          <Suspense fallback={null}>
-            <Work />
-          </Suspense>
-          <Suspense fallback={null}>
-            <About />
-          </Suspense>
-          <Suspense fallback={null}>
-            <Skills />
-          </Suspense>
-          <Suspense fallback={null}>
-            <GitHubSection />
-          </Suspense>
-          <Suspense fallback={null}>
-            <Contact />
-          </Suspense>
+          <Work />
+          <About />
+          <Skills />
+          <GitHubSection />
+          <Contact />
         </div>
       </ViewTransition>
     </main>
