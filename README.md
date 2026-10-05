@@ -114,15 +114,15 @@ Measured with Lighthouse 12.6.1 against the production deployment, default simul
 
 | Page       | Preset  | Performance | Accessibility | Best practices | SEO |
 | ---------- | ------- | ----------- | ------------- | -------------- | --- |
-| Home       | Mobile  | 62, 67, 76  | 100           | 100            | 100 |
+| Home       | Mobile  | 92, 91, 91  | 100           | 100            | 100 |
 | Home       | Desktop | 97          | 100           | 100            | 100 |
 | Case study | Mobile  | 92          | 100           | 100            | 100 |
 
-**The target of 90 on mobile is not met for the home page.** Run-to-run variance is large (total blocking time swings between 0.4s and 1s on identical code). What the investigation found:
+All three pages clear the targets (performance 90+, accessibility 95+, SEO 95+); desktop and case studies have headroom, the home page on mobile is the tightest at 91 to 92. Getting the home page there took several rounds, and what the investigation found is worth keeping:
 
-- Under real CPU throttling, the dominant cost was one synchronous React hydration task. About 55% of the first-load DOM was decorative SVG (heatmap cells, tooltips, cover art), so those now mount only as they near the viewport. First-load DOM went from 2,065 to 838 nodes and mobile TBT in my 4x-CPU harness from about 2.0s to 0.4s.
+- Under real CPU throttling, the dominant cost was one synchronous React hydration task. About 55% of the first-load DOM was decorative SVG (heatmap cells, tooltips, cover art), so those now mount only as they near the viewport. First-load DOM went from 2,065 to 838 nodes and mobile TBT in my 4x-CPU harness from about 2.0s to 0.4s. Lazily mounting the skills graph (never mounted on phones, where it is hidden) took the home page from 62-76 to 91-92.
 - Splitting sections into `<Suspense>` slices made production worse (TBT up to 1.7s), so it was reverted.
-- The simulated LCP stays around 3.6s even though the observed paint is early. Hypotheses I tested and ruled out: the preloader overlay, hydration replacing DOM nodes, and font-display.
+- The simulated LCP stays around 3.4s even though the observed paint is early. Hypotheses I tested and ruled out: the preloader overlay, hydration replacing DOM nodes, and font-display.
 - Remaining cost is mostly the first layout pass and the framework bundle.
 
 Other measures: Lenis and ScrollTrigger are torn down with `gsap.context`, all 3D and the chat, palette and terminal are code-split and lazy, the 3D loop pauses off-screen and when the tab is hidden, DPR is capped at 1.5, `prefers-reduced-motion` swaps scrubbed motion for plain fades and disables the shader, and the site is fully keyboard-operable with visible focus.
@@ -138,7 +138,6 @@ GitHub auto-deploy needs a Login Connection for GitHub on the Vercel account, wh
 
 ## Known gaps
 
-- Mobile home-page Lighthouse performance (above).
 - Every case study uses generated cover art because screenshots are still `TODO_SCREENSHOT`.
 - No `public/resume.pdf` yet.
 - Experience, education, certifications and achievements are empty until `data/linkedin.json` is filled, so the timeline and some About counters are hidden.
