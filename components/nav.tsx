@@ -88,6 +88,15 @@ export function Nav() {
         </ul>
 
         <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent("palette:open"))}
+            aria-label="Open command palette"
+            className="border-line text-fg-muted hover:border-accent hover:text-fg hidden items-center gap-2 rounded-full border px-3 py-2 font-mono text-xs transition-colors sm:flex"
+          >
+            Search{" "}
+            <kbd className="border-line rounded border px-1.5 text-[10px]">Ctrl K</kbd>
+          </button>
           <ThemeToggle />
           <button
             type="button"

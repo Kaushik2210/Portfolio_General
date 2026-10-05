@@ -2,11 +2,15 @@ import type { Metadata } from "next";
 import { Bricolage_Grotesque, Geist, JetBrains_Mono } from "next/font/google";
 import { ChatRoot } from "@/components/chat/chat-root";
 import { Cursor } from "@/components/cursor";
+import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
+import { CommandPalette } from "@/components/palette";
 import { PrefsSync } from "@/components/prefs-sync";
 import { Preloader } from "@/components/preloader";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { SmoothScroll } from "@/components/smooth-scroll";
+import { TerminalRoot } from "@/components/terminal";
+import { hasResume } from "@/lib/resume";
 import "./globals.css";
 
 const display = Bricolage_Grotesque({
@@ -37,6 +41,7 @@ export const metadata: Metadata = {
 const bootScript = `try{var d=document.documentElement,l=localStorage;var t=l.getItem('theme');if(t==='light'||t==='dark')d.dataset.theme=t;var r=l.getItem('role');if(r==='sde'||r==='data'||r==='ai')d.dataset.role=r;if(sessionStorage.getItem('intro-seen'))d.dataset.introSeen='1'}catch(e){}`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  const resume = hasResume();
   return (
     <html
       lang="en"
@@ -61,7 +66,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Cursor />
         <Nav />
         <ChatRoot />
+        <CommandPalette hasResume={resume} />
+        <TerminalRoot hasResume={resume} />
         {children}
+        <Footer />
         <div className="grain" aria-hidden="true" />
       </body>
     </html>
