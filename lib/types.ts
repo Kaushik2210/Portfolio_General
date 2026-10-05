@@ -36,6 +36,8 @@ export interface Skill {
   name: string;
   group: Role;
   level?: 1 | 2 | 3;
+  /** Slugs of projects in data/projects.json that show this skill. */
+  projects?: string[];
 }
 
 export interface Achievement {

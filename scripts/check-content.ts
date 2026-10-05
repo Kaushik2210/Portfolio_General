@@ -54,8 +54,12 @@ for (const key of [
 ]) {
   if (!(key in li)) errors.push(`linkedin.json: missing ${key}`);
 }
-for (const s of (li.skills as { name: string; group: string }[]) ?? []) {
+for (const s of (li.skills as { name: string; group: string; projects?: string[] }[]) ??
+  []) {
   if (!roles.includes(s.group)) errors.push(`skill ${s.name}: bad group ${s.group}`);
+  for (const slug of s.projects ?? []) {
+    if (!slugs.has(slug)) errors.push(`skill ${s.name}: unknown project slug ${slug}`);
+  }
 }
 
 walk(projects, "projects");

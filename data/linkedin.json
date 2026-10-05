@@ -32,25 +32,101 @@
     }
   ],
   "skills": [
-    { "name": "TypeScript", "group": "sde" },
-    { "name": "JavaScript", "group": "sde" },
-    { "name": "Java", "group": "sde" },
-    { "name": "Next.js", "group": "sde" },
-    { "name": "React", "group": "sde" },
-    { "name": "Node.js", "group": "sde" },
-    { "name": "Tailwind CSS", "group": "sde" },
-    { "name": "Supabase / PostgreSQL", "group": "sde" },
-    { "name": "FastAPI", "group": "sde" },
-    { "name": "GitHub Actions CI", "group": "sde" },
-    { "name": "Python", "group": "data" },
-    { "name": "Time-series anomaly detection", "group": "data" },
-    { "name": "Telemetry analysis", "group": "data" },
-    { "name": "Data visualization", "group": "data" },
-    { "name": "PyTorch", "group": "ai" },
-    { "name": "ONNX", "group": "ai" },
-    { "name": "Computer vision", "group": "ai" },
-    { "name": "LLM application design", "group": "ai" },
-    { "name": "Explainable detection", "group": "ai" }
+    {
+      "name": "TypeScript",
+      "group": "sde",
+      "projects": ["overrank", "algoverse", "attesta", "glyphforge", "veriframe"]
+    },
+    {
+      "name": "JavaScript",
+      "group": "sde",
+      "projects": ["gitvisualise"]
+    },
+    {
+      "name": "Java",
+      "group": "sde",
+      "projects": []
+    },
+    {
+      "name": "Next.js",
+      "group": "sde",
+      "projects": ["overrank", "algoverse", "orbital-sentinel", "veriframe"]
+    },
+    {
+      "name": "React",
+      "group": "sde",
+      "projects": ["glyphforge"]
+    },
+    {
+      "name": "Node.js",
+      "group": "sde",
+      "projects": ["gitvisualise"]
+    },
+    {
+      "name": "Tailwind CSS",
+      "group": "sde",
+      "projects": ["overrank", "algoverse"]
+    },
+    {
+      "name": "Supabase / PostgreSQL",
+      "group": "sde",
+      "projects": ["overrank", "algoverse"]
+    },
+    {
+      "name": "FastAPI",
+      "group": "sde",
+      "projects": ["orbital-sentinel", "veriframe"]
+    },
+    {
+      "name": "GitHub Actions CI",
+      "group": "sde",
+      "projects": ["gitvisualise", "portcullis"]
+    },
+    {
+      "name": "Python",
+      "group": "data",
+      "projects": ["orbital-sentinel", "veriframe", "portcullis", "net-sentinel"]
+    },
+    {
+      "name": "Time-series anomaly detection",
+      "group": "data",
+      "projects": ["orbital-sentinel"]
+    },
+    {
+      "name": "Telemetry analysis",
+      "group": "data",
+      "projects": ["orbital-sentinel", "net-sentinel"]
+    },
+    {
+      "name": "Data visualization",
+      "group": "data",
+      "projects": ["algoverse", "gitvisualise"]
+    },
+    {
+      "name": "PyTorch",
+      "group": "ai",
+      "projects": ["orbital-sentinel", "veriframe"]
+    },
+    {
+      "name": "ONNX",
+      "group": "ai",
+      "projects": ["orbital-sentinel"]
+    },
+    {
+      "name": "Computer vision",
+      "group": "ai",
+      "projects": ["veriframe"]
+    },
+    {
+      "name": "LLM application design",
+      "group": "ai",
+      "projects": ["portcullis", "attesta"]
+    },
+    {
+      "name": "Explainable detection",
+      "group": "ai",
+      "projects": ["veriframe", "net-sentinel", "portcullis"]
+    }
   ],
   "achievements": [
     {
