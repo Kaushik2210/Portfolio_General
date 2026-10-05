@@ -15,21 +15,33 @@ export function Architecture({ nodes }: { nodes: string[] }) {
     const el = list.current;
     if (!el || prefersReducedMotion()) return;
 
-    const parts = el.querySelectorAll<HTMLElement>("[data-node], [data-link]");
+    const nodes = el.querySelectorAll<HTMLElement>("[data-node]");
+    const links = el.querySelectorAll<HTMLElement>("[data-link]");
+    const parts = [...nodes, ...links];
     parts.forEach((p) => (p.style.opacity = "0"));
 
-    let anim: ReturnType<typeof animate> | null = null;
+    let anims: ReturnType<typeof animate>[] = [];
     const io = new IntersectionObserver(
       ([e]) => {
         if (!e.isIntersecting) return;
         io.disconnect();
-        anim = animate(parts, {
-          opacity: [0, 1],
-          translateY: [16, 0],
-          duration: 700,
-          delay: stagger(110),
-          ease: "outExpo",
-        });
+        // Nodes rise in; connectors draw outward between them.
+        anims = [
+          animate(nodes, {
+            opacity: [0, 1],
+            translateY: [18, 0],
+            delay: stagger(220),
+            duration: 700,
+            ease: "outExpo",
+          }),
+          animate(links, {
+            opacity: [0, 1],
+            scale: [0, 1],
+            delay: stagger(220, { start: 140 }),
+            duration: 600,
+            ease: "outExpo",
+          }),
+        ];
       },
       { threshold: 0.3 },
     );
@@ -37,7 +49,7 @@ export function Architecture({ nodes }: { nodes: string[] }) {
 
     return () => {
       io.disconnect();
-      anim?.revert();
+      anims.forEach((x) => x.revert());
       parts.forEach((p) => (p.style.opacity = ""));
     };
   }, [nodes]);
