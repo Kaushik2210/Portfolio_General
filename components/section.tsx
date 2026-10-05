@@ -1,4 +1,6 @@
+import { Eyebrow } from "./eyebrow";
 import { RevealScope } from "./reveal-scope";
+import { SplitHeading } from "./split-heading";
 
 interface Props {
   id: string;
@@ -17,15 +19,13 @@ export function Section({ id, eyebrow, title, children, className = "" }: Props)
       className={`border-line border-t py-[clamp(64px,12vw,160px)] ${className}`}
     >
       <RevealScope className="mx-auto max-w-[1280px] px-[var(--gutter)]">
-        <p className="reveal text-accent mb-4 font-mono text-xs tracking-widest uppercase">
-          {eyebrow}
-        </p>
-        <h2
+        <Eyebrow className="mb-4">{eyebrow}</Eyebrow>
+        <SplitHeading
           id={`${id}-title`}
-          className="reveal font-display text-[length:var(--text-3xl)] leading-[0.95] font-semibold tracking-tight"
+          className="font-display text-[length:var(--text-3xl)] leading-[0.95] font-semibold tracking-tight"
         >
           {title}
-        </h2>
+        </SplitHeading>
         <div className="mt-[clamp(32px,6vw,80px)]">{children}</div>
       </RevealScope>
     </section>
