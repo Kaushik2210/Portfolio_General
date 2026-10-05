@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import type { Project } from "@/lib/types";
 import { Tilt } from "../tilt";
 import { Cover } from "./cover";
@@ -6,7 +7,16 @@ import { Cover } from "./cover";
 /** First sentence of the problem statement, used as the hover preview. */
 const firstSentence = (s: string) => s.match(/^.*?[.!?](\s|$)/)?.[0].trim() ?? s;
 
+const ROLE_COLOR = {
+  sde: "var(--accent)",
+  data: "var(--data)",
+  ai: "var(--c3)",
+} as const;
+
 export function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const top = (
+    Object.entries(project.weight) as [keyof typeof ROLE_COLOR, number][]
+  ).sort((a, b) => b[1] - a[1])[0][0];
   return (
     <Link
       href={`/work/${project.slug}`}
@@ -14,6 +24,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
       data-flip-id={project.slug}
       data-cursor
       data-cursor-label="View"
+      style={{ "--card-c": ROLE_COLOR[top] } as CSSProperties}
       className="group block w-full shrink-0 focus-visible:outline-offset-8 lg:data-[pinned=true]:w-[min(560px,42vw)]"
     >
       <Tilt>
@@ -21,7 +32,7 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
           <div className="relative">
             <Cover
               project={project}
-              className="transition-transform duration-[var(--dur-slow)] ease-[var(--ease-out)] group-hover:scale-[1.015]"
+              className="border-ink border-2 shadow-[10px_10px_0_0_var(--card-c)] transition-[transform,box-shadow] duration-[var(--dur-base)] ease-[var(--ease-out)] group-hover:-translate-x-1 group-hover:-translate-y-1 group-hover:shadow-[16px_16px_0_0_var(--card-c)]"
             />
             <div
               className="from-bg/95 via-bg/80 pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 rounded-b-[var(--radius)] bg-gradient-to-t to-transparent p-5 pt-16 opacity-0 transition-[opacity,transform] duration-[var(--dur-base)] ease-[var(--ease-out)] group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100"
