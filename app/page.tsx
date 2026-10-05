@@ -1,6 +1,7 @@
 import { ViewTransition } from "react";
 import { About } from "@/components/about";
 import { Contact } from "@/components/contact";
+import { Marquee } from "@/components/marquee";
 import { GitHubSection } from "@/components/github";
 import { Hero } from "@/components/hero";
 import { linkedin, SITE } from "@/lib/data";
@@ -41,9 +42,24 @@ export default function Home() {
       <ViewTransition enter={slide.enter} exit={slide.exit} default="none">
         <div>
           <Hero />
+          <Marquee
+            words={["Software engineer", "Data analyst", "AI engineer", "Bengaluru"]}
+          />
           <Work />
           <About />
           <Skills />
+          <Marquee
+            direction={-1}
+            words={[
+              "TypeScript",
+              "Python",
+              "PyTorch",
+              "Next.js",
+              "FastAPI",
+              "Supabase",
+              "ONNX",
+            ]}
+          />
           <GitHubSection />
           <Contact />
         </div>
