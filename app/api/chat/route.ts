@@ -1,8 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { createHash } from "node:crypto";
 import { z } from "zod";
 import { systemPrompt } from "@/lib/chat/context";
-import { checkLimit } from "@/lib/chat/ratelimit";
+import { CHAT_LIMIT, checkLimit, clientKey } from "@/lib/ratelimit";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -26,12 +25,6 @@ const json = (status: number, error: string, extra?: Record<string, unknown>) =>
     { error, ...extra },
     { status, headers: { "Cache-Control": "no-store" } },
   );
-
-/** Hash the client address so no raw IP is stored in the limiter or logs. */
-function clientKey(req: Request): string {
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "anon";
-  return createHash("sha256").update(ip).digest("hex").slice(0, 24);
-}
 
 /** Lets the UI choose the offline state up front. Reveals nothing but availability. */
 export function GET() {
@@ -66,7 +59,7 @@ export async function POST(req: Request) {
   if (!ordered || messages.at(-1)?.role !== "user" || tooLong)
     return json(400, "bad_request");
 
-  const rl = await checkLimit(clientKey(req));
+  const rl = await checkLimit(clientKey(req.headers), CHAT_LIMIT);
   if (!rl.ok) {
     return Response.json(
       { error: "rate_limited", retryAfter: rl.retryAfter },
