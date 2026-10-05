@@ -1,19 +1,28 @@
+import { ViewTransition } from "react";
 import { About } from "@/components/about";
 import { Hero } from "@/components/hero";
+import { Work } from "@/components/work";
 
-const PLACEHOLDERS = ["work", "skills", "github", "contact"];
+const PLACEHOLDERS = ["skills", "github", "contact"];
+
+const slide = {
+  enter: { "nav-forward": "nav-forward", "nav-back": "nav-back", default: "none" },
+  exit: { "nav-forward": "nav-forward", "nav-back": "nav-back", default: "none" },
+} as const;
 
 export default function Home() {
   return (
     <main>
-      <Hero />
-      {PLACEHOLDERS.slice(0, 1).map((id) => (
-        <Placeholder key={id} id={id} />
-      ))}
-      <About />
-      {PLACEHOLDERS.slice(1).map((id) => (
-        <Placeholder key={id} id={id} />
-      ))}
+      <ViewTransition enter={slide.enter} exit={slide.exit} default="none">
+        <div>
+          <Hero />
+          <Work />
+          <About />
+          {PLACEHOLDERS.map((id) => (
+            <Placeholder key={id} id={id} />
+          ))}
+        </div>
+      </ViewTransition>
     </main>
   );
 }
