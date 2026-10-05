@@ -2,7 +2,7 @@
 
 import { animate, createTimeline, stagger } from "animejs";
 import { useEffect, useRef } from "react";
-import { introDone, useIntroDone } from "@/lib/prefs";
+import { introDone, preloaderGone, usePreloaderGone } from "@/lib/prefs";
 import { prefersReducedMotion } from "@/lib/motion/scroll";
 
 const NAME = "S V KAUSHIK";
@@ -10,7 +10,7 @@ const SEEN_KEY = "intro-seen";
 
 /** Under 2.5s, skippable, and shown once per tab session. */
 export function Preloader() {
-  const done = useIntroDone();
+  const gone = usePreloaderGone();
   const root = useRef<HTMLDivElement>(null);
   const count = useRef<HTMLSpanElement>(null);
   const bar = useRef<HTMLDivElement>(null);
@@ -20,7 +20,8 @@ export function Preloader() {
     const el = root.current;
     if (!el) return;
 
-    const finish = () => {
+    // The hero starts animating as the overlay begins to slide away, so the hand-off is seamless.
+    const begin = () => {
       try {
         sessionStorage.setItem(SEEN_KEY, "1");
       } catch {
@@ -28,16 +29,22 @@ export function Preloader() {
       }
       introDone.set(true);
     };
+    const end = () => preloaderGone.set(true);
 
-    if (document.documentElement.dataset.introSeen || prefersReducedMotion()) {
-      finish();
+    if (
+      document.documentElement.dataset.introSeen ||
+      document.documentElement.dataset.noIntro ||
+      prefersReducedMotion()
+    ) {
+      begin();
+      end();
       return;
     }
 
     const chars = el.querySelectorAll<HTMLElement>("[data-char]");
     const progress = { value: 0 };
 
-    const tl = createTimeline({ defaults: { ease: "outExpo" }, onComplete: finish });
+    const tl = createTimeline({ defaults: { ease: "outExpo" }, onComplete: end });
     tl.add(chars, { translateY: ["110%", "0%"], duration: 700, delay: stagger(40) }, 0)
       .add(
         progress,
@@ -56,11 +63,13 @@ export function Preloader() {
         0,
       )
       .add(bar.current!, { scaleX: [0, 1], duration: 1400, ease: "inOutQuad" }, 0)
-      .add(el, { translateY: "-100%", duration: 650, ease: "inOutExpo" }, 1550);
+      .add(el, { translateY: "-100%", duration: 650, ease: "inOutExpo" }, 1550)
+      .call(begin, 1500);
 
     skip.current = () => {
       tl.pause();
-      animate(el, { opacity: 0, duration: 200, ease: "linear", onComplete: finish });
+      begin();
+      animate(el, { opacity: 0, duration: 200, ease: "linear", onComplete: end });
     };
 
     return () => {
@@ -69,15 +78,15 @@ export function Preloader() {
   }, []);
 
   useEffect(() => {
-    if (done) return;
+    if (gone) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape" || e.key === "Enter") skip.current?.();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [done]);
+  }, [gone]);
 
-  if (done) return null;
+  if (gone) return null;
 
   return (
     <div

@@ -9,7 +9,6 @@ import { prefersReducedMotion, scrollTo } from "@/lib/motion/scroll";
 import { dur, ease, shift, stagger, staggerFor } from "@/lib/motion/tokens";
 import { useIntroDone, useRole, useRoleChosen } from "@/lib/prefs";
 import { useReducedMotion } from "@/lib/capability";
-import { SITE } from "@/lib/data";
 import { HeroScene } from "./scene";
 import { sceneState } from "./scene-state";
 
@@ -18,7 +17,13 @@ const CYCLE_MS = 2600;
 const btn =
   "inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-colors duration-[var(--dur-base)]";
 
-export function HeroClient({ hasResume }: { hasResume: boolean }) {
+export function HeroClient({
+  hasResume,
+  location,
+}: {
+  hasResume: boolean;
+  location: string;
+}) {
   const root = useRef<HTMLElement>(null);
   const nameEl = useRef<HTMLHeadingElement>(null);
   const titleEl = useRef<HTMLSpanElement>(null);
@@ -75,8 +80,9 @@ export function HeroClient({ hasResume }: { hasResume: boolean }) {
       const el = root.current;
       if (!el) return;
 
-      if (prefersReducedMotion()) {
-        gsap.set(el.querySelectorAll(".reveal"), { opacity: 1 });
+      // Reduced motion and phones: no entrance choreography, the content is simply there.
+      if (prefersReducedMotion() || document.documentElement.dataset.noIntro) {
+        gsap.set(el.querySelectorAll(".hero-fade, .hero-name"), { opacity: 1 });
         sceneState.progress = 1;
         return;
       }
@@ -132,18 +138,18 @@ export function HeroClient({ hasResume }: { hasResume: boolean }) {
       <HeroScene />
 
       <div className="hero-content relative mx-auto w-full max-w-[1280px] px-[var(--gutter)] pt-32 pb-12 md:pb-16">
-        <p className="hero-fade reveal text-fg-muted mb-4 font-mono text-xs tracking-widest uppercase">
-          {SITE.location} / Portfolio 2026
+        <p className="hero-fade text-fg-muted mb-4 font-mono text-xs tracking-widest uppercase">
+          {location} / Portfolio 2026
         </p>
 
         <h1
           ref={nameEl}
-          className="reveal font-display text-[length:var(--text-hero)] leading-[0.88] font-semibold tracking-tighter"
+          className="hero-name font-display text-[length:var(--text-hero)] leading-[0.88] font-semibold tracking-tighter"
         >
           S V Kaushik
         </h1>
 
-        <p className="hero-fade reveal font-display mt-6 flex flex-wrap items-baseline gap-x-4 text-[length:var(--text-2xl)] leading-tight">
+        <p className="hero-fade font-display mt-6 flex flex-wrap items-baseline gap-x-4 text-[length:var(--text-2xl)] leading-tight">
           <span className="text-accent" aria-hidden="true">
             /
           </span>
@@ -156,12 +162,12 @@ export function HeroClient({ hasResume }: { hasResume: boolean }) {
 
         <p
           ref={bodyEl}
-          className="hero-fade reveal text-fg-muted mt-4 max-w-xl text-lg leading-relaxed"
+          className="hero-fade text-fg-muted mt-4 max-w-xl text-lg leading-relaxed"
         >
           {copy.line}
         </p>
 
-        <div className="hero-fade reveal mt-8 flex flex-wrap items-center gap-3">
+        <div className="hero-fade mt-8 flex flex-wrap items-center gap-3">
           <Magnetic>
             <a
               href="#work"
@@ -197,7 +203,7 @@ export function HeroClient({ hasResume }: { hasResume: boolean }) {
           )}
         </div>
 
-        <div className="hero-fade reveal mt-10">
+        <div className="hero-fade mt-10">
           <RoleSwitcher chosen={chosen} preview={shown} />
         </div>
       </div>
