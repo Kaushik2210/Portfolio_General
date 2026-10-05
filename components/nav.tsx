@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { scrollTo } from "@/lib/motion/scroll";
 import { useTheme } from "@/lib/prefs";
@@ -44,15 +45,22 @@ function ThemeToggle() {
 
 export function Nav() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
 
   const go = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
     setOpen(false);
-    scrollTo(href);
+    // Off the home page, anchors become real navigations back to a home section.
+    if (pathname !== "/") router.push(`/${href}`);
+    else scrollTo(href);
   };
 
   return (
-    <header className="fixed inset-x-0 top-0 z-[70]">
+    <header
+      className="fixed inset-x-0 top-0 z-[70]"
+      style={{ viewTransitionName: "site-header" }}
+    >
       <nav
         aria-label="Primary"
         className="mx-auto flex max-w-[1280px] items-center justify-between px-[var(--gutter)] py-4"
