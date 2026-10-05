@@ -17,15 +17,15 @@ export function Work() {
           Selected work.
         </h2>
         <p className="reveal text-fg-muted mt-6 max-w-xl">
-          {projects.length} projects, ordered for the role you pick above. Each opens a
-          case study: problem, approach, result.
+          {projects.length} projects. Switch the role to re-order them; each opens a case
+          study with the problem, the approach and the result.
         </p>
         <div className="reveal mt-8">
           <RoleSwitcher />
         </div>
       </RevealScope>
       <div className="pb-[clamp(64px,10vw,128px)]">
-        <Gallery />
+        <Gallery projects={projects} />
       </div>
     </section>
   );

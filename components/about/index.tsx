@@ -27,7 +27,7 @@ export function About() {
           } satisfies Stat,
         ]
       : []),
-    { label: "Case studies", value: projects.length, note: "below" },
+    { label: "Case studies", value: projects.length, note: "featured" },
     { label: "Languages", value: github.languages.length, note: "over 1% of my code" },
     ...(certs > 0 ? [{ label: "Certifications", value: certs } satisfies Stat] : []),
     ...(wins > 0 ? [{ label: "Hackathons and awards", value: wins } satisfies Stat] : []),
