@@ -17,10 +17,10 @@ export function ScrubText({
   useGSAP(
     () => {
       if (prefersReducedMotion() || !el.current) return;
-      const split = SplitText.create(el.current, { type: "words" });
+      const split = SplitText.create(el.current, { type: "words", aria: "none" });
       gsap.fromTo(
         split.words,
-        { opacity: 0.18 },
+        { opacity: 0.45 },
         {
           opacity: 1,
           ease: "none",

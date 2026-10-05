@@ -11,7 +11,11 @@ export function Wordmark({ text }: { text: string }) {
   useGSAP(
     () => {
       if (prefersReducedMotion() || !el.current) return;
-      const split = SplitText.create(el.current, { type: "chars", mask: "chars" });
+      const split = SplitText.create(el.current, {
+        type: "chars",
+        mask: "chars",
+        aria: "none",
+      });
       gsap.from(split.chars, {
         yPercent: 105,
         ease: "power3.out",
