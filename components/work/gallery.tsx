@@ -21,6 +21,8 @@ export function Gallery({ projects }: { projects: Project[] }) {
   const root = useRef<HTMLDivElement>(null);
   const pin = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLUListElement>(null);
+  const count = useRef<HTMLSpanElement>(null);
+  const bar = useRef<HTMLDivElement>(null);
   const flipState = useRef<Flip.FlipState | null>(null);
 
   // Capture card positions just before React re-orders them. The store notifies
@@ -78,6 +80,14 @@ export function Gallery({ projects }: { projects: Project[] }) {
               scrub: 0.6,
               anticipatePin: 1,
               invalidateOnRefresh: true,
+              onUpdate: (self) => {
+                const n = projects.length;
+                if (count.current)
+                  count.current.textContent = String(
+                    Math.round(self.progress * (n - 1)) + 1,
+                  ).padStart(2, "0");
+                if (bar.current) bar.current.style.transform = `scaleX(${self.progress})`;
+              },
             },
           });
 
@@ -97,8 +107,26 @@ export function Gallery({ projects }: { projects: Project[] }) {
     <div ref={root} className="group/gallery">
       <div
         ref={pin}
-        className="group-data-[mode=pinned]/gallery:flex group-data-[mode=pinned]/gallery:h-[100svh] group-data-[mode=pinned]/gallery:flex-col group-data-[mode=pinned]/gallery:justify-center group-data-[mode=pinned]/gallery:overflow-hidden"
+        className="relative group-data-[mode=pinned]/gallery:flex group-data-[mode=pinned]/gallery:h-[100svh] group-data-[mode=pinned]/gallery:flex-col group-data-[mode=pinned]/gallery:justify-center group-data-[mode=pinned]/gallery:overflow-hidden"
       >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-[var(--gutter)] bottom-10 hidden items-center gap-4 font-mono text-xs group-data-[mode=pinned]/gallery:flex"
+        >
+          <span ref={count} className="text-fg tabular-nums">
+            01
+          </span>
+          <span className="text-fg-muted">
+            / {String(projects.length).padStart(2, "0")}
+          </span>
+          <div className="bg-line h-px flex-1">
+            <div
+              ref={bar}
+              className="bg-accent h-full origin-left"
+              style={{ transform: "scaleX(0)" }}
+            />
+          </div>
+        </div>
         <ul
           ref={track}
           aria-label="Projects"

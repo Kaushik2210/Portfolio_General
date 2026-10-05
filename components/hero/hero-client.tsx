@@ -15,7 +15,7 @@ import { sceneState } from "./scene-state";
 const CYCLE_MS = 2600;
 
 const btn =
-  "inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-colors duration-[var(--dur-base)]";
+  "relative overflow-hidden inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-colors duration-[var(--dur-base)]";
 
 export function HeroClient({
   hasResume,
@@ -108,6 +108,36 @@ export function HeroClient({
         )
         .to(sceneState, { progress: 1, duration: 2.6, ease: "power2.inOut" }, 0.1);
 
+      let cleanup: (() => void) | undefined;
+      // Depth parallax: layers drift against the pointer at different rates (mouse only).
+      if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        const layers = [
+          { sel: ".hero-name", x: -22, y: -10 },
+          { sel: ".hero-role", x: -12, y: -6 },
+          { sel: ".hero-body", x: -6, y: -3 },
+        ].map((l) => {
+          const node = el.querySelector(l.sel);
+          return node
+            ? {
+                ...l,
+                qx: gsap.quickTo(node, "x", { duration: 0.9, ease: "power3.out" }),
+                qy: gsap.quickTo(node, "y", { duration: 0.9, ease: "power3.out" }),
+              }
+            : null;
+        });
+        const onMove = (e: PointerEvent) => {
+          const nx = e.clientX / window.innerWidth - 0.5;
+          const ny = e.clientY / window.innerHeight - 0.5;
+          for (const l of layers) {
+            if (!l) continue;
+            l.qx(nx * l.x);
+            l.qy(ny * l.y);
+          }
+        };
+        window.addEventListener("pointermove", onMove, { passive: true });
+        cleanup = () => window.removeEventListener("pointermove", onMove);
+      }
+
       ScrollTrigger.create({
         trigger: el,
         start: "top top",
@@ -122,6 +152,8 @@ export function HeroClient({
         ease: "none",
         scrollTrigger: { trigger: el, start: "top top", end: "bottom top", scrub: 0.6 },
       });
+
+      return () => cleanup?.();
     },
     { scope: root, dependencies: [done] },
   );
@@ -149,7 +181,7 @@ export function HeroClient({
           S V Kaushik
         </h1>
 
-        <p className="hero-fade font-display mt-6 flex flex-wrap items-baseline gap-x-4 text-[length:var(--text-2xl)] leading-tight">
+        <p className="hero-fade hero-role font-display mt-6 flex flex-wrap items-baseline gap-x-4 text-[length:var(--text-2xl)] leading-tight">
           <span className="text-accent" aria-hidden="true">
             /
           </span>
@@ -162,7 +194,7 @@ export function HeroClient({
 
         <p
           ref={bodyEl}
-          className="hero-fade text-fg-muted mt-4 max-w-xl text-lg leading-relaxed"
+          className="hero-fade hero-body text-fg-muted mt-4 max-w-xl text-lg leading-relaxed"
         >
           {copy.line}
         </p>
@@ -171,6 +203,7 @@ export function HeroClient({
           <Magnetic>
             <a
               href="#work"
+              data-ripple
               onClick={(e) => {
                 e.preventDefault();
                 scrollTo("#work");
@@ -184,6 +217,7 @@ export function HeroClient({
             <button
               type="button"
               onClick={() => window.dispatchEvent(new CustomEvent("chat:open"))}
+              data-ripple
               className={`${btn} border-line bg-surface/60 hover:border-accent border backdrop-blur-lg`}
             >
               Talk to my AI
