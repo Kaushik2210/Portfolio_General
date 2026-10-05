@@ -47,7 +47,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
         <noscript>
-          <style>{".preloader{display:none!important}"}</style>
+          <style>
+            {".preloader{display:none!important}.reveal{opacity:1!important}"}
+          </style>
         </noscript>
       </head>
       <body>

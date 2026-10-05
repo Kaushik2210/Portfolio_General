@@ -112,3 +112,25 @@ body {
 html[data-intro-seen] .preloader {
   display: none;
 }
+
+/* Hero reveal targets start hidden; GSAP reveals them. Visible without JS or with reduced motion. */
+.reveal {
+  opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+  }
+}
+
+.fallback-drift {
+  animation: drift 18s ease-in-out infinite alternate;
+}
+@keyframes drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(-1.5%, 1%, 0) scale(1.03);
+  }
+}
