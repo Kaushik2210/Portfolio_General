@@ -70,7 +70,7 @@ html {
 }
 
 body {
-  background: var(--bg);
+  /* The page colour lives on <html> so the ambient layer can sit behind content. */
   color: var(--fg);
   font-family: var(--font-geist), system-ui, sans-serif;
   line-height: 1.6;
@@ -118,12 +118,17 @@ html[data-no-intro] .preloader {
   opacity: 0;
 }
 /* On repeat visits there is no preloader to cover the name, so hide it until GSAP reveals it. */
+/* Split headings are hidden until their words are split and ready to rise. */
+.split-hidden {
+  opacity: 0;
+}
 html[data-intro-seen] .hero-name,
 html[data-intro-seen] .hero-fade {
   opacity: 0;
 }
 @media (prefers-reduced-motion: reduce) {
   .reveal,
+  .split-hidden,
   .hero-name,
   .hero-fade {
     opacity: 1 !important;
@@ -209,4 +214,10 @@ html[data-intro-seen] .hero-fade {
     animation-duration: 0s !important;
     animation-delay: 0s !important;
   }
+}
+
+/* Outlined display text for the marquee. */
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--fg-muted);
 }

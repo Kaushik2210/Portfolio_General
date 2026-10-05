@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Geist, JetBrains_Mono } from "next/font/google";
+import { Ambient } from "@/components/ambient";
 import { ChatRoot } from "@/components/chat/chat-root";
 import { Cursor } from "@/components/cursor";
 import { Footer } from "@/components/footer";
 import { Nav } from "@/components/nav";
 import { CommandPalette } from "@/components/palette";
 import { PrefsSync } from "@/components/prefs-sync";
+import { Ripple } from "@/components/ripple";
 import { Preloader } from "@/components/preloader";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { SmoothScroll } from "@/components/smooth-scroll";
@@ -71,7 +73,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <noscript>
           <style>
             {
-              ".preloader{display:none!important}.reveal,.hero-name,.hero-fade{opacity:1!important}"
+              ".preloader{display:none!important}.reveal,.split-hidden,.hero-name,.hero-fade{opacity:1!important}"
             }
           </style>
         </noscript>
@@ -88,6 +90,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Preloader />
         <ScrollProgress />
         <Cursor />
+        <Ambient />
+        <Ripple />
         <Nav />
         <ChatRoot />
         <CommandPalette hasResume={resume} />
