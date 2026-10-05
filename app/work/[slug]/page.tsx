@@ -49,7 +49,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]"
   ];
 
   return (
-    <main>
+    <main id="main" tabIndex={-1}>
       <ViewTransition enter={slide.enter} exit={slide.exit} default="none">
         <article className="pt-28 pb-[clamp(64px,10vw,128px)]">
           <RevealScope className="mx-auto max-w-[1280px] px-[var(--gutter)]">

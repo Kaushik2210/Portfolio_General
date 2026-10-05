@@ -35,7 +35,7 @@ export default function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(personJsonLd).replace(/</g, "\u003c"),
+          __html: JSON.stringify(personJsonLd).replace(/</g, "\\u003c"),
         }}
       />
       <ViewTransition enter={slide.enter} exit={slide.exit} default="none">
