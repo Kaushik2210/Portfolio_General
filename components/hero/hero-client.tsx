@@ -169,6 +169,63 @@ export function HeroClient({
     >
       <HeroScene />
 
+      {/* Maximalist dressing: all decorative, hidden from assistive tech. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+      >
+        <p className="text-outline font-display absolute top-1/2 right-0 hidden translate-x-[6%] -translate-y-1/2 text-[clamp(14rem,38vw,42rem)] leading-none font-semibold tracking-tighter opacity-30 select-none md:block">
+          SVK
+        </p>
+        {["top-24 left-3", "top-24 right-3", "bottom-3 left-3", "bottom-3 right-3"].map(
+          (pos) => (
+            <span key={pos} className={`absolute ${pos} text-fg-muted font-mono text-lg`}>
+              +
+            </span>
+          ),
+        )}
+        <p className="text-fg-muted absolute top-28 right-[var(--gutter)] hidden text-right font-mono text-[11px] leading-relaxed tracking-widest uppercase lg:block">
+          Fig. 01
+          <br />
+          12.9716° N / 77.5946° E<br />
+          Bengaluru, IN
+        </p>
+        <div className="absolute right-[8vw] bottom-[18vh] hidden size-44 -rotate-12 md:block">
+          <svg viewBox="0 0 200 200" className="spin-slow size-full">
+            <defs>
+              <path
+                id="badge-circle"
+                d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"
+              />
+            </defs>
+            <circle cx="100" cy="100" r="99" fill="var(--c4)" />
+            <circle
+              cx="100"
+              cy="100"
+              r="62"
+              fill="none"
+              stroke="var(--ink)"
+              strokeWidth="1.5"
+              strokeDasharray="3 5"
+            />
+            <text
+              fontSize="15.5"
+              fontWeight="700"
+              letterSpacing="2.4"
+              fill="var(--ink)"
+              className="font-mono"
+            >
+              <textPath href="#badge-circle">
+                SOFTWARE ✦ DATA ✦ AI ✦ SOFTWARE ✦ DATA ✦ AI ✦
+              </textPath>
+            </text>
+          </svg>
+          <span className="font-display text-ink absolute inset-0 grid place-items-center text-5xl">
+            ✦
+          </span>
+        </div>
+      </div>
+
       <div className="hero-content relative mx-auto w-full max-w-[1280px] px-[var(--gutter)] pt-32 pb-12 md:pb-16">
         <p className="hero-fade text-fg-muted mb-4 font-mono text-xs tracking-widest uppercase">
           {location} / Portfolio 2026
@@ -198,6 +255,20 @@ export function HeroClient({
         >
           {copy.line}
         </p>
+        <ul aria-label="Focus areas" className="hero-fade mt-6 flex flex-wrap gap-3">
+          {[
+            ["Full-stack TypeScript", "bg-c3", "-rotate-2"],
+            ["Anomaly detection", "bg-c4", "rotate-1"],
+            ["LLM systems", "bg-c5", "-rotate-1"],
+          ].map(([t, bg, rot]) => (
+            <li
+              key={t}
+              className={`${bg} ${rot} border-ink text-ink rounded-full border-2 px-4 py-1.5 font-mono text-xs font-medium tracking-wide shadow-[4px_4px_0_0_var(--ink)]`}
+            >
+              {t}
+            </li>
+          ))}
+        </ul>
 
         <div className="hero-fade mt-8 flex flex-wrap items-center gap-3">
           <Magnetic>
