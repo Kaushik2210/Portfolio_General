@@ -12,7 +12,17 @@ export interface Stat {
 
 const fmt = (n: number) => Math.round(n).toLocaleString("en-US");
 
-function Counter({ stat }: { stat: Stat }) {
+const TILE = ["bg-accent", "bg-c4", "bg-c3", "bg-c5", "bg-data", "bg-c4"];
+const TILT = [
+  "md:-rotate-1",
+  "md:rotate-1",
+  "md:rotate-0",
+  "md:-rotate-1",
+  "md:rotate-1",
+  "md:-rotate-1",
+];
+
+function Counter({ stat, i }: { stat: Stat; i: number }) {
   const num = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -48,12 +58,14 @@ function Counter({ stat }: { stat: Stat }) {
   }, [stat.value]);
 
   return (
-    <li className="reveal border-line border-t pt-5">
+    <li
+      className={`reveal text-ink border-ink rounded-[var(--radius-lg)] border-2 p-6 shadow-[6px_6px_0_0_var(--ink)] ${TILE[i % TILE.length]} ${TILT[i % TILT.length]}`}
+    >
       <p className="font-display text-[length:var(--text-3xl)] leading-none font-semibold tracking-tight tabular-nums">
         <span ref={num}>{fmt(stat.value)}</span>
       </p>
-      <p className="text-fg mt-3 text-sm">{stat.label}</p>
-      {stat.note && <p className="text-fg-muted font-mono text-xs">{stat.note}</p>}
+      <p className="mt-3 text-sm font-medium">{stat.label}</p>
+      {stat.note && <p className="font-mono text-xs opacity-70">{stat.note}</p>}
     </li>
   );
 }
@@ -65,8 +77,8 @@ export function Stats({ items }: { items: Stat[] }) {
       aria-label="Key numbers"
       className="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4"
     >
-      {items.map((s) => (
-        <Counter key={s.label} stat={s} />
+      {items.map((s, i) => (
+        <Counter key={s.label} stat={s} i={i} />
       ))}
     </ul>
   );

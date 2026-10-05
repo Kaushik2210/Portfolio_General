@@ -42,14 +42,21 @@ export function Ambient() {
         className="amb-a absolute -top-[20vh] -left-[10vw] size-[70vw] will-change-transform"
         style={{
           background:
-            "radial-gradient(closest-side, color-mix(in oklab, var(--accent) 13%, transparent), transparent)",
+            "radial-gradient(closest-side, color-mix(in oklab, var(--accent) 20%, transparent), transparent)",
+        }}
+      />
+      <div
+        className="amb-c absolute top-[10vh] left-[30vw] size-[55vw] will-change-transform"
+        style={{
+          background:
+            "radial-gradient(closest-side, color-mix(in oklab, var(--c3) 17%, transparent), transparent)",
         }}
       />
       <div
         className="amb-b absolute top-[30vh] -right-[15vw] size-[60vw] will-change-transform"
         style={{
           background:
-            "radial-gradient(closest-side, color-mix(in oklab, var(--data) 10%, transparent), transparent)",
+            "radial-gradient(closest-side, color-mix(in oklab, var(--data) 15%, transparent), transparent)",
         }}
       />
     </div>
