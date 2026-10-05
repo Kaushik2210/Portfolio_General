@@ -10,7 +10,8 @@
     "prepare": "husky",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
-    "sync": "tsx scripts/sync-data.ts"
+    "sync": "tsx scripts/sync-data.ts",
+    "check:content": "tsx scripts/check-content.ts"
   },
   "dependencies": {
     "next": "16.3.8",
