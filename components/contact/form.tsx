@@ -113,8 +113,9 @@ export function ContactForm() {
       <div className="flex flex-wrap items-center gap-4">
         <button
           type="submit"
+          data-ripple
           disabled={pending}
-          className="bg-accent text-accent-ink rounded-full px-7 py-3 text-sm font-medium transition-[filter] hover:brightness-110 disabled:opacity-60"
+          className="bg-accent text-accent-ink relative overflow-hidden rounded-full px-7 py-3 text-sm font-medium transition-[filter] hover:brightness-110 disabled:opacity-60"
         >
           {pending ? "Sending..." : "Send message"}
         </button>

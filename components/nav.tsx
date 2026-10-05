@@ -1,7 +1,8 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { useState, useSyncExternalStore } from "react";
+import { animate } from "animejs";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { scrollTo } from "@/lib/motion/scroll";
 import { useTheme } from "@/lib/prefs";
 
@@ -61,6 +62,52 @@ export function Nav() {
   const pathname = usePathname();
   const router = useRouter();
   const scrolled = useScrolled();
+  const list = useRef<HTMLUListElement>(null);
+  const pill = useRef<HTMLSpanElement>(null);
+  const [active, setActive] = useState<string | null>(null);
+  const [hovered, setHovered] = useState<string | null>(null);
+
+  // Track which home section is under the middle of the viewport.
+  useEffect(() => {
+    if (pathname !== "/") return;
+    const targets: { href: string; el: Element }[] = [];
+    for (const l of LINKS) {
+      const el = document.querySelector(l.href);
+      if (el) targets.push({ href: l.href, el });
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting)
+            setActive(targets.find((t) => t.el === e.target)?.href ?? null);
+        }
+      },
+      { rootMargin: "-45% 0px -50% 0px" },
+    );
+    targets.forEach((t) => io.observe(t.el));
+    return () => io.disconnect();
+  }, [pathname]);
+
+  // The pill slides to the hovered link, or rests on the active section.
+  const target = pathname === "/" ? (hovered ?? active) : hovered;
+  useEffect(() => {
+    const p = pill.current;
+    const a = target
+      ? list.current?.querySelector<HTMLElement>(`a[href="${target}"]`)
+      : null;
+    if (!p) return;
+    if (!a) {
+      animate(p, { opacity: 0, duration: 250, ease: "outQuad" });
+      return;
+    }
+    animate(p, {
+      translateX: a.offsetLeft,
+      width: a.offsetWidth,
+      opacity: 1,
+      duration: 480,
+      ease: "outExpo",
+    });
+  }, [target]);
 
   const go = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
@@ -89,13 +136,29 @@ export function Nav() {
           S V Kaushik<span className="text-accent">.</span>
         </a>
 
-        <ul className="border-line bg-surface/60 hidden items-center gap-1 rounded-full border px-2 py-1.5 backdrop-blur-lg md:flex">
+        <ul
+          ref={list}
+          onPointerLeave={() => setHovered(null)}
+          className="border-line bg-surface/60 relative hidden items-center gap-1 rounded-full border px-2 py-1.5 backdrop-blur-lg md:flex"
+        >
+          <span
+            ref={pill}
+            aria-hidden="true"
+            className="bg-surface-2 pointer-events-none absolute top-1.5 bottom-1.5 left-0 w-0 rounded-full opacity-0"
+          />
           {LINKS.map((l) => (
-            <li key={l.href}>
+            <li key={l.href} onPointerEnter={() => setHovered(l.href)}>
               <a
                 href={l.href}
                 onClick={(e) => go(e, l.href)}
-                className="text-fg-muted hover:bg-surface-2 hover:text-fg rounded-full px-3.5 py-1.5 text-sm transition-colors"
+                onFocus={() => setHovered(l.href)}
+                onBlur={() => setHovered(null)}
+                aria-current={
+                  pathname === "/" && active === l.href ? "location" : undefined
+                }
+                className={`relative rounded-full px-3.5 py-1.5 text-sm transition-colors ${
+                  target === l.href ? "text-fg" : "text-fg-muted"
+                }`}
               >
                 {l.label}
               </a>

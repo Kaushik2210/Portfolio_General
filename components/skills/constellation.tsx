@@ -1,7 +1,8 @@
 "use client";
 
+import { animate, stagger } from "animejs";
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ROLE_COPY, ROLE_ORDER } from "@/lib/copy";
 import { gsap, useGSAP } from "@/lib/motion/gsap";
 import { prefersReducedMotion } from "@/lib/motion/scroll";
@@ -160,6 +161,26 @@ export function Constellation({ skills, edges, titles }: Props) {
   const [hover, setHover] = useState<string | null>(null);
   const [locked, setLocked] = useState<string | null>(null);
   const active = hover ?? locked;
+  const chips = useRef<HTMLDivElement>(null);
+  const firstRole = useRef(true);
+
+  // Chips re-enter in a wave when the role changes (anime.js).
+  useEffect(() => {
+    if (firstRole.current) {
+      firstRole.current = false;
+      return;
+    }
+    if (prefersReducedMotion()) return;
+    const els = chips.current?.querySelectorAll("button");
+    if (els?.length)
+      animate(els, {
+        translateY: [14, 0],
+        opacity: [0.15, 1],
+        delay: stagger(26),
+        duration: 650,
+        ease: "outExpo",
+      });
+  }, [role]);
 
   const byName = useMemo(() => new Map(skills.map((s) => [s.name, s])), [skills]);
   const neighbours = useMemo(() => {
@@ -199,7 +220,7 @@ export function Constellation({ skills, edges, titles }: Props) {
         </LazyMount>
       </div>
 
-      <div className="lg:col-span-5">
+      <div className="lg:col-span-5" ref={chips}>
         <div className="space-y-8">
           {groups.map((g) => (
             <section key={g} aria-labelledby={`skills-${g}`}>
