@@ -1,0 +1,62 @@
+{
+  "$comment": "Schema: lib/types.ts (LinkedInData). Every value 'TODO_VERIFY' is unverified and must be filled from LinkedIn, the LinkedIn data export, or the resume. Nothing here was scraped from LinkedIn. Skills below are evidenced by the public GitHub repos (languages and topics), not by LinkedIn.",
+  "headline": "TODO_VERIFY",
+  "about": "TODO_VERIFY",
+  "experience": [
+    {
+      "company": "TODO_VERIFY",
+      "title": "TODO_VERIFY",
+      "start": "TODO_VERIFY",
+      "end": "TODO_VERIFY",
+      "location": "TODO_VERIFY",
+      "summary": "TODO_VERIFY",
+      "highlights": []
+    }
+  ],
+  "education": [
+    {
+      "school": "TODO_VERIFY",
+      "degree": "TODO_VERIFY",
+      "field": "TODO_VERIFY",
+      "start": "TODO_VERIFY",
+      "end": "TODO_VERIFY",
+      "grade": "TODO_VERIFY"
+    }
+  ],
+  "certifications": [
+    {
+      "name": "TODO_VERIFY",
+      "issuer": "TODO_VERIFY",
+      "issued": "TODO_VERIFY",
+      "url": "TODO_VERIFY"
+    }
+  ],
+  "skills": [
+    { "name": "TypeScript", "group": "sde" },
+    { "name": "JavaScript", "group": "sde" },
+    { "name": "Java", "group": "sde" },
+    { "name": "Next.js", "group": "sde" },
+    { "name": "React", "group": "sde" },
+    { "name": "Node.js", "group": "sde" },
+    { "name": "Tailwind CSS", "group": "sde" },
+    { "name": "Supabase / PostgreSQL", "group": "sde" },
+    { "name": "FastAPI", "group": "sde" },
+    { "name": "GitHub Actions CI", "group": "sde" },
+    { "name": "Python", "group": "data" },
+    { "name": "Time-series anomaly detection", "group": "data" },
+    { "name": "Telemetry analysis", "group": "data" },
+    { "name": "Data visualization", "group": "data" },
+    { "name": "PyTorch", "group": "ai" },
+    { "name": "ONNX", "group": "ai" },
+    { "name": "Computer vision", "group": "ai" },
+    { "name": "LLM application design", "group": "ai" },
+    { "name": "Explainable detection", "group": "ai" }
+  ],
+  "achievements": [
+    {
+      "title": "TODO_VERIFY",
+      "detail": "TODO_VERIFY",
+      "year": "TODO_VERIFY"
+    }
+  ]
+}
