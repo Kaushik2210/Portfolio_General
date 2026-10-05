@@ -4,8 +4,8 @@ import { useLayoutEffect, useRef } from "react";
 import { gsap, Flip, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 import { prefersReducedMotion } from "@/lib/motion/scroll";
 import { dur, ease } from "@/lib/motion/tokens";
-import { projectsForRole } from "@/lib/data";
 import { roleStore, useRole } from "@/lib/prefs";
+import type { Project } from "@/lib/types";
 import { ProjectCard } from "./card";
 
 /**
@@ -13,9 +13,10 @@ import { ProjectCard } from "./card";
  * Otherwise (mobile, touch, reduced motion, no JS): a plain vertical stack.
  * Changing the role re-orders the cards with a Flip animation.
  */
-export function Gallery() {
+export function Gallery({ projects }: { projects: Project[] }) {
   const [role] = useRole();
-  const items = projectsForRole(role);
+  // Weight first; the original order breaks ties.
+  const items = [...projects].sort((a, b) => b.weight[role] - a.weight[role]);
 
   const root = useRef<HTMLDivElement>(null);
   const pin = useRef<HTMLDivElement>(null);
