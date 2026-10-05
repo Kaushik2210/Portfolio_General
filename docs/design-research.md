@@ -4,13 +4,13 @@ Principles only. No layout, asset, copy or code is borrowed from any site below.
 
 ## What I could and could not read
 
-| Source | Result |
-| --- | --- |
-| awwwards.com/websites/portfolio/ | Read (via a scraper). Listing only: names and thumbnails, no award or stack metadata. |
-| awwwards.com/websites/gsap/ (and /three-js, /webgl, /anime-js, /next-js) | HTTP 502 on fetch. Not read directly. Supplemented with the secondary sources below. |
-| wallofportfolios.in | Read. Categories and Portfolio-of-the-Month reasoning. |
-| github.com/emmabostian/developer-portfolios | Read. Format trends and role taglines. |
-| hontran.dev "award-winning websites 2026" (juror write-up) | Read. Source for most of the motion and performance points. |
+| Source                                                                   | Result                                                                                |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| awwwards.com/websites/portfolio/                                         | Read (via a scraper). Listing only: names and thumbnails, no award or stack metadata. |
+| awwwards.com/websites/gsap/ (and /three-js, /webgl, /anime-js, /next-js) | HTTP 502 on fetch. Not read directly. Supplemented with the secondary sources below.  |
+| wallofportfolios.in                                                      | Read. Categories and Portfolio-of-the-Month reasoning.                                |
+| github.com/emmabostian/developer-portfolios                              | Read. Format trends and role taglines.                                                |
+| hontran.dev "award-winning websites 2026" (juror write-up)               | Read. Source for most of the motion and performance points.                           |
 
 Individual Awwwards winners were not opened one by one, so the notes below are
 about patterns, not teardowns of specific sites.

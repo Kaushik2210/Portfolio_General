@@ -9,17 +9,17 @@ Tailwind v4 via `@theme`. This file is the reference.
 
 ## Colour
 
-| Token | Dark | Light | Use |
-| --- | --- | --- | --- |
-| `--bg` | `#08090b` | `#f3f0ea` | page background |
-| `--surface` | `#101216` | `#ffffff` | cards, bento tiles |
-| `--surface-2` | `#171a20` | `#e9e5dd` | raised / hover surfaces |
-| `--line` | `#252932` | `#d6d1c6` | hairlines, borders |
-| `--fg` | `#ece8e1` | `#101216` | primary text |
-| `--fg-muted` | `#9a9ea8` | `#4d515a` | secondary text |
-| `--accent` | `#ff5a36` | `#d93a17` | signature ember: CTAs, focus, key numbers |
-| `--accent-ink` | `#1a0803` | `#ffffff` | text on accent |
-| `--data` | `#6ee7d8` | `#0b7a6f` | charts, graph nodes, data role only |
+| Token          | Dark      | Light     | Use                                       |
+| -------------- | --------- | --------- | ----------------------------------------- |
+| `--bg`         | `#08090b` | `#f3f0ea` | page background                           |
+| `--surface`    | `#101216` | `#ffffff` | cards, bento tiles                        |
+| `--surface-2`  | `#171a20` | `#e9e5dd` | raised / hover surfaces                   |
+| `--line`       | `#252932` | `#d6d1c6` | hairlines, borders                        |
+| `--fg`         | `#ece8e1` | `#101216` | primary text                              |
+| `--fg-muted`   | `#9a9ea8` | `#4d515a` | secondary text                            |
+| `--accent`     | `#ff5a36` | `#d93a17` | signature ember: CTAs, focus, key numbers |
+| `--accent-ink` | `#1a0803` | `#ffffff` | text on accent                            |
+| `--data`       | `#6ee7d8` | `#0b7a6f` | charts, graph nodes, data role only       |
 
 Contrast: `--fg` on `--bg` and `--fg-muted` on `--bg` pass WCAG AA for body text
 in both themes; `--accent` is used for large text, icons and focus rings, with
@@ -30,11 +30,11 @@ mix of the two (`color-mix(in oklab, var(--accent) 50%, var(--data))`).
 
 ## Type
 
-| Role | Family | Notes |
-| --- | --- | --- |
+| Role    | Family                                      | Notes                               |
+| ------- | ------------------------------------------- | ----------------------------------- |
 | Display | Bricolage Grotesque (variable, opsz + wdth) | headlines, wordmark, tight tracking |
-| Sans | Geist | body, UI |
-| Mono | JetBrains Mono | labels, code, metadata, terminal |
+| Sans    | Geist                                       | body, UI                            |
+| Mono    | JetBrains Mono                              | labels, code, metadata, terminal    |
 
 Scale (fluid, `clamp`): `--text-xs .75rem`, `--text-sm .875rem`,
 `--text-base 1rem`, `--text-lg 1.25rem`, `--text-xl 1.75rem`,
@@ -51,15 +51,15 @@ Radius: `--radius-sm 6px`, `--radius 12px`, `--radius-lg 24px`.
 
 One vocabulary everywhere. Exposed in `lib/motion` and as CSS variables.
 
-| Token | Value | Use |
-| --- | --- | --- |
-| `--ease-out` | `cubic-bezier(.16, 1, .3, 1)` | default entrance, "expo out" |
-| `--ease-in-out` | `cubic-bezier(.65, 0, .35, 1)` | state changes, layout (Flip) |
-| `--ease-snap` | `cubic-bezier(.34, 1.56, .64, 1)` | small micro-interactions only |
-| `--dur-fast` | `150ms` | hover, press |
-| `--dur-base` | `400ms` | UI transitions |
-| `--dur-slow` | `800ms` | section reveals |
-| `--dur-hero` | `1200ms` | preloader handoff, hero intro |
+| Token           | Value                             | Use                           |
+| --------------- | --------------------------------- | ----------------------------- |
+| `--ease-out`    | `cubic-bezier(.16, 1, .3, 1)`     | default entrance, "expo out"  |
+| `--ease-in-out` | `cubic-bezier(.65, 0, .35, 1)`    | state changes, layout (Flip)  |
+| `--ease-snap`   | `cubic-bezier(.34, 1.56, .64, 1)` | small micro-interactions only |
+| `--dur-fast`    | `150ms`                           | hover, press                  |
+| `--dur-base`    | `400ms`                           | UI transitions                |
+| `--dur-slow`    | `800ms`                           | section reveals               |
+| `--dur-hero`    | `1200ms`                          | preloader handoff, hero intro |
 
 GSAP names: `expo.out` (= `--ease-out`), `power3.inOut` (= `--ease-in-out`).
 Stagger: 0.04s per character, 0.08s per word, 0.1s per card, never above 0.6s
