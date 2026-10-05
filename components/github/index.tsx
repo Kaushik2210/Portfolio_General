@@ -1,4 +1,5 @@
 import { github, SITE } from "@/lib/data";
+import { LazyMount } from "../lazy-mount";
 import { Section } from "../section";
 import { Heatmap } from "./heatmap";
 import { LangBar } from "./lang-bar";
@@ -49,7 +50,9 @@ export function GitHubSection() {
               @{profile.login} <span aria-hidden="true">↗</span>
             </a>
           </div>
-          <Heatmap days={contributions.days} total={contributions.total} />
+          <LazyMount className="min-h-[190px]">
+            <Heatmap days={contributions.days} total={contributions.total} />
+          </LazyMount>
         </div>
       )}
 

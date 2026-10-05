@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ViewTransition } from "react";
+import { LazyMount } from "@/components/lazy-mount";
 import type { Project } from "@/lib/types";
 
 function hash(str: string): number {
@@ -99,7 +100,9 @@ export function Cover({
             className="object-cover"
           />
         ) : (
-          <Generated project={project} />
+          <LazyMount className="size-full" rootMargin="300px">
+            <Generated project={project} />
+          </LazyMount>
         )}
       </div>
     </ViewTransition>

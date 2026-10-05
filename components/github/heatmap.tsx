@@ -1,7 +1,7 @@
 "use client";
 
 import { animate, stagger } from "animejs";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { prefersReducedMotion } from "@/lib/motion/scroll";
 import type { ContributionDay } from "@/lib/types";
 
@@ -39,6 +39,19 @@ function levelFn(days: ContributionDay[]) {
 
 export function Heatmap({ days, total }: { days: ContributionDay[]; total: number }) {
   const svg = useRef<SVGSVGElement>(null);
+  const [tip, setTip] = useState<{ text: string; x: number; y: number } | null>(null);
+
+  // One delegated tooltip instead of a <title> node per cell (366 fewer nodes to hydrate).
+  const onMove = (e: React.PointerEvent<SVGSVGElement>) => {
+    const cell = (e.target as Element).closest<SVGRectElement>("rect[data-tip]");
+    if (!cell) return setTip(null);
+    const box = e.currentTarget.getBoundingClientRect();
+    setTip({
+      text: cell.dataset.tip ?? "",
+      x: e.clientX - box.left,
+      y: e.clientY - box.top,
+    });
+  };
 
   const { weeks, months, level, busiest } = useMemo(() => {
     const lvl = levelFn(days);
@@ -95,7 +108,7 @@ export function Heatmap({ days, total }: { days: ContributionDay[]; total: numbe
   const height = TOP + 7 * (CELL + GAP);
 
   return (
-    <figure>
+    <figure className="relative">
       <div className="overflow-x-auto pb-2">
         <svg
           ref={svg}
@@ -103,6 +116,8 @@ export function Heatmap({ days, total }: { days: ContributionDay[]; total: numbe
           role="img"
           aria-label={`${total.toLocaleString("en-US")} contributions in the past year. Busiest day: ${fmtDate(busiest.date)} with ${busiest.count}.`}
           className="h-auto w-full min-w-[720px]"
+          onPointerMove={onMove}
+          onPointerLeave={() => setTip(null)}
         >
           {months.map((m) => (
             <text
@@ -139,13 +154,21 @@ export function Heatmap({ days, total }: { days: ContributionDay[]; total: numbe
                 height={CELL}
                 rx={2}
                 fill={LEVEL_FILL[level(d.count)]}
-              >
-                <title>{`${d.count} contribution${d.count === 1 ? "" : "s"} on ${fmtDate(d.date)}`}</title>
-              </rect>
+                data-tip={`${d.count} contribution${d.count === 1 ? "" : "s"} on ${fmtDate(d.date)}`}
+              />
             )),
           )}
         </svg>
       </div>
+      {tip && (
+        <div
+          role="tooltip"
+          className="bg-surface-2 text-fg pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full rounded px-2 py-1 font-mono text-[11px] whitespace-nowrap shadow"
+          style={{ left: tip.x, top: tip.y - 8 }}
+        >
+          {tip.text}
+        </div>
+      )}
       <figcaption className="text-fg-muted mt-3 flex items-center gap-2 font-mono text-xs">
         Less
         {LEVEL_FILL.map((f, i) => (
