@@ -11,6 +11,11 @@
   --accent: #ff5a36;
   --accent-ink: #1a0803;
   --data: #6ee7d8;
+  /* Maximalist extras: used for stickers, tiles and bands. */
+  --c3: #8b5cf6;
+  --c4: #c6ff3d;
+  --c5: #ff3d9a;
+  --ink: #0b0b10;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
@@ -38,6 +43,9 @@
   --accent: #d93a17;
   --accent-ink: #ffffff;
   --data: #0b7a6f;
+  --c3: #7a4df0;
+  --c4: #b4e600;
+  --c5: #f0267f;
 
   color-scheme: light;
 }
@@ -52,6 +60,10 @@
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
   --color-data: var(--data);
+  --color-c3: var(--c3);
+  --color-c4: var(--c4);
+  --color-c5: var(--c5);
+  --color-ink: var(--ink);
 
   --font-display: var(--font-bricolage);
   --font-sans: var(--font-geist);
@@ -66,7 +78,17 @@
 }
 
 html {
-  background: var(--bg);
+  background-color: var(--bg);
+}
+/* Static dot grid like graph paper. Desktop only: it costs paint time on phones. */
+@media (min-width: 768px) {
+  html {
+    background-image: radial-gradient(
+      color-mix(in oklab, var(--fg) 11%, transparent) 1px,
+      transparent 1.2px
+    );
+    background-size: 26px 26px;
+  }
 }
 
 body {
@@ -220,4 +242,23 @@ html[data-intro-seen] .hero-fade {
 .text-outline {
   color: transparent;
   -webkit-text-stroke: 1.5px var(--fg-muted);
+}
+
+.text-outline-ink {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--ink);
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spin-slow {
+  animation: spin-slow 22s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .spin-slow {
+    animation: none;
+  }
 }
