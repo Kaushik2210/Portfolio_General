@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { scrollTo } from "@/lib/motion/scroll";
 import { useTheme } from "@/lib/prefs";
 
@@ -12,6 +12,19 @@ const LINKS = [
   { href: "#github", label: "GitHub" },
   { href: "#contact", label: "Contact" },
 ] as const;
+
+const subscribeScroll = (cb: () => void) => {
+  window.addEventListener("scroll", cb, { passive: true });
+  return () => window.removeEventListener("scroll", cb);
+};
+
+/** True once the page has scrolled, so the bar can gain a background. */
+const useScrolled = () =>
+  useSyncExternalStore(
+    subscribeScroll,
+    () => window.scrollY > 24,
+    () => false,
+  );
 
 function ThemeToggle() {
   const [theme, setTheme] = useTheme();
@@ -47,6 +60,7 @@ export function Nav() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const scrolled = useScrolled();
 
   const go = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
@@ -58,7 +72,9 @@ export function Nav() {
 
   return (
     <header
-      className="fixed inset-x-0 top-0 z-[70]"
+      className={`fixed inset-x-0 top-0 z-[70] border-b transition-[background-color,border-color,backdrop-filter] duration-[var(--dur-base)] ${
+        scrolled ? "border-line bg-bg/70 backdrop-blur-lg" : "border-transparent"
+      }`}
       style={{ viewTransitionName: "site-header" }}
     >
       <nav
