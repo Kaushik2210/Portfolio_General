@@ -14,4 +14,5 @@ export const introDone = createFlag(false);
 
 export const useTheme = () => [themeStore.useValue(), themeStore.set] as const;
 export const useRole = () => [roleStore.useValue(), roleStore.set] as const;
+export const useRoleChosen = () => roleStore.useHasChosen();
 export const useIntroDone = () => introDone.useValue();

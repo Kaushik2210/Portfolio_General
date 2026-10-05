@@ -12,13 +12,17 @@ export function createPersistedStore<T extends string>(
 ) {
   const listeners = new Set<() => void>();
   let cached: T | null = null;
+  let stored = false;
 
   const get = (): T => {
     if (cached !== null) return cached;
     let value: T = fallback;
     try {
       const raw = localStorage.getItem(key);
-      if (raw && (valid as readonly string[]).includes(raw)) value = raw as T;
+      if (raw && (valid as readonly string[]).includes(raw)) {
+        value = raw as T;
+        stored = true;
+      }
     } catch {
       // storage can throw (private mode, blocked site data); fall back quietly
     }
@@ -28,6 +32,7 @@ export function createPersistedStore<T extends string>(
 
   const set = (value: T) => {
     cached = value;
+    stored = true;
     try {
       localStorage.setItem(key, value);
     } catch {
@@ -43,7 +48,18 @@ export function createPersistedStore<T extends string>(
 
   const useValue = (): T => useSyncExternalStore(subscribe, get, () => fallback);
 
-  return { get, set, subscribe, useValue };
+  /** True once the visitor has chosen a value (now or in an earlier visit). */
+  const useHasChosen = (): boolean =>
+    useSyncExternalStore(
+      subscribe,
+      () => {
+        get();
+        return stored;
+      },
+      () => false,
+    );
+
+  return { get, set, subscribe, useValue, useHasChosen };
 }
 
 /** In-memory boolean store for one-shot flags (e.g. the intro finished). */
