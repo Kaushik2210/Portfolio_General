@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Geist, JetBrains_Mono } from "next/font/google";
+import { ChatRoot } from "@/components/chat/chat-root";
 import { Cursor } from "@/components/cursor";
 import { Nav } from "@/components/nav";
 import { PrefsSync } from "@/components/prefs-sync";
@@ -59,6 +60,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <ScrollProgress />
         <Cursor />
         <Nav />
+        <ChatRoot />
         {children}
         <div className="grain" aria-hidden="true" />
       </body>
