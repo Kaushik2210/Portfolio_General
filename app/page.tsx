@@ -40,15 +40,35 @@ export default function Home() {
         }}
       />
       <ViewTransition enter={slide.enter} exit={slide.exit} default="none">
-        <div>
+        <div className="overflow-x-clip">
           <Hero />
-          <Marquee
-            words={["Software engineer", "Data analyst", "AI engineer", "Bengaluru"]}
-          />
+          {/* Two colour bands crossing, like tape across the page. */}
+          <div className="relative overflow-x-clip py-[clamp(24px,5vw,64px)]">
+            <Marquee
+              tone="accent"
+              tilt={-1.6}
+              words={["Software engineer", "Data analyst", "AI engineer", "Bengaluru"]}
+            />
+            <div className="-mt-[clamp(40px,7vw,96px)] hidden md:block">
+              <Marquee
+                tone="lime"
+                tilt={1.4}
+                direction={-1}
+                words={[
+                  "Ship it",
+                  "Show the evidence",
+                  "Explain the model",
+                  "Measure twice",
+                ]}
+              />
+            </div>
+          </div>
           <Work />
           <About />
           <Skills />
           <Marquee
+            tone="violet"
+            tilt={-1}
             direction={-1}
             words={[
               "TypeScript",
