@@ -66,6 +66,13 @@ export function Preloader() {
       .add(el, { translateY: "-100%", duration: 650, ease: "inOutExpo" }, 1550)
       .call(begin, 1500);
 
+    // Failsafe: animation frames pause in background tabs and crawl on slow devices, so a
+    // plain timer guarantees the overlay always leaves.
+    const failsafe = window.setTimeout(() => {
+      begin();
+      end();
+    }, 4000);
+
     skip.current = () => {
       tl.pause();
       begin();
@@ -73,6 +80,7 @@ export function Preloader() {
     };
 
     return () => {
+      window.clearTimeout(failsafe);
       tl.revert();
     };
   }, []);

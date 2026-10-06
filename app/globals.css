@@ -324,3 +324,26 @@ html[data-intro-seen] .hero-fade {
     border-top-right-radius: clamp(28px, 4vw, 64px);
   }
 }
+
+/* Last-resort failsafe: even if scripts never run, the loading overlay leaves by itself. */
+.preloader {
+  animation: preloader-failsafe 0.4s ease 6s forwards;
+}
+@keyframes preloader-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+/* The hero is never left blank, whatever happens to the intro. */
+.hero-name,
+.hero-fade {
+  animation: hero-failsafe 0.01s linear 9s forwards;
+}
+@keyframes hero-failsafe {
+  to {
+    opacity: 1;
+  }
+}
