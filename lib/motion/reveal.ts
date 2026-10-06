@@ -15,15 +15,17 @@ export function useScrollReveal(scope: RefObject<HTMLElement | null>) {
         return;
       }
       ScrollTrigger.batch(".reveal", {
-        start: "top 88%",
+        start: "top 92%",
         once: true,
         onEnter: (els) =>
           gsap.fromTo(
             els,
-            { y: shift.reveal, opacity: 0 },
+            { y: shift.reveal * 1.5, opacity: 0, filter: "blur(6px)" },
             {
               y: 0,
               opacity: 1,
+              filter: "blur(0px)",
+              clearProps: "filter",
               duration: dur.slow,
               ease: ease.out,
               stagger: 0.1,

@@ -72,7 +72,7 @@ function ProjectPanel({
     >
       <span
         aria-hidden="true"
-        className="panel-num text-outline-ink font-display pointer-events-none absolute top-1/2 right-0 hidden -translate-y-1/2 text-[clamp(14rem,44vw,48rem)] leading-none font-semibold tracking-tighter opacity-35 select-none md:block"
+        className="panel-num text-outline-ink font-display pointer-events-none absolute top-1/2 right-0 hidden -translate-y-1/2 text-[clamp(14rem,44vw,48rem)] leading-none font-semibold tracking-tighter opacity-55 select-none md:block"
       >
         {num}
       </span>

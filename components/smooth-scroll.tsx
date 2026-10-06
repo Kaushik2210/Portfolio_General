@@ -15,7 +15,12 @@ export function SmoothScroll() {
   useEffect(() => {
     if (prefersReducedMotion()) return;
 
-    const lenis = new Lenis({ autoRaf: false, lerp: 0.1, anchors: false });
+    const lenis = new Lenis({
+      autoRaf: false,
+      lerp: 0.085,
+      wheelMultiplier: 0.95,
+      anchors: false,
+    });
     setLenis(lenis);
     lenis.on("scroll", ScrollTrigger.update);
 
@@ -28,6 +33,36 @@ export function SmoothScroll() {
       gsap.ticker.lagSmoothing(500, 33);
       lenis.destroy();
       setLenis(null);
+    };
+  }, []);
+
+  // Failsafe: anything still hidden that is on screen or already scrolled past gets shown,
+  // so a fast fling or an anchor jump can never leave text invisible.
+  useEffect(() => {
+    if (prefersReducedMotion()) return;
+    let t = 0;
+    const sweep = () => {
+      document.querySelectorAll<HTMLElement>(".reveal, .split-hidden").forEach((el) => {
+        if (getComputedStyle(el).opacity !== "0") return;
+        if (el.getBoundingClientRect().top > window.innerHeight * 0.9) return;
+        gsap.to(el, {
+          opacity: 1,
+          y: 0,
+          filter: "none",
+          duration: 0.6,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+      });
+    };
+    const onScroll = () => {
+      window.clearTimeout(t);
+      t = window.setTimeout(sweep, 700);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.clearTimeout(t);
+      window.removeEventListener("scroll", onScroll);
     };
   }, []);
 

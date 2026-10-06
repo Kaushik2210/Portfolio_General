@@ -18,25 +18,38 @@ export function SplitHeading({ id, as: Tag = "h2", className = "", children }: P
   const el = useRef<HTMLHeadingElement>(null);
 
   useGSAP(
-    () => {
+    (ctx) => {
       const node = el.current;
       if (!node) return;
       if (prefersReducedMotion()) {
         gsap.set(node, { opacity: 1 });
         return;
       }
-      const split = SplitText.create(node, { type: "words", mask: "words" });
-      gsap.set(node, { opacity: 1 });
-      gsap.from(split.words, {
-        yPercent: 115,
-        rotationX: -75,
-        transformPerspective: 700,
-        transformOrigin: "50% 100%",
-        duration: dur.hero,
-        ease: ease.out,
-        stagger: 0.09,
-        scrollTrigger: { trigger: node, start: "top 88%", once: true },
-      });
+      // Splitting text is not free; only headings near the viewport pay for it at hydration.
+      const run = () => {
+        const split = SplitText.create(node, { type: "words", mask: "words" });
+        gsap.set(node, { opacity: 1 });
+        gsap.from(split.words, {
+          yPercent: 115,
+          rotationX: -75,
+          transformPerspective: 700,
+          transformOrigin: "50% 100%",
+          duration: dur.hero,
+          ease: ease.out,
+          stagger: 0.09,
+          scrollTrigger: { trigger: node, start: "top 92%", once: true },
+        });
+      };
+      const io = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry.isIntersecting) return;
+          io.disconnect();
+          ctx.add(run);
+        },
+        { rootMargin: "60% 0px" },
+      );
+      io.observe(node);
+      return () => io.disconnect();
     },
     { scope: el },
   );

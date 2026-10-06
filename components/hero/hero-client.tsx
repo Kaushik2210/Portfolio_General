@@ -217,7 +217,7 @@ export function HeroClient({
 
         <div className="hero-bottom grid items-end gap-8 lg:grid-cols-12">
           <div className="lg:col-span-6">
-            <p className="hero-fade font-display text-[length:var(--text-2xl)] leading-none">
+            <p className="font-display text-[length:var(--text-2xl)] leading-none">
               <span className="text-accent" aria-hidden="true">
                 /{" "}
               </span>
@@ -225,7 +225,7 @@ export function HeroClient({
             </p>
             <p
               ref={bodyEl}
-              className="hero-fade text-fg-muted mt-3 max-w-lg text-lg leading-relaxed"
+              className="text-fg-muted mt-3 max-w-lg text-lg leading-relaxed"
             >
               {copy.line}
             </p>

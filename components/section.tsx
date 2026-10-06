@@ -40,7 +40,7 @@ export function Section({
     >
       <span
         aria-hidden="true"
-        className="text-outline font-display pointer-events-none absolute top-4 right-[var(--gutter)] hidden text-[clamp(8rem,24vw,24rem)] leading-none font-semibold tracking-tighter opacity-50 select-none md:block"
+        className="text-outline font-display pointer-events-none absolute top-4 right-[var(--gutter)] hidden text-[clamp(8rem,24vw,24rem)] leading-none font-semibold tracking-tighter opacity-70 select-none md:block"
       >
         {eyebrow.match(/^\d+/)?.[0]}
       </span>
