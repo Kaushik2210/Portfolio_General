@@ -73,12 +73,14 @@ export default function Home() {
                 ]}
               />
             </div>
-            <ScrubBand
-              rows={[
-                ["EXPLAIN THE MODEL", 1],
-                ["SHOW THE EVIDENCE", -1],
-              ]}
-            />
+            <div className="hidden md:block">
+              <ScrubBand
+                rows={[
+                  ["EXPLAIN THE MODEL", 1],
+                  ["SHOW THE EVIDENCE", -1],
+                ]}
+              />
+            </div>
           </div>
 
           <Skills />

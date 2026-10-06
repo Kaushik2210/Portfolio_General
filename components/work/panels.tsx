@@ -68,7 +68,7 @@ function ProjectPanel({
       data-world={world}
       data-hud={`Work · ${project.title}`}
       aria-label={`Project ${num}: ${project.title}`}
-      className="bg-bg text-fg relative flex min-h-[100svh] items-center overflow-hidden pt-[104px] pb-12"
+      className="bg-bg text-fg relative flex items-center overflow-hidden pt-24 pb-14 lg:min-h-[100svh] lg:pt-[104px] lg:pb-12"
     >
       <span
         aria-hidden="true"
@@ -77,7 +77,7 @@ function ProjectPanel({
         {num}
       </span>
 
-      <RevealScope className="relative mx-auto grid w-full max-w-[1440px] items-center gap-12 px-[var(--gutter)] lg:grid-cols-12">
+      <RevealScope className="relative mx-auto grid w-full max-w-[1440px] items-center gap-8 px-[var(--gutter)] lg:grid-cols-12 lg:gap-12">
         <div className="lg:col-span-7">
           <p className="reveal mb-5 flex flex-wrap items-center gap-3 font-mono text-xs tracking-widest uppercase">
             <span className="border-ink text-ink -rotate-2 border-2 bg-[#c6ff3d] px-3 py-1 font-medium shadow-[3px_3px_0_0_var(--ink)]">
@@ -141,11 +141,11 @@ function ProjectPanel({
             className="block"
           >
             <Tilt max={6}>
-              <div className="border-ink overflow-hidden rounded-[var(--radius-lg)] border-2 shadow-[14px_14px_0_0_var(--ink)]">
+              <div className="border-ink overflow-hidden rounded-[var(--radius-lg)] border-2 shadow-[8px_8px_0_0_var(--ink)] lg:shadow-[14px_14px_0_0_var(--ink)]">
                 <div className="panel-cover scale-[1.18]">
                   <Cover
                     project={project}
-                    className="!aspect-[4/5] !rounded-none !border-0"
+                    className="!aspect-[16/11] !rounded-none !border-0 lg:!aspect-[4/5]"
                   />
                 </div>
               </div>

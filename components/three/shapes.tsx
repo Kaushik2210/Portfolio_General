@@ -1,10 +1,10 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
-export type Variant = "crystal" | "skyline" | "gyro" | "prism";
+export type Variant = "crystal" | "skyline" | "gyro" | "prism" | "knot";
 
 const pointer = { x: 0, y: 0 };
 
@@ -136,37 +136,61 @@ function Prism() {
   );
 }
 
-const SCENES = { crystal: Crystal, skyline: Skyline, gyro: Gyro, prism: Prism } as const;
+/** A lime torus knot with an ink wireframe shell. */
+function Knot() {
+  const g = useRef<THREE.Group>(null);
+  useFrame((state, dt) => {
+    if (!g.current) return;
+    g.current.rotation.x += dt * 0.35;
+    g.current.rotation.y += dt * 0.5;
+    g.current.position.x += (pointer.x * 0.6 - g.current.position.x) * 0.06;
+    g.current.position.y += (pointer.y * 0.4 - g.current.position.y) * 0.06;
+    g.current.scale.setScalar(1 + Math.sin(state.clock.elapsedTime * 1.4) * 0.03);
+  });
+  return (
+    <group ref={g} scale={0.9}>
+      <mesh>
+        <torusKnotGeometry args={[1, 0.34, 220, 24, 2, 3]} />
+        <meshStandardMaterial
+          color="#c6ff3d"
+          roughness={0.25}
+          metalness={0.2}
+          flatShading
+        />
+      </mesh>
+      <mesh scale={1.06}>
+        <torusKnotGeometry args={[1, 0.34, 90, 10, 2, 3]} />
+        <meshBasicMaterial color={INK} wireframe />
+      </mesh>
+    </group>
+  );
+}
+
+const SCENES = {
+  knot: Knot,
+  crystal: Crystal,
+  skyline: Skyline,
+  gyro: Gyro,
+  prism: Prism,
+} as const;
 
 /** One lightweight canvas per section. Renders only while visible, DPR capped. */
 export default function Shape({ variant }: { variant: Variant }) {
-  const box = useRef<HTMLDivElement>(null);
-  const [live, setLive] = useState(false);
-
   useEffect(() => {
-    const el = box.current;
-    if (!el) return;
-    const io = new IntersectionObserver(([e]) => setLive(e.isIntersecting));
-    io.observe(el);
     const move = (e: PointerEvent) => {
       pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
       pointer.y = -((e.clientY / window.innerHeight) * 2 - 1);
     };
     window.addEventListener("pointermove", move, { passive: true });
     return () => {
-      io.disconnect();
       window.removeEventListener("pointermove", move);
     };
   }, []);
 
   const Scene = SCENES[variant];
   return (
-    <div ref={box} aria-hidden="true" className="pointer-events-none size-full">
-      <Canvas
-        frameloop={live ? "always" : "never"}
-        dpr={[1, 1.5]}
-        camera={{ position: [0, 0, 6.5], fov: 40 }}
-      >
+    <div aria-hidden="true" className="pointer-events-none size-full">
+      <Canvas dpr={[1, 1.5]} camera={{ position: [0, 0, 6.5], fov: 40 }}>
         <ambientLight intensity={0.9} />
         <directionalLight position={[3, 4, 5]} intensity={2.2} />
         <Scene />

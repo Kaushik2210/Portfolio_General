@@ -126,7 +126,7 @@ export function Nav() {
     >
       <nav
         aria-label="Primary"
-        className="mx-auto flex max-w-[1280px] items-center justify-between px-[var(--gutter)] py-3"
+        className="mx-auto flex max-w-[1280px] items-center justify-between px-[var(--gutter)] py-2.5 md:py-3"
       >
         <a
           href="#top"

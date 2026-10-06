@@ -3,7 +3,7 @@ import { Section } from "../section";
 import { AskAiButton } from "./ask-ai-button";
 import { ContactForm } from "./form";
 import { CopyEmail } from "./copy-email";
-import { KnotSlot } from "./knot-slot";
+import { Float3D } from "../three/float";
 
 const link =
   "group flex items-center justify-between rounded-[var(--radius)] border border-line px-5 py-4 transition-colors hover:border-accent";
@@ -17,7 +17,7 @@ export function Contact() {
       world="violet"
       label="Contact"
     >
-      <KnotSlot />
+      <Float3D variant="knot" className="top-16 right-[8%]" />
       <div className="relative z-10 grid gap-14 lg:grid-cols-12">
         <div className="lg:col-span-5">
           <p className="reveal text-fg-muted max-w-md">

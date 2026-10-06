@@ -188,7 +188,7 @@ export function HeroClient({
         ))}
       </div>
 
-      <div className="relative z-10 flex flex-1 flex-col justify-between px-[var(--gutter)] pt-20 pb-10">
+      <div className="relative z-10 flex flex-1 flex-col justify-between px-[var(--gutter)] pt-20 pb-24 lg:pb-10">
         <div className="hero-fade text-fg-muted flex items-center justify-between font-mono text-[11px] tracking-widest uppercase">
           <span>SVK / 2026</span>
           <span className="hidden md:inline">Software · Data · AI</span>

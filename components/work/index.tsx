@@ -16,7 +16,7 @@ export function Work() {
         data-world="ink"
         data-hud="Work"
         aria-labelledby="work-title"
-        className="bg-bg text-fg relative flex min-h-[100svh] items-center overflow-hidden pt-[112px] pb-16"
+        className="bg-bg text-fg relative flex items-center overflow-hidden pt-28 pb-14 lg:min-h-[100svh] lg:pt-[112px] lg:pb-16"
       >
         <span
           aria-hidden="true"

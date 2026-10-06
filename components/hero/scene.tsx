@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useSceneMode } from "@/lib/capability";
+import { Guard } from "../three/guard";
 
 // Three.js, R3F and the shaders only load on capable desktop clients.
 const Blob = dynamic(() => import("./blob"), { ssr: false });
@@ -11,7 +12,7 @@ function Orb() {
   return (
     <div
       aria-hidden="true"
-      className="absolute inset-0 grid place-items-start justify-items-center overflow-hidden pt-[22svh] opacity-45 md:place-items-center md:pt-0 md:opacity-100"
+      className="absolute inset-0 grid place-items-start justify-items-center overflow-hidden pt-[9svh] opacity-40 md:place-items-center md:pt-0 md:opacity-100"
     >
       <div
         className="size-[84vw] max-w-[560px] rounded-full opacity-90"
@@ -27,5 +28,10 @@ function Orb() {
 
 export function HeroScene() {
   const mode = useSceneMode();
-  return mode === "webgl" ? <Blob /> : <Orb />;
+  if (mode !== "webgl") return <Orb />;
+  return (
+    <Guard fallback={<Orb />}>
+      <Blob />
+    </Guard>
+  );
 }
