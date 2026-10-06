@@ -14,9 +14,10 @@ work.
 
 ## What is in it
 
-- **Hero**: a custom GLSL particle field that resolves from noise into a neural-network lattice, reacts to the cursor and dissolves on scroll. Phones, touch devices, reduced-motion and low-power machines get a static SVG version of the same layout instead of WebGL.
+- **Design v2 (colour worlds)**: type is the image. Each section sits in its own colour world (ink, lime, violet, pink, ember, cream) set through a `data-world` attribute that swaps the design tokens. On desktop the sections are sheets that pin and scale back while the next slides over them (`components/stack.tsx`), a fixed vertical HUD names the current section, and a scrubbed type band travels sideways with scroll.
+- **Hero**: a giant two-line name that tears apart on a pinned scroll scene while a displaced, iridescent GLSL crystal swells behind it and a lime iris opens into the next world. Phones, touch devices and reduced-motion get a static orb and no pinning.
 - **Role switcher** (`View as: SDE | Data | AI`): re-orders projects (GSAP Flip), re-weights skills, and changes the hero copy and scene tint. Until you pick a role the hero previews all three.
-- **Work**: pinned horizontal gallery on desktop, plain grid elsewhere. Each project has a case-study route (problem, approach, result, architecture) with a shared-element cover transition via React `<ViewTransition>`.
+- **Work**: one full-screen coloured panel per project (parallax numeral, generated poster cover, metric, case-study link), stacked as sheets on desktop. Each project has a case-study route (problem, approach, result, architecture) with a shared-element cover transition via React `<ViewTransition>`.
 - **Skills**: an interactive constellation (hover or focus a skill to light the projects that use it), with the same content as a plain accessible list.
 - **GitHub**: contribution heatmap, language share and recent activity from `data/github.json`, refreshed by `npm run sync`.
 - **Ask my portfolio**: streaming chat grounded in the data files, with a fit-check mode for pasting a job description. Falls back to data-derived answers when no API key is set.
@@ -115,13 +116,13 @@ LinkedIn cannot be scraped (login wall and terms), so nothing here came from it.
 
 Measured with Lighthouse 12.6.1 against the production deployment, default simulated throttling.
 
-| Page       | Preset  | Performance    | Accessibility | Best practices | SEO |
-| ---------- | ------- | -------------- | ------------- | -------------- | --- |
-| Home       | Mobile  | 73, 85, 87, 87 | 100           | 100            | 100 |
-| Home       | Desktop | 96             | 100           | 100            | 100 |
-| Case study | Mobile  | 91             | 100           | 100            | 100 |
+| Page       | Preset  | Performance | Accessibility | Best practices | SEO |
+| ---------- | ------- | ----------- | ------------- | -------------- | --- |
+| Home       | Mobile  | 76 (v2)     | 100           | 100            | 100 |
+| Home       | Desktop | 86 (v2)     | 100           | 100            | 100 |
+| Case study | Mobile  | 91          | 100           | 100            | 100 |
 
-Measured again after the motion layer and the maximalist styling were added. Accessibility, best practices and SEO are 100 everywhere and desktop clears 90, but **mobile home sits under the performance target (typically 85 to 87, with occasional outliers either side)**; the maximalist and 3D layers cost roughly 5 mobile points, which is the trade for the look. Cutting more of it on phones would close the gap; desktop and case studies have headroom, the home page on mobile is the tightest at 91 to 92. Getting the home page there took several rounds, and what the investigation found is worth keeping:
+The v2 redesign (full-screen panels, pinned stacking, WebGL crystal) cost performance: mobile 76 (TBT 470ms, LCP 3.6s, hydration-dominated) and desktop 86. Accessibility, best practices and SEO stay at 100. Earlier numbers, measured after the motion layer and the maximalist styling were added. Accessibility, best practices and SEO are 100 everywhere and desktop clears 90, but **mobile home sits under the performance target (typically 85 to 87, with occasional outliers either side)**; the maximalist and 3D layers cost roughly 5 mobile points, which is the trade for the look. Cutting more of it on phones would close the gap; desktop and case studies have headroom, the home page on mobile is the tightest at 91 to 92. Getting the home page there took several rounds, and what the investigation found is worth keeping:
 
 - Under real CPU throttling, the dominant cost was one synchronous React hydration task. About 55% of the first-load DOM was decorative SVG (heatmap cells, tooltips, cover art), so those now mount only as they near the viewport. First-load DOM went from 2,065 to 838 nodes and mobile TBT in my 4x-CPU harness from about 2.0s to 0.4s. Lazily mounting the skills graph (never mounted on phones, where it is hidden) took the home page from 62-76 to 91-92.
 - Splitting sections into `<Suspense>` slices made production worse (TBT up to 1.7s), so it was reverted.
