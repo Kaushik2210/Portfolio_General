@@ -116,6 +116,94 @@ function Crystal() {
   );
 }
 
+/** Five solids on tilted orbits around the crystal; they fan outward as the hero is scrolled. */
+const SATS = [
+  { geo: "octa", color: "#c6ff3d", r: 3.3, speed: 0.55, tilt: 0.5, size: 0.36 },
+  { geo: "tetra", color: "#ff3d9a", r: 3.9, speed: -0.4, tilt: -0.7, size: 0.44 },
+  { geo: "ico", color: "#8b5cf6", r: 3.0, speed: 0.75, tilt: 1.1, size: 0.3 },
+  { geo: "box", color: "#6ee7d8", r: 4.4, speed: -0.3, tilt: 0.2, size: 0.38 },
+  { geo: "torus", color: "#ff5a36", r: 3.6, speed: 0.45, tilt: -1.2, size: 0.32 },
+] as const;
+
+function Satellites() {
+  const group = useRef<THREE.Group>(null);
+  useFrame((state) => {
+    const g = group.current;
+    if (!g) return;
+    const t = state.clock.elapsedTime;
+    const s = sceneState.scroll;
+    g.children.forEach((pivot, i) => {
+      const d = SATS[i];
+      pivot.rotation.z = d.tilt;
+      pivot.rotation.y = t * d.speed + i * 1.3;
+      const body = pivot.children[0];
+      body.position.x = d.r * (1 + s * 0.8);
+      body.rotation.x += 0.02 + i * 0.004;
+      body.rotation.y += 0.03;
+    });
+    g.rotation.x = -pointer.y * 0.15;
+    g.rotation.y = pointer.x * 0.2;
+  });
+  return (
+    <group ref={group}>
+      {SATS.map((d) => (
+        <group key={d.geo}>
+          <mesh>
+            {d.geo === "octa" && <octahedronGeometry args={[d.size, 0]} />}
+            {d.geo === "tetra" && <tetrahedronGeometry args={[d.size, 0]} />}
+            {d.geo === "ico" && <icosahedronGeometry args={[d.size, 0]} />}
+            {d.geo === "box" && <boxGeometry args={[d.size, d.size, d.size]} />}
+            {d.geo === "torus" && (
+              <torusGeometry args={[d.size, d.size * 0.35, 12, 24]} />
+            )}
+            <meshStandardMaterial color={d.color} roughness={0.3} flatShading />
+          </mesh>
+        </group>
+      ))}
+    </group>
+  );
+}
+
+/** A receding wireframe landscape that ripples under the crystal and fades as you scroll. */
+function Terrain() {
+  const mesh = useRef<THREE.Mesh>(null);
+  const N = 44;
+  const base = useMemo(() => {
+    const g = new THREE.PlaneGeometry(16, 12, N, N);
+    g.rotateX(-Math.PI / 2);
+    return g;
+  }, []);
+  useFrame((state) => {
+    const m = mesh.current;
+    if (!m) return;
+    const pos = (m.geometry as THREE.PlaneGeometry).attributes.position;
+    const t = state.clock.elapsedTime * 0.6;
+    for (let i = 0; i < pos.count; i++) {
+      const x = pos.getX(i);
+      const z = pos.getZ(i);
+      pos.setY(i, Math.sin(x * 0.7 + t) * 0.18 + Math.cos(z * 0.6 - t * 1.3) * 0.18);
+    }
+    pos.needsUpdate = true;
+    (m.material as THREE.MeshBasicMaterial).opacity = 0.2 * (1 - sceneState.scroll);
+  });
+  return (
+    <mesh ref={mesh} geometry={base} position={[0, -3, -1.5]}>
+      <meshBasicMaterial color="#c6ff3d" wireframe transparent opacity={0.2} />
+    </mesh>
+  );
+}
+
+/** The camera drifts with the cursor so the whole scene has parallax depth. */
+function CameraRig() {
+  useFrame((state, dt) => {
+    const cam = state.camera;
+    cam.position.x = THREE.MathUtils.damp(cam.position.x, pointer.x * 0.6, 3, dt);
+    cam.position.y = THREE.MathUtils.damp(cam.position.y, pointer.y * 0.4, 3, dt);
+    cam.lookAt(0, 0, 0);
+  });
+  return null;
+}
+
 /** Renders only while on screen and the tab is visible. */
 export default function Blob() {
   const wrap = useRef<HTMLDivElement>(null);
@@ -151,7 +239,12 @@ export default function Blob() {
         style={{ pointerEvents: "none" }}
         aria-hidden="true"
       >
+        <ambientLight intensity={0.9} />
+        <directionalLight position={[3, 4, 5]} intensity={2.2} />
+        <CameraRig />
+        <Terrain />
         <Crystal />
+        <Satellites />
       </Canvas>
     </div>
   );
