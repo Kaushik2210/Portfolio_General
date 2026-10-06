@@ -5,6 +5,8 @@ export const pointsVertex = /* glsl */ `
   uniform float uSize;
   uniform float uPixelRatio;
   uniform vec2 uMouse;     // world-space pointer in the field's local plane
+  uniform float uBurst;    // 1 right after a click, decays to 0
+  uniform vec2 uBurstPos;  // where the click landed
   attribute vec3 aTarget;
   attribute float aSeed;
   varying float vSeed;
@@ -31,12 +33,18 @@ export const pointsVertex = /* glsl */ `
     p.xy += normalize(d + vec2(0.0001)) * f * 0.42;
     p.z += f * 0.5;
 
+    // Click shockwave: a ring that expands outward and throws points off the lattice.
+    vec2 bd = p.xy - uBurstPos;
+    float ring = exp(-pow(length(bd) - (1.0 - uBurst) * 5.5, 2.0) * 2.2) * uBurst;
+    p.xy += normalize(bd + vec2(0.0001)) * ring * 0.9;
+    p.z += ring * 0.9;
+
     vec4 mv = modelViewMatrix * vec4(p, 1.0);
     gl_Position = projectionMatrix * mv;
-    gl_PointSize = uSize * uPixelRatio * (1.0 + f * 1.6) * (1.0 + k * 0.25) / -mv.z;
+    gl_PointSize = uSize * uPixelRatio * (1.0 + f * 1.6 + ring * 2.2) * (1.0 + k * 0.25) / -mv.z;
 
     vSeed = aSeed;
-    vAlpha = (0.35 + 0.65 * k) * (1.0 - uScroll) * (0.55 + 0.45 * f + 0.45 * aSeed);
+    vAlpha = (0.35 + 0.65 * k) * (1.0 - uScroll) * (0.55 + 0.45 * f + 0.45 * aSeed + ring * 0.9);
   }
 `;
 
