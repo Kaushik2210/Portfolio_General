@@ -27,7 +27,9 @@ export function SplitHeading({ id, className = "", children }: Props) {
       gsap.set(node, { opacity: 1 });
       gsap.from(split.words, {
         yPercent: 115,
-        rotate: 4,
+        rotationX: -75,
+        transformPerspective: 700,
+        transformOrigin: "50% 100%",
         duration: dur.hero,
         ease: ease.out,
         stagger: 0.09,

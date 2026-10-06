@@ -16,6 +16,21 @@ export function Wordmark({ text }: { text: string }) {
         mask: "chars",
         aria: "none",
       });
+      // The whole word tips up out of the floor as the footer arrives.
+      gsap.fromTo(
+        el.current,
+        { rotationX: 55, transformPerspective: 800, transformOrigin: "50% 100%" },
+        {
+          rotationX: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: el.current,
+            start: "top 100%",
+            end: "top 55%",
+            scrub: 0.6,
+          },
+        },
+      );
       gsap.from(split.chars, {
         yPercent: 105,
         ease: "power3.out",
@@ -36,7 +51,7 @@ export function Wordmark({ text }: { text: string }) {
     <p
       ref={el}
       aria-hidden="true"
-      className="font-display text-[length:clamp(3rem,13.2vw,15rem)] leading-[0.82] font-semibold tracking-tighter whitespace-nowrap select-none"
+      className="font-display text-[length:clamp(3rem,17.2vw,22rem)] leading-[0.82] font-semibold tracking-tighter whitespace-nowrap select-none"
     >
       {text}
     </p>
