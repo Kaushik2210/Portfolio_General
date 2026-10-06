@@ -1,3 +1,4 @@
+import { Float3D } from "../three/float";
 import { projects } from "@/lib/data";
 import { Eyebrow } from "../eyebrow";
 import { RevealScope } from "../reveal-scope";
@@ -15,7 +16,7 @@ export function Work() {
         data-world="ink"
         data-hud="Work"
         aria-labelledby="work-title"
-        className="bg-bg text-fg relative flex min-h-[100svh] items-center overflow-hidden py-[clamp(72px,10vw,140px)]"
+        className="bg-bg text-fg relative flex min-h-[100svh] items-center overflow-hidden pt-[112px] pb-16"
       >
         <span
           aria-hidden="true"
@@ -23,7 +24,8 @@ export function Work() {
         >
           {String(projects.length).padStart(2, "0")}
         </span>
-        <RevealScope className="relative mx-auto w-full max-w-[1440px] px-[var(--gutter)]">
+        <Float3D variant="prism" className="top-[14%] right-[6%]" />
+        <RevealScope className="relative z-10 mx-auto w-full max-w-[1440px] px-[var(--gutter)]">
           <Eyebrow className="mb-5">02 / Work</Eyebrow>
           <SplitHeading
             id="work-title"

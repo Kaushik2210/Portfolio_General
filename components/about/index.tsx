@@ -1,3 +1,4 @@
+import { Float3D } from "../three/float";
 import { github, linkedin, projects } from "@/lib/data";
 import { buildTimeline } from "@/lib/timeline";
 import { isReal } from "@/lib/verified";
@@ -46,6 +47,9 @@ export function About() {
       title="Software that shows its work."
       world="lime"
       label="About"
+      shape={
+        <Float3D variant="crystal" className="top-[clamp(380px,34vw,560px)] right-[3%]" />
+      }
     >
       <div className="grid gap-[clamp(40px,8vw,120px)] lg:grid-cols-12">
         <div className="lg:col-span-8">

@@ -68,7 +68,7 @@ function ProjectPanel({
       data-world={world}
       data-hud={`Work · ${project.title}`}
       aria-label={`Project ${num}: ${project.title}`}
-      className="bg-bg text-fg relative flex min-h-[100svh] items-center overflow-hidden py-[clamp(72px,10vw,140px)]"
+      className="bg-bg text-fg relative flex min-h-[100svh] items-center overflow-hidden pt-[104px] pb-12"
     >
       <span
         aria-hidden="true"
@@ -90,12 +90,12 @@ function ProjectPanel({
 
           <SplitHeading
             as="h3"
-            className="font-display text-[length:clamp(3.2rem,9.4vw,9.6rem)] leading-[0.86] font-semibold tracking-tighter"
+            className="font-display text-[length:clamp(3rem,min(9.4vw,15svh),9.6rem)] leading-[0.86] font-semibold tracking-tighter"
           >
             {project.title}
           </SplitHeading>
 
-          <p className="reveal mt-8 max-w-xl text-[length:clamp(1.15rem,1.6vw,1.6rem)] leading-snug font-medium">
+          <p className="reveal mt-5 max-w-xl text-[length:clamp(1.15rem,1.6vw,1.6rem)] leading-snug font-medium">
             {project.tagline}
           </p>
 
@@ -110,7 +110,7 @@ function ProjectPanel({
             </p>
           )}
 
-          <div className="reveal mt-10 flex flex-wrap gap-3">
+          <div className="reveal mt-7 flex flex-wrap gap-3">
             <Link
               href={`/work/${project.slug}`}
               transitionTypes={["nav-forward"]}
@@ -132,7 +132,7 @@ function ProjectPanel({
           </div>
         </div>
 
-        <div className="reveal lg:col-span-5">
+        <div className="reveal mx-auto w-full lg:col-span-5 lg:max-w-[min(100%,calc(58svh*0.8))]">
           <Link
             href={`/work/${project.slug}`}
             transitionTypes={["nav-forward"]}

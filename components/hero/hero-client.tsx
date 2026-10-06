@@ -188,7 +188,7 @@ export function HeroClient({
         ))}
       </div>
 
-      <div className="relative z-10 flex flex-1 flex-col justify-between px-[var(--gutter)] pt-24 pb-24">
+      <div className="relative z-10 flex flex-1 flex-col justify-between px-[var(--gutter)] pt-20 pb-10">
         <div className="hero-fade text-fg-muted flex items-center justify-between font-mono text-[11px] tracking-widest uppercase">
           <span>SVK / 2026</span>
           <span className="hidden md:inline">Software · Data · AI</span>
@@ -198,7 +198,7 @@ export function HeroClient({
         {/* The name. Overprinted against the crystal with a difference blend on desktop. */}
         <h1
           className="hero-name font-display my-auto leading-[0.78] font-semibold tracking-tighter text-[#f4f0e6] lg:mix-blend-difference"
-          style={{ fontSize: "clamp(4.2rem, 21.5vw, 26rem)" }}
+          style={{ fontSize: "clamp(4.2rem, min(21.5vw, 24svh), 26rem)" }}
         >
           <span className="sr-only">S V Kaushik</span>
           <span
@@ -233,7 +233,7 @@ export function HeroClient({
               <RoleSwitcher chosen={chosen} preview={shown} />
             </div>
           </div>
-          <div className="hero-fade flex flex-wrap items-center gap-3 lg:col-span-6 lg:justify-end">
+          <div className="hero-fade flex flex-wrap items-center gap-3 lg:col-span-6 lg:justify-end lg:pr-44">
             <Magnetic>
               <a
                 href="#work"

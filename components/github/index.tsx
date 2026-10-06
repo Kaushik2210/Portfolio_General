@@ -1,3 +1,4 @@
+import { Float3D } from "../three/float";
 import { github, SITE } from "@/lib/data";
 import { LazyMount } from "../lazy-mount";
 import { Section } from "../section";
@@ -32,6 +33,7 @@ export function GitHubSection() {
       title="Shipping in the open."
       world="cream"
       label="GitHub"
+      shape={<Float3D variant="skyline" className="top-20 right-[8%]" />}
     >
       <p className="reveal text-fg-muted mb-12 max-w-xl">
         Pulled from the GitHub API at build time, so these numbers are real and as fresh

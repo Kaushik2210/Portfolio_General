@@ -14,6 +14,8 @@ interface Props {
   world?: World;
   /** Short name shown in the scroll HUD. */
   label?: string;
+  /** Optional decorative 3D shape rendered behind the content. */
+  shape?: React.ReactNode;
 }
 
 /**
@@ -28,6 +30,7 @@ export function Section({
   className = "",
   world,
   label,
+  shape,
 }: Props) {
   return (
     <section
@@ -36,7 +39,7 @@ export function Section({
       data-world={world ?? "ink"}
       data-hud={label ?? eyebrow}
       aria-labelledby={`${id}-title`}
-      className={`border-line bg-bg text-fg relative overflow-x-clip py-[clamp(72px,13vw,180px)] ${className}`}
+      className={`border-line bg-bg text-fg relative overflow-x-clip pt-[clamp(104px,13vw,180px)] pb-[clamp(72px,13vw,180px)] ${className}`}
     >
       <span
         aria-hidden="true"
@@ -44,7 +47,8 @@ export function Section({
       >
         {eyebrow.match(/^\d+/)?.[0]}
       </span>
-      <RevealScope className="mx-auto max-w-[1440px] px-[var(--gutter)]">
+      {shape}
+      <RevealScope className="relative z-10 mx-auto max-w-[1440px] px-[var(--gutter)]">
         <Eyebrow className="mb-5">{eyebrow}</Eyebrow>
         <SplitHeading
           id={`${id}-title`}

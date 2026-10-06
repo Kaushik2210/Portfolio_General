@@ -1,3 +1,4 @@
+import { Float3D } from "../three/float";
 import { linkedin, projects } from "@/lib/data";
 import { layoutSkills, skillEdges } from "@/lib/skills-layout";
 import { LazyMount } from "../lazy-mount";
@@ -18,6 +19,7 @@ export function Skills() {
       eyebrow="03 / Skills"
       title="Grouped by what they are for."
       label="Skills"
+      shape={<Float3D variant="gyro" className="top-24 right-[10%]" />}
     >
       <p className="text-fg-muted mb-12 max-w-xl">
         Pick a role and its group comes forward. Hover or focus a skill to see which case
