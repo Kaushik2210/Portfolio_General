@@ -10,10 +10,14 @@ import { RevealScope } from "../reveal-scope";
 import type { World } from "../section";
 import { SplitHeading } from "../split-heading";
 import { Tilt } from "../tilt";
+import { Float3D } from "../three/float";
+import type { Variant } from "../three/shapes";
 import { Cover } from "./cover";
 
 /** Each project gets its own colour world; adjacent panels always differ. */
 const WORLDS: World[] = ["ember", "violet", "pink", "cream", "lime"];
+
+const SHAPES: Variant[] = ["crystal", "prism", "gyro", "knot", "skyline"];
 
 const ROLE_TAG = { sde: "Software", data: "Data", ai: "AI" } as const;
 
@@ -77,6 +81,10 @@ function ProjectPanel({
         {num}
       </span>
 
+      <Float3D
+        variant={SHAPES[index % SHAPES.length]}
+        className="top-[16%] right-[2%] !z-20 !h-[clamp(150px,16vw,260px)] !w-[clamp(150px,16vw,260px)]"
+      />
       <RevealScope className="relative mx-auto grid w-full max-w-[1440px] items-center gap-8 px-[var(--gutter)] lg:grid-cols-12 lg:gap-12">
         <div className="lg:col-span-7">
           <p className="reveal mb-5 flex flex-wrap items-center gap-3 font-mono text-xs tracking-widest uppercase">
