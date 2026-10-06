@@ -2,57 +2,30 @@
 
 import dynamic from "next/dynamic";
 import { useSceneMode } from "@/lib/capability";
-import { buildNetwork } from "./network";
 
 // Three.js, R3F and the shaders only load on capable desktop clients.
-const SceneCanvas = dynamic(() => import("./scene-canvas"), { ssr: false });
+const Blob = dynamic(() => import("./blob"), { ssr: false });
 
-const NETWORK = buildNetwork();
-
-/** Static, CSS-only stand-in: same layout as the 3D scene, no JS animation. */
-function Fallback() {
-  const sx = (x: number) => 50 + x * 7.2;
-  const sy = (y: number) => 50 - y * 11;
+/** Static stand-in for phones and low-power devices: same colours, no WebGL. */
+function Orb() {
   return (
-    <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
+    <div
+      aria-hidden="true"
+      className="absolute inset-0 grid place-items-start justify-items-center overflow-hidden pt-[22svh] opacity-45 md:place-items-center md:pt-0 md:opacity-100"
+    >
       <div
-        className="absolute inset-0"
+        className="size-[84vw] max-w-[560px] rounded-full opacity-90"
         style={{
-          background:
-            "radial-gradient(60% 50% at 70% 40%, color-mix(in oklab, var(--accent) 22%, transparent), transparent 70%), radial-gradient(40% 40% at 85% 75%, color-mix(in oklab, var(--data) 14%, transparent), transparent 70%)",
+          background: "conic-gradient(from 210deg, #c6ff3d, #ff3d9a, #8b5cf6, #c6ff3d)",
+          boxShadow: "0 0 0 2px #0b0b10, 12px 12px 0 2px #c6ff3d",
         }}
       />
-      <svg
-        viewBox="0 0 100 100"
-        preserveAspectRatio="xMidYMid slice"
-        className="absolute inset-0 size-full opacity-60"
-      >
-        <g stroke="var(--fg-muted)" strokeWidth="0.12" opacity="0.5">
-          {NETWORK.edges.map(([a, b], i) => (
-            <line
-              key={i}
-              x1={sx(NETWORK.nodes[a][0])}
-              y1={sy(NETWORK.nodes[a][1])}
-              x2={sx(NETWORK.nodes[b][0])}
-              y2={sy(NETWORK.nodes[b][1])}
-            />
-          ))}
-        </g>
-        <g fill="var(--accent)">
-          {NETWORK.nodes.map((n, i) => (
-            <circle key={i} cx={sx(n[0])} cy={sy(n[1])} r={i % 5 === 0 ? 0.7 : 0.4} />
-          ))}
-        </g>
-      </svg>
+      <div className="absolute size-[112vw] max-w-[760px] rounded-full border-2 border-dashed border-[#ff3d9a]/60" />
     </div>
   );
 }
 
 export function HeroScene() {
   const mode = useSceneMode();
-  return (
-    <div className="absolute inset-0 [mask-image:linear-gradient(90deg,transparent_8%,#000_52%)]">
-      {mode === "webgl" ? <SceneCanvas /> : <Fallback />}
-    </div>
-  );
+  return mode === "webgl" ? <Blob /> : <Orb />;
 }

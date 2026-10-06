@@ -22,55 +22,91 @@ function rng(seed: number) {
   };
 }
 
-/** Dominant role decides the tint, so covers echo the role switcher colours. */
-function tint(weight: Project["weight"]): string {
-  const [top] = (Object.entries(weight) as [keyof typeof weight, number][]).sort(
-    (a, b) => b[1] - a[1],
-  );
-  return top[0] === "data" ? "var(--data)" : "var(--accent)";
-}
+const PALETTES: [string, string][] = [
+  ["#c6ff3d", "#0b0b10"],
+  ["#ff3d9a", "#0b0b10"],
+  ["#8b5cf6", "#c6ff3d"],
+  ["#ff5a36", "#0b0b10"],
+  ["#6ee7d8", "#0b0b10"],
+  ["#f4f0e6", "#ff3d9a"],
+];
 
 /**
- * Generated cover art: a small constellation seeded by the slug, so each case
- * study has a stable, distinct visual until a real screenshot is provided.
- * It is decorative (aria-hidden) and never pretends to be a screenshot.
+ * Generated poster art, seeded by the slug: flat colour, a giant outlined
+ * initial, a sun, hatching and a small constellation. Each case study gets a
+ * stable, loud visual until a real screenshot is provided. It is decorative
+ * (aria-hidden) and never pretends to be a screenshot.
  */
 function Generated({ project }: { project: Project }) {
   const rand = rng(hash(project.slug));
-  const color = tint(project.weight);
-  const count = 16 + Math.floor(rand() * 8);
-  const pts = Array.from({ length: count }, () => ({
-    x: 30 + rand() * 340,
-    y: 25 + rand() * 190,
-    r: 1.2 + rand() * 3.2,
+  const [bg, fg] = PALETTES[hash(project.slug) % PALETTES.length];
+  const initial = project.title.charAt(0).toUpperCase();
+  const pts = Array.from({ length: 11 }, () => ({
+    x: 40 + rand() * 320,
+    y: 40 + rand() * 420,
+    r: 2 + rand() * 4,
   }));
   const edges: [number, number][] = [];
   pts.forEach((p, i) => {
     const near = pts
       .map((q, j) => ({ j, d: (p.x - q.x) ** 2 + (p.y - q.y) ** 2 }))
       .filter((n) => n.j !== i)
-      .sort((a, b) => a.d - b.d)
+      .sort((x, y) => x.d - y.d)
       .slice(0, 2);
     near.forEach((n) => i < n.j && edges.push([i, n.j]));
   });
+  const sunX = 90 + rand() * 220;
+  const sunY = 90 + rand() * 120;
 
   return (
     <svg
-      viewBox="0 0 400 240"
+      viewBox="0 0 400 500"
       preserveAspectRatio="xMidYMid slice"
       aria-hidden="true"
       className="size-full"
     >
-      <rect width="400" height="240" fill="var(--surface)" />
-      <rect width="400" height="240" fill={color} opacity="0.07" />
-      <g stroke={color} strokeWidth="0.6" opacity="0.5">
-        {edges.map(([a, b], i) => (
-          <line key={i} x1={pts[a].x} y1={pts[a].y} x2={pts[b].x} y2={pts[b].y} />
+      <defs>
+        <pattern
+          id={`hatch-${project.slug}`}
+          width="14"
+          height="14"
+          patternUnits="userSpaceOnUse"
+          patternTransform="rotate(45)"
+        >
+          <line x1="0" y1="0" x2="0" y2="14" stroke={fg} strokeWidth="3" />
+        </pattern>
+      </defs>
+      <rect width="400" height="500" fill={bg} />
+      <circle cx={sunX} cy={sunY} r="120" fill={fg} />
+      <rect
+        x="0"
+        y="330"
+        width="400"
+        height="170"
+        fill={`url(#hatch-${project.slug})`}
+        opacity="0.55"
+      />
+      <text
+        x="200"
+        y="400"
+        textAnchor="middle"
+        fontSize="520"
+        fontWeight="700"
+        fill="none"
+        stroke={fg}
+        strokeWidth="3"
+        className="font-display"
+      >
+        {initial}
+      </text>
+      <g stroke={fg} strokeWidth="2" opacity="0.85">
+        {edges.map(([p, q], i) => (
+          <line key={i} x1={pts[p].x} y1={pts[p].y} x2={pts[q].x} y2={pts[q].y} />
         ))}
       </g>
-      <g fill={color}>
+      <g fill={bg} stroke={fg} strokeWidth="2.5">
         {pts.map((p, i) => (
-          <circle key={i} cx={p.x} cy={p.y} r={p.r} opacity={0.5 + (i % 3) * 0.2} />
+          <circle key={i} cx={p.x} cy={p.y} r={p.r + 3} />
         ))}
       </g>
     </svg>

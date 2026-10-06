@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Geist, JetBrains_Mono } from "next/font/google";
-import { Ambient } from "@/components/ambient";
 import { ChatRoot } from "@/components/chat/chat-root";
 import { Cursor } from "@/components/cursor";
 import { Footer } from "@/components/footer";
@@ -90,7 +89,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Preloader />
         <ScrollProgress />
         <Cursor />
-        <Ambient />
         <Ripple />
         <Nav />
         <ChatRoot />

@@ -120,7 +120,7 @@ export function Nav() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-[70] border-b transition-[background-color,border-color,backdrop-filter] duration-[var(--dur-base)] ${
-        scrolled ? "border-line bg-bg/70 backdrop-blur-lg" : "border-transparent"
+        scrolled ? "border-line bg-bg/85 backdrop-blur-lg" : "border-transparent"
       }`}
       style={{ viewTransitionName: "site-header" }}
     >

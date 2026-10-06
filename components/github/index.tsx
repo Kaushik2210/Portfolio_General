@@ -26,7 +26,13 @@ export function GitHubSection() {
   const top = repos.slice(0, 6);
 
   return (
-    <Section id="github" eyebrow="04 / GitHub" title="Shipping in the open.">
+    <Section
+      id="github"
+      eyebrow="04 / GitHub"
+      title="Shipping in the open."
+      world="cream"
+      label="GitHub"
+    >
       <p className="reveal text-fg-muted mb-12 max-w-xl">
         Pulled from the GitHub API at build time, so these numbers are real and as fresh
         as the last deploy.

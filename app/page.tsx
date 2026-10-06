@@ -1,7 +1,10 @@
 import { ViewTransition } from "react";
 import { About } from "@/components/about";
 import { Contact } from "@/components/contact";
+import { Hud } from "@/components/hud";
 import { Marquee } from "@/components/marquee";
+import { ScrubBand } from "@/components/scrub-band";
+import { SectionStack } from "@/components/stack";
 import { GitHubSection } from "@/components/github";
 import { Hero } from "@/components/hero";
 import { linkedin, SITE } from "@/lib/data";
@@ -42,8 +45,16 @@ export default function Home() {
       <ViewTransition enter={slide.enter} exit={slide.exit} default="none">
         <div className="overflow-x-clip">
           <Hero />
-          {/* Two colour bands crossing, like tape across the page. */}
-          <div className="relative overflow-x-clip py-[clamp(24px,5vw,64px)]">
+          <About />
+          <Work />
+
+          {/* Tape across the page: two colour bands crossing, then type that travels. */}
+          <div
+            data-stack
+            data-world="ink"
+            data-hud="Tape"
+            className="bg-bg relative overflow-x-clip py-[clamp(48px,8vw,120px)]"
+          >
             <Marquee
               tone="accent"
               tilt={-1.6}
@@ -62,28 +73,21 @@ export default function Home() {
                 ]}
               />
             </div>
+            <ScrubBand
+              rows={[
+                ["EXPLAIN THE MODEL", 1],
+                ["SHOW THE EVIDENCE", -1],
+              ]}
+            />
           </div>
-          <Work />
-          <About />
+
           <Skills />
-          <Marquee
-            tone="violet"
-            tilt={-1}
-            direction={-1}
-            words={[
-              "TypeScript",
-              "Python",
-              "PyTorch",
-              "Next.js",
-              "FastAPI",
-              "Supabase",
-              "ONNX",
-            ]}
-          />
           <GitHubSection />
           <Contact />
         </div>
       </ViewTransition>
+      <SectionStack />
+      <Hud />
     </main>
   );
 }

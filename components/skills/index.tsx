@@ -13,7 +13,12 @@ const TITLES = Object.fromEntries(projects.map((p) => [p.slug, p.title]));
 
 export function Skills() {
   return (
-    <Section id="skills" eyebrow="03 / Skills" title="Grouped by what they are for.">
+    <Section
+      id="skills"
+      eyebrow="03 / Skills"
+      title="Grouped by what they are for."
+      label="Skills"
+    >
       <p className="text-fg-muted mb-12 max-w-xl">
         Pick a role and its group comes forward. Hover or focus a skill to see which case
         studies it appears in.

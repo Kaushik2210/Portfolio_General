@@ -7,12 +7,14 @@ import { dur, ease } from "@/lib/motion/tokens";
 
 interface Props {
   id?: string;
+  /** Heading level. Panels use h3 under a section h2. */
+  as?: "h2" | "h3";
   className?: string;
   children: string;
 }
 
 /** Section heading whose words rise out of a mask as it scrolls into view. */
-export function SplitHeading({ id, className = "", children }: Props) {
+export function SplitHeading({ id, as: Tag = "h2", className = "", children }: Props) {
   const el = useRef<HTMLHeadingElement>(null);
 
   useGSAP(
@@ -40,8 +42,8 @@ export function SplitHeading({ id, className = "", children }: Props) {
   );
 
   return (
-    <h2 ref={el} id={id} className={`split-hidden ${className}`}>
+    <Tag ref={el} id={id} className={`split-hidden ${className}`}>
       {children}
-    </h2>
+    </Tag>
   );
 }

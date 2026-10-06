@@ -9,7 +9,13 @@ const link =
 
 export function Contact() {
   return (
-    <Section id="contact" eyebrow="05 / Contact" title="Let's talk.">
+    <Section
+      id="contact"
+      eyebrow="05 / Contact"
+      title="Let's talk."
+      world="violet"
+      label="Contact"
+    >
       <div className="grid gap-14 lg:grid-cols-12">
         <div className="lg:col-span-5">
           <p className="reveal text-fg-muted max-w-md">

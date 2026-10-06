@@ -40,7 +40,13 @@ export function About() {
       }.`;
 
   return (
-    <Section id="about" eyebrow="02 / About" title="Software that shows its work.">
+    <Section
+      id="about"
+      eyebrow="01 / About"
+      title="Software that shows its work."
+      world="lime"
+      label="About"
+    >
       <div className="grid gap-[clamp(40px,8vw,120px)] lg:grid-cols-12">
         <div className="lg:col-span-8">
           <ScrubText

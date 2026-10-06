@@ -13,7 +13,14 @@ export interface Stat {
 
 const fmt = (n: number) => Math.round(n).toLocaleString("en-US");
 
-const TILE = ["bg-accent", "bg-c4", "bg-c3", "bg-c5", "bg-data", "bg-c4"];
+const TILE = [
+  "bg-[#ff5a36]",
+  "bg-[#c6ff3d]",
+  "bg-[#8b5cf6]",
+  "bg-[#ff3d9a]",
+  "bg-[#6ee7d8]",
+  "bg-[#c6ff3d]",
+];
 const TILT = [
   "md:-rotate-1",
   "md:rotate-1",

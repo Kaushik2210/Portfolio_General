@@ -3,12 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Magnetic } from "@/components/magnetic";
 import { RoleSwitcher } from "@/components/role-switcher";
-import { ROLE_COPY, ROLE_ORDER } from "@/lib/copy";
-import { gsap, ScrollTrigger, SplitText, useGSAP } from "@/lib/motion/gsap";
-import { prefersReducedMotion, scrollTo } from "@/lib/motion/scroll";
-import { dur, ease, shift, stagger, staggerFor } from "@/lib/motion/tokens";
-import { useIntroDone, useRole, useRoleChosen } from "@/lib/prefs";
 import { useReducedMotion } from "@/lib/capability";
+import { ROLE_COPY, ROLE_ORDER } from "@/lib/copy";
+import { gsap, SplitText, useGSAP } from "@/lib/motion/gsap";
+import { prefersReducedMotion, scrollTo } from "@/lib/motion/scroll";
+import { dur, ease, stagger, staggerFor } from "@/lib/motion/tokens";
+import { useIntroDone, useRole, useRoleChosen } from "@/lib/prefs";
 import { HeroScene } from "./scene";
 import { sceneState } from "./scene-state";
 
@@ -16,6 +16,12 @@ const CYCLE_MS = 2600;
 
 const btn =
   "relative overflow-hidden inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-colors duration-[var(--dur-base)]";
+
+const STICKERS: { t: string; cls: string; pos: string }[] = [
+  { t: "Full-stack TypeScript", cls: "bg-c3 -rotate-6", pos: "top-[21%] left-[36%]" },
+  { t: "Anomaly detection", cls: "bg-c4 rotate-3", pos: "top-[44%] right-[2%]" },
+  { t: "LLM systems", cls: "bg-c5 -rotate-3", pos: "top-[60%] left-[42%]" },
+];
 
 export function HeroClient({
   hasResume,
@@ -25,7 +31,6 @@ export function HeroClient({
   location: string;
 }) {
   const root = useRef<HTMLElement>(null);
-  const nameEl = useRef<HTMLHeadingElement>(null);
   const titleEl = useRef<HTMLSpanElement>(null);
   const bodyEl = useRef<HTMLParagraphElement>(null);
   const done = useIntroDone();
@@ -50,7 +55,7 @@ export function HeroClient({
     };
   }, [shown]);
 
-  // Roll the title and fade the line in when the previewed role changes.
+  // The title scrambles into place when the previewed role changes.
   const first = useRef(true);
   useGSAP(
     () => {
@@ -59,7 +64,6 @@ export function HeroClient({
         return;
       }
       if (prefersReducedMotion()) return;
-      // The new title scrambles into place (GSAP ScrambleText).
       gsap.fromTo(
         titleEl.current,
         { opacity: 0.4 },
@@ -79,87 +83,75 @@ export function HeroClient({
     { scope: root, dependencies: [shown] },
   );
 
-  // Entrance and scroll choreography. Waits for the preloader hand-off.
+  // Entrance on preloader hand-off, then the pinned scroll scene (desktop only).
   useGSAP(
     () => {
       if (!done) return;
       const el = root.current;
       if (!el) return;
 
-      // Reduced motion and phones: no entrance choreography, the content is simply there.
+      // Reduced motion and phones: no choreography, the content is simply there.
       if (prefersReducedMotion() || document.documentElement.dataset.noIntro) {
         gsap.set(el.querySelectorAll(".hero-fade, .hero-name"), { opacity: 1 });
-        sceneState.progress = 1;
+        sceneState.scroll = 0;
         return;
       }
 
-      const split = SplitText.create(nameEl.current!, { type: "chars", mask: "chars" });
-      gsap.set(nameEl.current, { opacity: 1 });
+      const splits = gsap.utils
+        .toArray<HTMLElement>(".hero-line")
+        .map((l) => SplitText.create(l, { type: "chars", mask: "chars", aria: "none" }));
+      gsap.set(el.querySelector(".hero-name"), { opacity: 1 });
 
-      const tl = gsap.timeline({ defaults: { ease: ease.out } });
-      tl.from(
-        split.chars,
-        {
-          yPercent: 110,
-          duration: dur.hero,
-          stagger: staggerFor(split.chars.length, stagger.char),
-        },
-        0,
-      )
-        .fromTo(
-          ".hero-fade",
-          { y: shift.reveal, opacity: 0 },
-          { y: 0, opacity: 1, duration: dur.slow, stagger: 0.1 },
-          0.35,
-        )
-        .to(sceneState, { progress: 1, duration: 2.6, ease: "power2.inOut" }, 0.1);
+      const intro = gsap.timeline({ defaults: { ease: ease.out } });
+      splits.forEach((s, i) =>
+        intro.from(
+          s.chars,
+          {
+            yPercent: 115,
+            rotate: i === 0 ? 8 : -8,
+            duration: dur.hero,
+            stagger: staggerFor(s.chars.length, stagger.char),
+          },
+          i * 0.12,
+        ),
+      );
+      intro.fromTo(
+        ".hero-fade",
+        { y: 28, opacity: 0 },
+        { y: 0, opacity: 1, duration: dur.slow, stagger: 0.08 },
+        0.4,
+      );
 
-      let cleanup: (() => void) | undefined;
-      // Depth parallax: layers drift against the pointer at different rates (mouse only).
-      if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-        const layers = [
-          { sel: ".hero-name", x: -22, y: -10 },
-          { sel: ".hero-role", x: -12, y: -6 },
-          { sel: ".hero-body", x: -6, y: -3 },
-        ].map((l) => {
-          const node = el.querySelector(l.sel);
-          return node
-            ? {
-                ...l,
-                qx: gsap.quickTo(node, "x", { duration: 0.9, ease: "power3.out" }),
-                qy: gsap.quickTo(node, "y", { duration: 0.9, ease: "power3.out" }),
-              }
-            : null;
+      const mm = gsap.matchMedia();
+      mm.add("(min-width: 1024px)", () => {
+        // The scene: name tears apart, the crystal swells, a lime iris opens.
+        const tl = gsap.timeline({
+          defaults: { ease: "none" },
+          scrollTrigger: {
+            trigger: el,
+            start: "top top",
+            end: "+=170%",
+            scrub: 0.7,
+            pin: true,
+            anticipatePin: 1,
+            onUpdate: (self) => {
+              sceneState.scroll = self.progress;
+            },
+          },
         });
-        const onMove = (e: PointerEvent) => {
-          const nx = e.clientX / window.innerWidth - 0.5;
-          const ny = e.clientY / window.innerHeight - 0.5;
-          for (const l of layers) {
-            if (!l) continue;
-            l.qx(nx * l.x);
-            l.qy(ny * l.y);
-          }
+        tl.to(".hero-line-1", { xPercent: -34, scale: 1.12 }, 0)
+          .to(".hero-line-2", { xPercent: 30, scale: 1.12 }, 0)
+          .to(".hero-bottom", { y: 140, opacity: 0, duration: 0.35 }, 0)
+          .to(".hero-sticker", { y: -160, opacity: 0, duration: 0.4, stagger: 0.04 }, 0)
+          .to(
+            ".hero-iris",
+            { clipPath: "circle(150% at 50% 52%)", ease: "power2.in", duration: 0.5 },
+            0.5,
+          );
+        return () => {
+          sceneState.scroll = 0;
         };
-        window.addEventListener("pointermove", onMove, { passive: true });
-        cleanup = () => window.removeEventListener("pointermove", onMove);
-      }
-
-      ScrollTrigger.create({
-        trigger: el,
-        start: "top top",
-        end: "bottom top",
-        scrub: true,
-        onUpdate: (self) => {
-          sceneState.scroll = self.progress;
-        },
       });
-      gsap.to(".hero-content", {
-        yPercent: -8,
-        ease: "none",
-        scrollTrigger: { trigger: el, start: "top top", end: "bottom top", scrub: 0.6 },
-      });
-
-      return () => cleanup?.();
     },
     { scope: root, dependencies: [done] },
   );
@@ -170,152 +162,133 @@ export function HeroClient({
     <section
       ref={root}
       id="top"
+      data-world="ink"
+      data-hud="Intro"
       aria-label="Introduction"
-      className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden"
+      className="bg-bg text-fg relative isolate flex min-h-[100svh] flex-col justify-between overflow-hidden"
     >
       <HeroScene />
 
-      {/* Maximalist dressing: all decorative, hidden from assistive tech. */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 overflow-hidden"
-      >
-        <p className="text-outline font-display absolute top-1/2 right-0 hidden translate-x-[6%] -translate-y-1/2 text-[clamp(14rem,38vw,42rem)] leading-none font-semibold tracking-tighter opacity-30 select-none md:block">
-          SVK
-        </p>
+      {/* Corner furniture. Decorative. */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-[15]">
         {["top-24 left-3", "top-24 right-3", "bottom-3 left-3", "bottom-3 right-3"].map(
-          (pos) => (
-            <span key={pos} className={`absolute ${pos} text-fg-muted font-mono text-lg`}>
+          (p) => (
+            <span key={p} className={`absolute ${p} text-fg-muted font-mono text-lg`}>
               +
             </span>
           ),
         )}
-        <p className="text-fg-muted absolute top-28 right-[var(--gutter)] hidden text-right font-mono text-[11px] leading-relaxed tracking-widest uppercase lg:block">
-          Fig. 01
-          <br />
-          12.9716° N / 77.5946° E<br />
-          Bengaluru, IN
-        </p>
-        <div className="absolute right-[8vw] bottom-[18vh] hidden size-44 -rotate-12 lg:block">
-          <svg viewBox="0 0 200 200" className="spin-slow size-full">
-            <defs>
-              <path
-                id="badge-circle"
-                d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"
-              />
-            </defs>
-            <circle cx="100" cy="100" r="99" fill="var(--c4)" />
-            <circle
-              cx="100"
-              cy="100"
-              r="62"
-              fill="none"
-              stroke="var(--ink)"
-              strokeWidth="1.5"
-              strokeDasharray="3 5"
-            />
-            <text
-              fontSize="15.5"
-              fontWeight="700"
-              letterSpacing="2.4"
-              fill="var(--ink)"
-              className="font-mono"
-            >
-              <textPath href="#badge-circle">
-                SOFTWARE ✦ DATA ✦ AI ✦ SOFTWARE ✦ DATA ✦ AI ✦
-              </textPath>
-            </text>
-          </svg>
-          <span className="font-display text-ink absolute inset-0 grid place-items-center text-5xl">
-            ✦
+        {STICKERS.map((s) => (
+          <span
+            key={s.t}
+            className={`hero-sticker border-ink text-ink absolute hidden rounded-full border-2 px-4 py-1.5 font-mono text-xs font-medium shadow-[4px_4px_0_0_var(--ink)] lg:block ${s.cls} ${s.pos}`}
+          >
+            {s.t}
           </span>
+        ))}
+      </div>
+
+      <div className="relative z-10 flex flex-1 flex-col justify-between px-[var(--gutter)] pt-24 pb-24">
+        <div className="hero-fade text-fg-muted flex items-center justify-between font-mono text-[11px] tracking-widest uppercase">
+          <span>SVK / 2026</span>
+          <span className="hidden md:inline">Software · Data · AI</span>
+          <span>{location}</span>
+        </div>
+
+        {/* The name. Overprinted against the crystal with a difference blend on desktop. */}
+        <h1
+          className="hero-name font-display my-auto leading-[0.78] font-semibold tracking-tighter text-[#f4f0e6] lg:mix-blend-difference"
+          style={{ fontSize: "clamp(4.2rem, 21.5vw, 26rem)" }}
+        >
+          <span className="sr-only">S V Kaushik</span>
+          <span
+            aria-hidden="true"
+            className="hero-line-1 block origin-left whitespace-nowrap"
+          >
+            <span className="hero-line block">S V</span>
+          </span>
+          <span
+            aria-hidden="true"
+            className="hero-line-2 block origin-right whitespace-nowrap"
+          >
+            <span className="hero-line block">KAUSHIK</span>
+          </span>
+        </h1>
+
+        <div className="hero-bottom grid items-end gap-8 lg:grid-cols-12">
+          <div className="lg:col-span-6">
+            <p className="hero-fade font-display text-[length:var(--text-2xl)] leading-none">
+              <span className="text-accent" aria-hidden="true">
+                /{" "}
+              </span>
+              <span ref={titleEl}>{reduced ? "Software, Data, AI" : copy.title}</span>
+            </p>
+            <p
+              ref={bodyEl}
+              className="hero-fade text-fg-muted mt-3 max-w-lg text-lg leading-relaxed"
+            >
+              {copy.line}
+            </p>
+            <div className="hero-fade mt-6">
+              <RoleSwitcher chosen={chosen} preview={shown} />
+            </div>
+          </div>
+          <div className="hero-fade flex flex-wrap items-center gap-3 lg:col-span-6 lg:justify-end">
+            <Magnetic>
+              <a
+                href="#work"
+                data-ripple
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollTo("#work");
+                }}
+                className={`${btn} bg-c4 text-ink border-ink border-2 shadow-[4px_4px_0_0_var(--ink)] hover:brightness-105`}
+              >
+                View work <span aria-hidden="true">↓</span>
+              </a>
+            </Magnetic>
+            <Magnetic>
+              <button
+                type="button"
+                data-ripple
+                onClick={() => window.dispatchEvent(new CustomEvent("chat:open"))}
+                className={`${btn} hover:text-ink border-2 border-[#f4f0e6] text-[#f4f0e6] hover:bg-[#f4f0e6]`}
+              >
+                Talk to my AI
+              </button>
+            </Magnetic>
+            {hasResume && (
+              <Magnetic>
+                <a
+                  href="/resume.pdf"
+                  target="_blank"
+                  rel="noopener"
+                  className={`${btn} text-fg-muted hover:text-fg`}
+                >
+                  Resume
+                </a>
+              </Magnetic>
+            )}
+          </div>
         </div>
       </div>
 
-      <div className="hero-content relative mx-auto w-full max-w-[1280px] px-[var(--gutter)] pt-32 pb-12 md:pb-16">
-        <p className="hero-fade text-fg-muted mb-4 font-mono text-xs tracking-widest uppercase">
-          {location} / Portfolio 2026
-        </p>
-
-        <h1
-          ref={nameEl}
-          className="hero-name font-display text-[length:var(--text-hero)] leading-[0.88] font-semibold tracking-tighter"
-        >
-          S V Kaushik
-        </h1>
-
-        <p className="hero-fade hero-role font-display mt-6 flex flex-wrap items-baseline gap-x-4 text-[length:var(--text-2xl)] leading-tight">
-          <span className="text-accent" aria-hidden="true">
-            /
-          </span>
-          <span className="inline-block overflow-hidden pb-1" aria-live="off">
-            <span ref={titleEl} className="inline-block">
-              {reduced ? "Software Engineer, Data Analyst, AI Engineer" : copy.title}
-            </span>
-          </span>
-        </p>
-
-        <p
-          ref={bodyEl}
-          className="hero-fade hero-body text-fg-muted mt-4 max-w-xl text-lg leading-relaxed"
-        >
-          {copy.line}
-        </p>
-        <ul aria-label="Focus areas" className="hero-fade mt-6 flex flex-wrap gap-3">
-          {[
-            ["Full-stack TypeScript", "bg-c3", "-rotate-2"],
-            ["Anomaly detection", "bg-c4", "rotate-1"],
-            ["LLM systems", "bg-c5", "-rotate-1"],
-          ].map(([t, bg, rot]) => (
-            <li
-              key={t}
-              className={`${bg} ${rot} border-ink text-ink rounded-full border-2 px-4 py-1.5 font-mono text-xs font-medium tracking-wide shadow-[4px_4px_0_0_var(--ink)]`}
-            >
-              {t}
-            </li>
-          ))}
-        </ul>
-
-        <div className="hero-fade mt-8 flex flex-wrap items-center gap-3">
-          <Magnetic>
-            <a
-              href="#work"
-              data-ripple
-              onClick={(e) => {
-                e.preventDefault();
-                scrollTo("#work");
-              }}
-              className={`${btn} bg-accent text-accent-ink hover:brightness-110`}
-            >
-              View work <span aria-hidden="true">↓</span>
-            </a>
-          </Magnetic>
-          <Magnetic>
-            <button
-              type="button"
-              onClick={() => window.dispatchEvent(new CustomEvent("chat:open"))}
-              data-ripple
-              className={`${btn} border-line bg-surface/60 hover:border-accent border backdrop-blur-lg`}
-            >
-              Talk to my AI
-            </button>
-          </Magnetic>
-          {hasResume && (
-            <Magnetic>
-              <a
-                href="/resume.pdf"
-                target="_blank"
-                rel="noopener"
-                className={`${btn} text-fg-muted hover:text-fg`}
-              >
-                Resume
-              </a>
-            </Magnetic>
-          )}
-        </div>
-
-        <div className="hero-fade mt-10">
-          <RoleSwitcher chosen={chosen} preview={shown} />
+      {/* The iris: opens on scroll and becomes the next (lime) world. Desktop only. */}
+      <div
+        aria-hidden="true"
+        data-world="lime"
+        className="hero-iris bg-bg text-fg absolute inset-0 z-20 hidden place-items-center lg:grid"
+        style={{ clipPath: "circle(0% at 50% 52%)" }}
+      >
+        <div className="px-[var(--gutter)] text-center">
+          <p className="font-display text-[clamp(6rem,19vw,22rem)] leading-[0.82] font-semibold tracking-tighter">
+            HELLO,
+            <br />
+            WORLD.
+          </p>
+          <p className="mt-8 font-mono text-sm tracking-widest uppercase">
+            I&apos;m Kaushik. It only gets louder from here ↓
+          </p>
         </div>
       </div>
     </section>

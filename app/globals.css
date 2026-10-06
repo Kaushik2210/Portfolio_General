@@ -80,16 +80,6 @@
 html {
   background-color: var(--bg);
 }
-/* Static dot grid like graph paper. Desktop only: it costs paint time on phones. */
-@media (min-width: 768px) {
-  html {
-    background-image: radial-gradient(
-      color-mix(in oklab, var(--fg) 11%, transparent) 1px,
-      transparent 1.2px
-    );
-    background-size: 26px 26px;
-  }
-}
 
 body {
   /* The page colour lives on <html> so the ambient layer can sit behind content. */
@@ -260,5 +250,77 @@ html[data-intro-seen] .hero-fade {
 @media (prefers-reduced-motion: reduce) {
   .spin-slow {
     animation: none;
+  }
+}
+
+/* ---------- Colour worlds ----------
+   A section sets data-world and every token below it re-themes. Components use
+   var(--bg) / var(--fg) / var(--accent), never fixed colours, so any section can
+   live in any world. */
+[data-world] {
+  background: var(--bg);
+  color: var(--fg);
+}
+[data-world="lime"] {
+  --bg: #c6ff3d;
+  --fg: #0b0b10;
+  --fg-muted: #1f2608;
+  --line: rgb(11 11 16 / 0.28);
+  --surface: #d8ff7a;
+  --surface-2: #b4e62e;
+  --accent: #0b0b10;
+  --accent-ink: #c6ff3d;
+  --data: #0b0b10;
+}
+[data-world="violet"] {
+  --bg: #8b5cf6;
+  --fg: #0b0b10;
+  --fg-muted: #160d33;
+  --line: rgb(11 11 16 / 0.3);
+  --surface: #a687f8;
+  --surface-2: #7a4de6;
+  --accent: #0b0b10;
+  --accent-ink: #c6ff3d;
+  --data: #0b0b10;
+}
+[data-world="pink"] {
+  --bg: #ff3d9a;
+  --fg: #0b0b10;
+  --fg-muted: #3a0620;
+  --line: rgb(11 11 16 / 0.3);
+  --surface: #ff6fb4;
+  --surface-2: #e62a86;
+  --accent: #0b0b10;
+  --accent-ink: #ffe3f1;
+  --data: #0b0b10;
+}
+[data-world="ember"] {
+  --bg: #ff5a36;
+  --fg: #0b0b10;
+  --fg-muted: #2a0b04;
+  --line: rgb(11 11 16 / 0.3);
+  --surface: #ff7d5e;
+  --surface-2: #e84a26;
+  --accent: #0b0b10;
+  --accent-ink: #ffe9e2;
+  --data: #0b0b10;
+}
+[data-world="cream"] {
+  --bg: #f4f0e6;
+  --fg: #0b0b10;
+  --fg-muted: #4a4639;
+  --line: rgb(11 11 16 / 0.2);
+  --surface: #ffffff;
+  --surface-2: #e8e2d2;
+  --accent: #c8320f;
+  --accent-ink: #ffffff;
+  --data: #0b7a6f;
+}
+
+/* Stacked sections get a sheet-like rounded top edge on desktop. */
+@media (min-width: 1024px) {
+  [data-stack] {
+    border-top-left-radius: clamp(28px, 4vw, 64px);
+    border-top-right-radius: clamp(28px, 4vw, 64px);
   }
 }
