@@ -1,8 +1,10 @@
 import { linkedin, projects } from "@/lib/data";
 import { layoutSkills, skillEdges } from "@/lib/skills-layout";
+import { LazyMount } from "../lazy-mount";
 import { RoleSwitcher } from "../role-switcher";
 import { Section } from "../section";
 import { Constellation } from "./constellation";
+import { SkillRing } from "./ring";
 
 // Computed once at build time; the layout is deterministic.
 const SKILLS = layoutSkills(linkedin.skills);
@@ -20,6 +22,15 @@ export function Skills() {
         <RoleSwitcher />
       </div>
       <Constellation skills={SKILLS} edges={EDGES} titles={TITLES} />
+      {/* Tablet and up only: it is hidden (and so never mounted) on phones. */}
+      <LazyMount className="hidden md:block" rootMargin="200px">
+        <SkillRing
+          items={linkedin.skills
+            .filter((k) => k.name.length <= 14)
+            .slice(0, 14)
+            .map((k) => ({ name: k.name, group: k.group }))}
+        />
+      </LazyMount>
     </Section>
   );
 }
