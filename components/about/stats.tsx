@@ -3,6 +3,7 @@
 import { animate } from "animejs";
 import { useEffect, useRef } from "react";
 import { prefersReducedMotion } from "@/lib/motion/scroll";
+import { Tilt } from "../tilt";
 
 export interface Stat {
   label: string;
@@ -58,14 +59,18 @@ function Counter({ stat, i }: { stat: Stat; i: number }) {
   }, [stat.value]);
 
   return (
-    <li
-      className={`reveal text-ink border-ink rounded-[var(--radius-lg)] border-2 p-6 shadow-[6px_6px_0_0_var(--ink)] ${TILE[i % TILE.length]} ${TILT[i % TILT.length]}`}
-    >
-      <p className="font-display text-[length:var(--text-3xl)] leading-none font-semibold tracking-tight tabular-nums">
-        <span ref={num}>{fmt(stat.value)}</span>
-      </p>
-      <p className="mt-3 text-sm font-medium">{stat.label}</p>
-      {stat.note && <p className="font-mono text-xs opacity-70">{stat.note}</p>}
+    <li className={`reveal ${TILT[i % TILT.length]}`}>
+      <Tilt
+        max={9}
+        radius="var(--radius-lg)"
+        innerClassName={`text-ink border-ink rounded-[var(--radius-lg)] border-2 p-6 shadow-[6px_6px_0_0_var(--ink)] ${TILE[i % TILE.length]}`}
+      >
+        <p className="font-display text-[length:var(--text-3xl)] leading-none font-semibold tracking-tight tabular-nums">
+          <span ref={num}>{fmt(stat.value)}</span>
+        </p>
+        <p className="mt-3 text-sm font-medium">{stat.label}</p>
+        {stat.note && <p className="font-mono text-xs opacity-70">{stat.note}</p>}
+      </Tilt>
     </li>
   );
 }

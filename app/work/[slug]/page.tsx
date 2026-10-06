@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ViewTransition } from "react";
 import { RevealScope } from "@/components/reveal-scope";
 import { Architecture } from "@/components/work/architecture";
+import { Tilt } from "@/components/tilt";
 import { Cover } from "@/components/work/cover";
 import { projects } from "@/lib/data";
 import { isReal } from "@/lib/verified";
@@ -93,7 +94,9 @@ export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]"
             </div>
 
             <div className="mt-14">
-              <Cover project={project} className="!aspect-[16/9]" />
+              <Tilt max={3}>
+                <Cover project={project} className="!aspect-[16/9]" />
+              </Tilt>
             </div>
 
             <dl className="reveal border-line mt-12 grid gap-8 border-y py-8 sm:grid-cols-3">
