@@ -4,7 +4,8 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
-export type Variant = "crystal" | "skyline" | "gyro" | "prism" | "knot";
+export type Variant =
+  "crystal" | "skyline" | "gyro" | "prism" | "knot" | "helix" | "orbit";
 
 const pointer = { x: 0, y: 0 };
 
@@ -166,7 +167,88 @@ function Knot() {
   );
 }
 
+/** A double helix of beads that twists further the more the page has scrolled. */
+function Helix() {
+  const g = useRef<THREE.Group>(null);
+  const ref = useRef<THREE.InstancedMesh>(null);
+  const N = 28;
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+  useFrame((state, dt) => {
+    const m = ref.current;
+    if (!m || !g.current) return;
+    g.current.rotation.y += dt * 0.5;
+    g.current.rotation.z = 0.35 + pointer.x * 0.2;
+    const twist = 0.5 + Math.sin(scrollPhase() * 0.7) * 0.25;
+    let i = 0;
+    for (let k = 0; k < N; k++) {
+      const y = (k / (N - 1) - 0.5) * 3.6;
+      const a = k * twist + state.clock.elapsedTime * 0.8;
+      for (const side of [0, Math.PI]) {
+        dummy.position.set(Math.cos(a + side) * 0.9, y, Math.sin(a + side) * 0.9);
+        dummy.scale.setScalar(0.17 + 0.05 * Math.sin(a * 2));
+        dummy.updateMatrix();
+        m.setMatrixAt(i++, dummy.matrix);
+      }
+    }
+    m.instanceMatrix.needsUpdate = true;
+  });
+  return (
+    <group ref={g}>
+      <instancedMesh ref={ref} args={[undefined, undefined, N * 2]}>
+        <sphereGeometry args={[1, 14, 14]} />
+        <meshStandardMaterial color="#ff3d9a" roughness={0.3} />
+      </instancedMesh>
+    </group>
+  );
+}
+
+/** A planet with a ring and three moons on different orbits. */
+function Orbit() {
+  const moons = useRef<THREE.Group>(null);
+  const g = useRef<THREE.Group>(null);
+  useFrame((state) => {
+    const t = state.clock.elapsedTime + scrollPhase() * 2;
+    moons.current?.children.forEach((m, i) => {
+      const a = t * (0.9 + i * 0.5) + i * 2.1;
+      const R = 1.5 + i * 0.35;
+      m.position.set(Math.cos(a) * R, Math.sin(a * 0.7 + i) * 0.5, Math.sin(a) * R);
+    });
+    if (g.current) {
+      g.current.rotation.x = 0.4 + pointer.y * 0.3;
+      g.current.rotation.y = pointer.x * 0.4;
+    }
+  });
+  return (
+    <group ref={g}>
+      <mesh>
+        <icosahedronGeometry args={[0.85, 2]} />
+        <meshStandardMaterial color="#6ee7d8" roughness={0.35} flatShading />
+      </mesh>
+      <mesh rotation={[Math.PI / 2.4, 0, 0]}>
+        <torusGeometry args={[1.35, 0.035, 12, 90]} />
+        <meshBasicMaterial color={INK} />
+      </mesh>
+      <group ref={moons}>
+        <mesh>
+          <sphereGeometry args={[0.16, 16, 16]} />
+          <meshStandardMaterial color="#c6ff3d" />
+        </mesh>
+        <mesh>
+          <sphereGeometry args={[0.19, 16, 16]} />
+          <meshStandardMaterial color="#ff3d9a" />
+        </mesh>
+        <mesh>
+          <sphereGeometry args={[0.22, 16, 16]} />
+          <meshStandardMaterial color="#8b5cf6" />
+        </mesh>
+      </group>
+    </group>
+  );
+}
+
 const SCENES = {
+  helix: Helix,
+  orbit: Orbit,
   knot: Knot,
   crystal: Crystal,
   skyline: Skyline,

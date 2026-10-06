@@ -1,6 +1,7 @@
 import { ViewTransition } from "react";
 import { About } from "@/components/about";
 import { Contact } from "@/components/contact";
+import { Float3D } from "@/components/three/float";
 import { Hud } from "@/components/hud";
 import { Marquee } from "@/components/marquee";
 import { ScrubBand } from "@/components/scrub-band";
@@ -55,6 +56,8 @@ export default function Home() {
             data-hud="Tape"
             className="bg-bg relative overflow-x-clip py-[clamp(48px,8vw,120px)]"
           >
+            <Float3D variant="helix" className="top-[4%] left-[3%] !z-20" />
+            <Float3D variant="orbit" className="right-[3%] bottom-[8%] !z-20" />
             <Marquee
               tone="accent"
               tilt={-1.6}

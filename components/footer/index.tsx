@@ -1,9 +1,11 @@
+import { Float3D } from "../three/float";
 import { SITE } from "@/lib/data";
 import { BackToTop, LocalTime, TerminalLink, Wordmark } from "./parts";
 
 export function Footer() {
   return (
-    <footer className="border-line overflow-hidden border-t pt-[clamp(48px,8vw,96px)]">
+    <footer className="border-line relative overflow-hidden border-t pt-[clamp(48px,8vw,96px)]">
+      <Float3D variant="orbit" className="top-4 right-[18%]" />
       <div className="mx-auto max-w-[1280px] px-[var(--gutter)]">
         <div className="flex flex-wrap items-center justify-between gap-6">
           <LocalTime />
