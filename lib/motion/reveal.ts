@@ -50,10 +50,14 @@ export function useScrollReveal(scope: RefObject<HTMLElement | null>) {
           io.observe(el);
         });
       scan();
-      const mo = scope.current ? new MutationObserver(scan) : null;
-      if (scope.current) mo?.observe(scope.current, { childList: true, subtree: true });
+      // Start watching only once hydration has settled, so it adds nothing to first load.
+      const mo = new MutationObserver(scan);
+      const start = window.setTimeout(() => {
+        if (scope.current) mo.observe(scope.current, { childList: true, subtree: true });
+      }, 2500);
       return () => {
-        mo?.disconnect();
+        window.clearTimeout(start);
+        mo.disconnect();
         io.disconnect();
       };
     },
