@@ -165,7 +165,9 @@ export function WorkPanels({ projects }: { projects: Project[] }) {
     <>
       {items.map((p, i) => (
         <ProjectPanel
-          key={p.slug}
+          // Keyed by position: pinned sections are wrapped by ScrollTrigger, so React must
+          // never move them. A role change swaps the content in place instead.
+          key={i}
           project={p}
           index={i}
           total={items.length}
