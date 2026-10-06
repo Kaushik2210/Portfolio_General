@@ -37,16 +37,16 @@ export function SplitHeading({ id, as: Tag = "h2", className = "", children }: P
           duration: dur.hero,
           ease: ease.out,
           stagger: 0.09,
-          scrollTrigger: { trigger: node, start: "top 92%", once: true },
         });
       };
       const io = new IntersectionObserver(
         ([entry]) => {
-          if (!entry.isIntersecting) return;
+          if (!entry.isIntersecting && entry.boundingClientRect.top > window.innerHeight)
+            return;
           io.disconnect();
           ctx.add(run);
         },
-        { rootMargin: "60% 0px" },
+        { rootMargin: "0px 0px -6% 0px" },
       );
       io.observe(node);
       return () => io.disconnect();

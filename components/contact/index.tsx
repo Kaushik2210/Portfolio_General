@@ -3,6 +3,7 @@ import { Section } from "../section";
 import { AskAiButton } from "./ask-ai-button";
 import { ContactForm } from "./form";
 import { CopyEmail } from "./copy-email";
+import { KnotSlot } from "./knot-slot";
 
 const link =
   "group flex items-center justify-between rounded-[var(--radius)] border border-line px-5 py-4 transition-colors hover:border-accent";
@@ -16,7 +17,8 @@ export function Contact() {
       world="violet"
       label="Contact"
     >
-      <div className="grid gap-14 lg:grid-cols-12">
+      <KnotSlot />
+      <div className="relative z-10 grid gap-14 lg:grid-cols-12">
         <div className="lg:col-span-5">
           <p className="reveal text-fg-muted max-w-md">
             Email is fastest. You can also send a note here, or ask the assistant first if

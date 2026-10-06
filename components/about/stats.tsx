@@ -32,6 +32,28 @@ const TILT = [
 
 function Counter({ stat, i }: { stat: Stat; i: number }) {
   const num = useRef<HTMLSpanElement>(null);
+  const tile = useRef<HTMLLIElement>(null);
+
+  // anime.js: each tile flips up from below, staggered by position.
+  useEffect(() => {
+    const el = tile.current;
+    if (!el || prefersReducedMotion()) return;
+    el.style.transformOrigin = "50% 100%";
+    const io = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting && entry.boundingClientRect.top > window.innerHeight)
+        return;
+      io.disconnect();
+      animate(el, {
+        rotateX: [-80, 0],
+        scale: [0.85, 1],
+        duration: 1100,
+        delay: i * 110,
+        ease: "outBack(1.4)",
+      });
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [i]);
 
   useEffect(() => {
     const el = num.current;
@@ -66,7 +88,11 @@ function Counter({ stat, i }: { stat: Stat; i: number }) {
   }, [stat.value]);
 
   return (
-    <li className={`reveal ${TILT[i % TILT.length]}`}>
+    <li
+      ref={tile}
+      className={`reveal ${TILT[i % TILT.length]}`}
+      style={{ perspective: 900 }}
+    >
       <Tilt
         max={9}
         radius="var(--radius-lg)"
