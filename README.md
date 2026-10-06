@@ -21,6 +21,7 @@ work.
 - **GitHub**: contribution heatmap, language share and recent activity from `data/github.json`, refreshed by `npm run sync`.
 - **Ask my portfolio**: streaming chat grounded in the data files, with a fit-check mode for pasting a job description. Falls back to data-derived answers when no API key is set.
 - **Maximalist styling**: saturated colour blocks (ember, teal, violet, lime, pink), two tilted tape-style marquee bands crossing the page, a rotating sticker badge, HUD coordinates and ghost outlined type in the hero, giant section numerals, a dot-grid texture, hard offset-shadow cards with numbered stickers, and colour-block stat tiles. The paint-heavy pieces (ghost type, numerals, dot grid, second band, tile tilts, endless marquee tweens) switch off on phones.
+- **3D effects**: the hero particle field now has a spinning wireframe icosahedron core and a click shockwave that ripples outward through the lattice (a GLSL ring expanding from where you clicked); a draggable CSS-3D skill carousel you can fling with momentum (tablet and up); cards and stat tiles tilt in 3D with a following glare; section headings tip up out of a perspective mask; the footer wordmark tips up from the floor as you scroll; the role title scrambles into place when you switch role.
 - **Motion layer**: a scroll-velocity marquee that speeds up, reverses and skews with your scroll; kinetic split-text headings; scramble-in section labels; 3D card tilt with a following glare; a gallery progress counter; hero depth parallax against the pointer; an ambient colour field that travels with scroll; contextual cursor labels. GSAP (ScrollTrigger, SplitText, ScrambleText, Flip) drives these, and anime.js drives the nav indicator that slides to the hovered or active section, click ripples, skill-chip waves on role change, and the drawn architecture connectors. Every one is skipped for reduced-motion, and pointer-driven ones for touch.
 - **Command palette** (`Ctrl/Cmd+K`), **terminal mode** (`~`), contact form (server action, Resend), dark/light theme, custom cursor, scroll progress, 404 page.
 
@@ -116,11 +117,11 @@ Measured with Lighthouse 12.6.1 against the production deployment, default simul
 
 | Page       | Preset  | Performance    | Accessibility | Best practices | SEO |
 | ---------- | ------- | -------------- | ------------- | -------------- | --- |
-| Home       | Mobile  | 96, 86, 88, 89 | 100           | 100            | 100 |
+| Home       | Mobile  | 73, 85, 87, 87 | 100           | 100            | 100 |
 | Home       | Desktop | 96             | 100           | 100            | 100 |
 | Case study | Mobile  | 91             | 100           | 100            | 100 |
 
-Measured again after the motion layer and the maximalist styling were added. Accessibility, best practices and SEO are 100 everywhere and desktop clears 90, but **mobile home now sits just under the performance target (86 to 96, median about 88)**; the maximalist layer costs roughly 3 to 5 mobile points, which is the trade for the look. Cutting more of it on phones would close the gap; desktop and case studies have headroom, the home page on mobile is the tightest at 91 to 92. Getting the home page there took several rounds, and what the investigation found is worth keeping:
+Measured again after the motion layer and the maximalist styling were added. Accessibility, best practices and SEO are 100 everywhere and desktop clears 90, but **mobile home sits under the performance target (typically 85 to 87, with occasional outliers either side)**; the maximalist and 3D layers cost roughly 5 mobile points, which is the trade for the look. Cutting more of it on phones would close the gap; desktop and case studies have headroom, the home page on mobile is the tightest at 91 to 92. Getting the home page there took several rounds, and what the investigation found is worth keeping:
 
 - Under real CPU throttling, the dominant cost was one synchronous React hydration task. About 55% of the first-load DOM was decorative SVG (heatmap cells, tooltips, cover art), so those now mount only as they near the viewport. First-load DOM went from 2,065 to 838 nodes and mobile TBT in my 4x-CPU harness from about 2.0s to 0.4s. Lazily mounting the skills graph (never mounted on phones, where it is hidden) took the home page from 62-76 to 91-92.
 - Splitting sections into `<Suspense>` slices made production worse (TBT up to 1.7s), so it was reverted.
@@ -143,3 +144,7 @@ GitHub auto-deploy needs a Login Connection for GitHub on the Vercel account, wh
 - Every case study uses generated cover art because screenshots are still `TODO_SCREENSHOT`.
 - No `public/resume.pdf` yet.
 - Experience, education, certifications and achievements are empty until `data/linkedin.json` is filled, so the timeline and some About counters are hidden.
+
+## Responsive behaviour
+
+Checked at 360, 390, 768, 1024 and 1440 px: no horizontal overflow and no tap targets under 32 px at any size. Decoration is tiered: phones get the content and a static hero; tablets add the sticker, skill carousel and tilt-free layout; desktops with a mouse add tilt, parallax, the cursor ring, the pinned gallery and the WebGL scene. Pointer-driven effects set themselves up on first hover, so touch devices pay nothing for them.
