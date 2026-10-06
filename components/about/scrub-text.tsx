@@ -20,15 +20,15 @@ export function ScrubText({
       const split = SplitText.create(el.current, { type: "words", aria: "none" });
       gsap.fromTo(
         split.words,
-        { opacity: 0.45 },
+        { opacity: 0.75 },
         {
           opacity: 1,
           ease: "none",
-          stagger: 0.12,
+          stagger: 0.06,
           scrollTrigger: {
             trigger: el.current,
-            start: "top 80%",
-            end: "bottom 45%",
+            start: "top 92%",
+            end: "bottom 78%",
             scrub: 0.6,
           },
         },
