@@ -46,7 +46,8 @@ export function ChatRoot() {
           className="border-line bg-surface/80 hover:border-accent fixed right-4 bottom-4 z-[85] flex items-center gap-2 rounded-full border px-4 py-3 text-sm font-medium shadow-lg backdrop-blur-lg transition-colors sm:right-6 sm:bottom-6"
         >
           <span aria-hidden="true" className="bg-accent size-2 rounded-full" />
-          Ask my portfolio
+          <span className="hidden sm:inline">Ask my portfolio</span>
+          <span className="sm:hidden">Ask</span>
         </button>
       )}
       {open && (

@@ -59,10 +59,16 @@ export function HeroClient({
         return;
       }
       if (prefersReducedMotion()) return;
+      // The new title scrambles into place (GSAP ScrambleText).
       gsap.fromTo(
         titleEl.current,
-        { yPercent: 100, opacity: 0 },
-        { yPercent: 0, opacity: 1, duration: dur.base + 0.1, ease: ease.out },
+        { opacity: 0.4 },
+        {
+          opacity: 1,
+          duration: 0.7,
+          ease: ease.out,
+          scrambleText: { text: ROLE_COPY[shown].title, chars: "upperCase", speed: 0.9 },
+        },
       );
       gsap.fromTo(
         bodyEl.current,
@@ -190,7 +196,7 @@ export function HeroClient({
           12.9716° N / 77.5946° E<br />
           Bengaluru, IN
         </p>
-        <div className="absolute right-[8vw] bottom-[18vh] hidden size-44 -rotate-12 md:block">
+        <div className="absolute right-[8vw] bottom-[18vh] hidden size-44 -rotate-12 lg:block">
           <svg viewBox="0 0 200 200" className="spin-slow size-full">
             <defs>
               <path

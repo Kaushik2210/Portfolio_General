@@ -131,7 +131,7 @@ export function Nav() {
         <a
           href="#top"
           onClick={(e) => go(e, "#top")}
-          className="font-display text-lg font-semibold tracking-tight"
+          className="font-display -my-2 py-2 text-lg font-semibold tracking-tight"
         >
           S V Kaushik<span className="text-accent">.</span>
         </a>
@@ -144,7 +144,7 @@ export function Nav() {
           <span
             ref={pill}
             aria-hidden="true"
-            className="bg-surface-2 pointer-events-none absolute top-1.5 bottom-1.5 left-0 w-0 rounded-full opacity-0"
+            className="bg-surface-2 pointer-events-none absolute top-1 bottom-1 left-0 w-0 rounded-full opacity-0"
           />
           {LINKS.map((l) => (
             <li key={l.href} onPointerEnter={() => setHovered(l.href)}>
@@ -156,7 +156,7 @@ export function Nav() {
                 aria-current={
                   pathname === "/" && active === l.href ? "location" : undefined
                 }
-                className={`relative rounded-full px-3.5 py-1.5 text-sm transition-colors ${
+                className={`relative inline-block rounded-full px-3.5 py-2.5 text-sm transition-colors ${
                   target === l.href ? "text-fg" : "text-fg-muted"
                 }`}
               >
