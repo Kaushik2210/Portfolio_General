@@ -5,7 +5,7 @@ import { Magnetic } from "@/components/magnetic";
 import { RoleSwitcher } from "@/components/role-switcher";
 import { useReducedMotion } from "@/lib/capability";
 import { ROLE_COPY, ROLE_ORDER } from "@/lib/copy";
-import { gsap, SplitText, useGSAP } from "@/lib/motion/gsap";
+import { gsap, ScrollTrigger, SplitText, useGSAP } from "@/lib/motion/gsap";
 import { prefersReducedMotion, scrollTo } from "@/lib/motion/scroll";
 import { dur, ease, stagger, staggerFor } from "@/lib/motion/tokens";
 import { useIntroDone, useRole, useRoleChosen } from "@/lib/prefs";
@@ -134,6 +134,8 @@ export function HeroClient({
             scrub: 0.7,
             pin: true,
             anticipatePin: 1,
+            // The hero adds scroll distance above every other pin, so it measures first.
+            refreshPriority: 10,
             onUpdate: (self) => {
               sceneState.scroll = self.progress;
             },
@@ -148,7 +150,10 @@ export function HeroClient({
             { clipPath: "circle(150% at 50% 52%)", ease: "power2.in", duration: 0.5 },
             0.5,
           );
+        // Pins below were measured before this one existed; measure them all again.
+        const raf = requestAnimationFrame(() => ScrollTrigger.refresh());
         return () => {
+          cancelAnimationFrame(raf);
           sceneState.scroll = 0;
         };
       });
