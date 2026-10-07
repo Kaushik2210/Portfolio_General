@@ -167,15 +167,18 @@ function Satellites() {
 /** A receding wireframe landscape that ripples under the crystal and fades as you scroll. */
 function Terrain() {
   const mesh = useRef<THREE.Mesh>(null);
-  const N = 44;
+  const N = 30;
   const base = useMemo(() => {
     const g = new THREE.PlaneGeometry(16, 12, N, N);
     g.rotateX(-Math.PI / 2);
     return g;
   }, []);
+  const tick = useRef(0);
   useFrame((state) => {
     const m = mesh.current;
     if (!m) return;
+    // The ripple is slow; every other frame is plenty and halves the CPU cost.
+    if (tick.current++ % 2) return;
     const pos = (m.geometry as THREE.PlaneGeometry).attributes.position;
     const t = state.clock.elapsedTime * 0.6;
     for (let i = 0; i < pos.count; i++) {

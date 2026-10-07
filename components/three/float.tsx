@@ -30,7 +30,7 @@ const Shape = dynamic(loadShapes, { ssr: false });
 /**
  * A decorative 3D shape pinned inside the nearest positioned section. Where WebGL scenes
  * are allowed (desktop, motion on) it is:
- * - warmed up while the browser is idle, so no code is parsed mid-scroll;
+ * - warmed up on the first scroll or mouse move, never during page load;
  * - created a screen or so before it is needed, so context and shader setup never lands
  *   on a visible frame;
  * - kept alive while still fairly close, and torn down once far away;
@@ -48,12 +48,17 @@ export function Float3D({
   const [near, setNear] = useState(false);
   const [visible, setVisible] = useState(false);
 
+  // Warm the code up on the first sign of interaction, never during page load.
   useEffect(() => {
     if (mode !== "webgl") return;
-    const idle =
-      window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 1500));
-    const id = idle(() => void loadShapes());
-    return () => window.cancelIdleCallback?.(id as number);
+    const warm = () => void loadShapes();
+    const opts = { once: true, passive: true } as const;
+    window.addEventListener("scroll", warm, opts);
+    window.addEventListener("pointermove", warm, opts);
+    return () => {
+      window.removeEventListener("scroll", warm);
+      window.removeEventListener("pointermove", warm);
+    };
   }, [mode]);
 
   useEffect(() => {
