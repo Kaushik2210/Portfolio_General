@@ -207,6 +207,140 @@ function CameraRig() {
   return null;
 }
 
+/** Pointer in world units on the z = 0 plane. */
+function useWorldPointer() {
+  const out = useRef(new THREE.Vector3());
+  useFrame((state) => {
+    out.current.set(
+      (pointer.x * state.viewport.width) / 2,
+      (pointer.y * state.viewport.height) / 2,
+      0,
+    );
+  });
+  return out;
+}
+
+/** A comet tail of small beads that chase the cursor, each a little slower than the last. */
+function Trail() {
+  const ref = useRef<THREE.InstancedMesh>(null);
+  const N = 22;
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+  const pos = useMemo(() => Array.from({ length: N }, () => new THREE.Vector3()), []);
+  const target = useWorldPointer();
+  useFrame((_, dt) => {
+    const m = ref.current;
+    if (!m) return;
+    pos.forEach((p, i) => {
+      const lead = i === 0 ? target.current : pos[i - 1];
+      p.lerp(lead, Math.min(1, dt * (16 - i * 0.5)));
+      dummy.position.copy(p);
+      dummy.scale.setScalar(0.11 * (1 - i / N) + 0.01);
+      dummy.updateMatrix();
+      m.setMatrixAt(i, dummy.matrix);
+    });
+    m.instanceMatrix.needsUpdate = true;
+  });
+  return (
+    <instancedMesh ref={ref} args={[undefined, undefined, N]} frustumCulled={false}>
+      <sphereGeometry args={[1, 10, 10]} />
+      <meshBasicMaterial color="#c6ff3d" />
+    </instancedMesh>
+  );
+}
+
+/** Click anywhere: a shockwave ring and a spray of shards fly out from the cursor. */
+function Burst() {
+  const ring = useRef<THREE.Mesh>(null);
+  const shards = useRef<THREE.InstancedMesh>(null);
+  const N = 36;
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+  const vel = useMemo(
+    () =>
+      Array.from({ length: N }, (_, i) => {
+        const a = (i / N) * Math.PI * 2 + (i % 3) * 0.2;
+        const sp = 1.2 + (i % 5) * 0.35;
+        return new THREE.Vector3(
+          Math.cos(a) * sp,
+          Math.sin(a) * sp,
+          ((i % 7) - 3) * 0.12,
+        );
+      }),
+    [],
+  );
+  const state = useRef({ t: 99, origin: new THREE.Vector3() });
+  const target = useWorldPointer();
+  useEffect(() => {
+    const down = () => {
+      state.current.t = 0;
+      state.current.origin.copy(target.current);
+    };
+    window.addEventListener("pointerdown", down);
+    return () => window.removeEventListener("pointerdown", down);
+  }, [target]);
+  useFrame((_, dt) => {
+    const st = state.current;
+    st.t += dt;
+    const k = st.t / 1.1;
+    const live = k < 1;
+    if (ring.current) {
+      ring.current.visible = live;
+      ring.current.position.copy(st.origin);
+      ring.current.scale.setScalar(0.2 + k * 3.2);
+      (ring.current.material as THREE.MeshBasicMaterial).opacity = Math.max(0, 1 - k);
+    }
+    const m = shards.current;
+    if (!m) return;
+    m.visible = live;
+    if (!live) return;
+    vel.forEach((v, i) => {
+      dummy.position.copy(st.origin).addScaledVector(v, st.t * 1.5);
+      dummy.rotation.set(st.t * 6 + i, st.t * 4, 0);
+      dummy.scale.setScalar(0.09 * (1 - k));
+      dummy.updateMatrix();
+      m.setMatrixAt(i, dummy.matrix);
+    });
+    m.instanceMatrix.needsUpdate = true;
+  });
+  return (
+    <>
+      <mesh ref={ring} visible={false}>
+        <torusGeometry args={[1, 0.02, 8, 64]} />
+        <meshBasicMaterial color="#ff3d9a" transparent />
+      </mesh>
+      <instancedMesh
+        ref={shards}
+        args={[undefined, undefined, N]}
+        visible={false}
+        frustumCulled={false}
+      >
+        <octahedronGeometry args={[1, 0]} />
+        <meshBasicMaterial color="#f4f0e6" />
+      </instancedMesh>
+    </>
+  );
+}
+
+/** A faint wireframe cage that breathes around the crystal. */
+function Cage() {
+  const ref = useRef<THREE.Mesh>(null);
+  useFrame((state, dt) => {
+    const m = ref.current;
+    if (!m) return;
+    m.rotation.y -= dt * 0.12;
+    m.rotation.x += dt * 0.07;
+    m.scale.setScalar(
+      1 + Math.sin(state.clock.elapsedTime * 1.1) * 0.04 + sceneState.scroll * 1.2,
+    );
+    (m.material as THREE.MeshBasicMaterial).opacity = 0.22 * (1 - sceneState.scroll);
+  });
+  return (
+    <mesh ref={ref}>
+      <icosahedronGeometry args={[2.05, 1]} />
+      <meshBasicMaterial color="#f4f0e6" wireframe transparent opacity={0.22} />
+    </mesh>
+  );
+}
+
 /** Renders only while on screen and the tab is visible. */
 export default function Blob() {
   const wrap = useRef<HTMLDivElement>(null);
@@ -247,7 +381,10 @@ export default function Blob() {
         <CameraRig />
         <Terrain />
         <Crystal />
+        <Cage />
         <Satellites />
+        <Trail />
+        <Burst />
       </Canvas>
     </div>
   );
