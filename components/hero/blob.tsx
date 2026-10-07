@@ -84,7 +84,7 @@ function Crystal() {
   return (
     <group ref={group}>
       <mesh>
-        <icosahedronGeometry args={[1.45, 28]} />
+        <icosahedronGeometry args={[1.45, 20]} />
         <shaderMaterial
           ref={mat}
           vertexShader={crystalVertex}
@@ -369,7 +369,7 @@ export default function Blob() {
   return (
     <div ref={wrap} className="absolute inset-0">
       <Canvas
-        dpr={[1, 1.5]}
+        dpr={[1, 1.25]}
         camera={{ position: [0, 0, 6.2], fov: 45 }}
         gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
         frameloop={onScreen && tabVisible ? "always" : "never"}
