@@ -347,3 +347,13 @@ html[data-intro-seen] .hero-fade {
     opacity: 1;
   }
 }
+
+/* The 3D hero scene fades in once it is ready, instead of popping. */
+.hero-scene-in {
+  animation: hero-scene-in 0.9s ease both;
+}
+@keyframes hero-scene-in {
+  from {
+    opacity: 0;
+  }
+}

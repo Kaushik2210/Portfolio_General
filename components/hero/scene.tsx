@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 import { useSceneMode } from "@/lib/capability";
 import { Guard } from "../three/guard";
 
@@ -28,10 +29,30 @@ function Orb() {
 
 export function HeroScene() {
   const mode = useSceneMode();
+  const [ready, setReady] = useState(false);
+
+  // Let the page paint and settle first; the crystal fades in just after.
+  useEffect(() => {
+    if (mode !== "webgl") return;
+    let id = 0;
+    const go = () => {
+      id = window.setTimeout(() => setReady(true), 400);
+    };
+    if (document.readyState === "complete") go();
+    else window.addEventListener("load", go, { once: true });
+    return () => {
+      window.clearTimeout(id);
+      window.removeEventListener("load", go);
+    };
+  }, [mode]);
+
   if (mode !== "webgl") return <Orb />;
+  if (!ready) return null;
   return (
-    <Guard fallback={<Orb />}>
-      <Blob />
-    </Guard>
+    <div className="hero-scene-in absolute inset-0">
+      <Guard fallback={<Orb />}>
+        <Blob />
+      </Guard>
+    </div>
   );
 }
