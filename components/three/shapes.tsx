@@ -257,7 +257,13 @@ const SCENES = {
 } as const;
 
 /** One lightweight canvas per section. Renders only while visible, DPR capped. */
-export default function Shape({ variant }: { variant: Variant }) {
+export default function Shape({
+  variant,
+  active = true,
+}: {
+  variant: Variant;
+  active?: boolean;
+}) {
   useEffect(() => {
     const move = (e: PointerEvent) => {
       pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -272,7 +278,11 @@ export default function Shape({ variant }: { variant: Variant }) {
   const Scene = SCENES[variant];
   return (
     <div aria-hidden="true" className="pointer-events-none size-full">
-      <Canvas dpr={[1, 1.5]} camera={{ position: [0, 0, 6.5], fov: 40 }}>
+      <Canvas
+        frameloop={active ? "always" : "never"}
+        dpr={[1, 1.5]}
+        camera={{ position: [0, 0, 6.5], fov: 40 }}
+      >
         <ambientLight intensity={0.9} />
         <directionalLight position={[3, 4, 5]} intensity={2.2} />
         <Scene />

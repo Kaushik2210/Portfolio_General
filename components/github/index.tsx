@@ -33,12 +33,7 @@ export function GitHubSection() {
       title="Shipping in the open."
       world="cream"
       label="GitHub"
-      shape={
-        <>
-          <Float3D variant="skyline" className="top-20 right-[8%]" />
-          <Float3D variant="prism" className="right-[3%] bottom-[4%]" />
-        </>
-      }
+      shape={<Float3D variant="skyline" className="top-20 right-[8%]" />}
     >
       <p className="reveal text-fg-muted mb-12 max-w-xl">
         Pulled from the GitHub API at build time, so these numbers are real and as fresh
