@@ -14,7 +14,9 @@ export type Variant =
   | "orbit"
   | "drift"
   | "galaxy"
-  | "waves";
+  | "waves"
+  | "embers"
+  | "gems";
 
 const pointer = { x: 0, y: 0 };
 
@@ -392,7 +394,98 @@ function Waves() {
   );
 }
 
+/** Glowing embers that rise across a wide canvas, flickering as they climb. */
+function Embers() {
+  const pts = useRef<THREE.Points>(null);
+  const N = 420;
+  const { positions, colors, base } = useMemo(() => {
+    const rand = seeded(2024);
+    const positions = new Float32Array(N * 3);
+    const colors = new Float32Array(N * 3);
+    const base = new Float32Array(N * 3);
+    const palette = ["#c6ff3d", "#ff3d9a", "#ff5a36", "#f4f0e6"].map(
+      (c) => new THREE.Color(c),
+    );
+    for (let i = 0; i < N; i++) {
+      base[i * 3] = (rand() - 0.5) * 26;
+      base[i * 3 + 1] = rand() * 5.2;
+      base[i * 3 + 2] = (rand() - 0.5) * 2;
+      const c = palette[Math.floor(rand() * palette.length)];
+      colors.set([c.r, c.g, c.b], i * 3);
+    }
+    positions.set(base);
+    return { positions, colors, base };
+  }, []);
+  useFrame((state) => {
+    const p = pts.current;
+    if (!p) return;
+    const t = state.clock.elapsedTime;
+    const pos = (p.geometry as THREE.BufferGeometry).attributes.position;
+    for (let i = 0; i < N; i++) {
+      const speed = 0.25 + (i % 7) * 0.07;
+      const y = ((base[i * 3 + 1] + t * speed) % 5.2) - 2.6;
+      pos.setXYZ(
+        i,
+        base[i * 3] + Math.sin(t * 0.6 + i) * 0.25 + pointer.x * 0.6,
+        y,
+        base[i * 3 + 2],
+      );
+    }
+    pos.needsUpdate = true;
+    (p.material as THREE.PointsMaterial).opacity = 0.65 + Math.sin(t * 3) * 0.12;
+  });
+  return (
+    <points ref={pts} frustumCulled={false}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+        <bufferAttribute attach="attributes-color" args={[colors, 3]} />
+      </bufferGeometry>
+      <pointsMaterial
+        size={0.09}
+        vertexColors
+        sizeAttenuation
+        transparent
+        opacity={0.7}
+      />
+    </points>
+  );
+}
+
+/** Three faceted gems that turn slowly and drift against the cursor. */
+function Gems() {
+  const g = useRef<THREE.Group>(null);
+  useFrame((state, dt) => {
+    const grp = g.current;
+    if (!grp) return;
+    const t = state.clock.elapsedTime;
+    grp.children.forEach((m, i) => {
+      m.rotation.y += dt * (0.4 + i * 0.25);
+      m.rotation.x += dt * (0.25 + i * 0.1);
+      m.position.x = (i - 1) * 2.3 + pointer.x * (0.2 + i * 0.1);
+      m.position.y = Math.sin(t * 0.9 + i * 2) * 0.25 + pointer.y * 0.15;
+    });
+  });
+  return (
+    <group ref={g}>
+      <mesh>
+        <octahedronGeometry args={[0.7, 0]} />
+        <meshStandardMaterial color="#c6ff3d" roughness={0.25} flatShading />
+      </mesh>
+      <mesh>
+        <dodecahedronGeometry args={[0.8, 0]} />
+        <meshStandardMaterial color="#ff3d9a" roughness={0.25} flatShading />
+      </mesh>
+      <mesh>
+        <icosahedronGeometry args={[0.65, 0]} />
+        <meshStandardMaterial color="#8b5cf6" roughness={0.25} flatShading />
+      </mesh>
+    </group>
+  );
+}
+
 const SCENES = {
+  embers: Embers,
+  gems: Gems,
   galaxy: Galaxy,
   waves: Waves,
   drift: Drift,

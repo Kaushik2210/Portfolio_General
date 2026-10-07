@@ -6,6 +6,11 @@ export function Footer() {
   return (
     <footer className="border-line relative overflow-hidden border-t pt-[clamp(48px,8vw,96px)]">
       <Float3D variant="orbit" className="top-4 right-[18%]" />
+      <Float3D
+        variant="gems"
+        className="top-[6%] left-[26%] !h-[clamp(140px,14vw,220px)] !w-[clamp(320px,32vw,520px)]"
+      />
+      <Float3D variant="embers" className="bottom-0 left-0 !h-[72%] !w-full" />
       <div className="mx-auto max-w-[1280px] px-[var(--gutter)]">
         <div className="flex flex-wrap items-center justify-between gap-6 lg:pr-44">
           <LocalTime />
