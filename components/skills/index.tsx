@@ -19,7 +19,12 @@ export function Skills() {
       eyebrow="03 / Skills"
       title="Grouped by what they are for."
       label="Skills"
-      shape={<Float3D variant="gyro" className="top-24 right-[10%]" />}
+      shape={
+        <>
+          <Float3D variant="gyro" className="top-24 right-[10%]" />
+          <Float3D variant="galaxy" className="top-[2%] left-[38%]" />
+        </>
+      }
     >
       <p className="text-fg-muted mb-12 max-w-xl">
         Pick a role and its group comes forward. Hover or focus a skill to see which case

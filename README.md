@@ -104,6 +104,8 @@ LinkedIn cannot be scraped (login wall and terms), so nothing here came from it.
 
 ## The assistant
 
+Tested end to end against a mock of the Anthropic API (27 API checks plus browser checks for streaming, fit-check, offline mode, error states, focus and Escape handling, and the mobile layout); the harness is in `scripts/chat-test/`. To turn the live assistant on, add `ANTHROPIC_API_KEY` in the Vercel project settings (Production) and redeploy.
+
 `app/api/chat/route.ts` streams from the Anthropic API.
 
 - **Grounding**: the system prompt is built from `data/*.json` (with every `TODO_VERIFY` and `TODO_SCREENSHOT` stripped) and the optional resume text. It must answer only from that and otherwise reply "I don't have that information; you can email ...".

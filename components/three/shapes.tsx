@@ -16,7 +16,8 @@ export type Variant =
   | "galaxy"
   | "waves"
   | "embers"
-  | "gems";
+  | "gems"
+  | "rings";
 
 const pointer = { x: 0, y: 0 };
 
@@ -483,7 +484,48 @@ function Gems() {
   );
 }
 
+/** Nested rings that precess like an armillary sphere around a bright core. */
+function Rings() {
+  const g = useRef<THREE.Group>(null);
+  const rings = useRef<THREE.Group>(null);
+  useFrame((state, dt) => {
+    const t = state.clock.elapsedTime;
+    rings.current?.children.forEach((r, i) => {
+      r.rotation.x += dt * (0.5 + i * 0.22);
+      r.rotation.y += dt * (0.3 + i * 0.17) * (i % 2 ? -1 : 1);
+    });
+    if (g.current) {
+      g.current.rotation.z = Math.sin(t * 0.4) * 0.3 + pointer.x * 0.3;
+      g.current.rotation.x = pointer.y * 0.3;
+      g.current.scale.setScalar(1 + Math.abs(Math.sin(scrollPhase())) * 0.25);
+    }
+  });
+  const cols = ["#c6ff3d", "#ff3d9a", "#8b5cf6", "#6ee7d8"];
+  return (
+    <group ref={g}>
+      <group ref={rings}>
+        {cols.map((c, i) => (
+          <mesh key={c}>
+            <torusGeometry args={[0.7 + i * 0.32, 0.035, 12, 96]} />
+            <meshStandardMaterial color={c} roughness={0.3} />
+          </mesh>
+        ))}
+      </group>
+      <mesh>
+        <icosahedronGeometry args={[0.32, 1]} />
+        <meshStandardMaterial
+          color="#f4f0e6"
+          emissive="#f4f0e6"
+          emissiveIntensity={0.4}
+          flatShading
+        />
+      </mesh>
+    </group>
+  );
+}
+
 const SCENES = {
+  rings: Rings,
   embers: Embers,
   gems: Gems,
   galaxy: Galaxy,

@@ -25,6 +25,10 @@ export function Work() {
           {String(projects.length).padStart(2, "0")}
         </span>
         <Float3D variant="prism" className="top-[14%] right-[6%]" />
+        <Float3D
+          variant="gems"
+          className="right-[8%] bottom-[6%] !h-[clamp(140px,14vw,220px)] !w-[clamp(320px,32vw,520px)]"
+        />
         <RevealScope className="relative z-10 mx-auto w-full max-w-[1440px] px-[var(--gutter)]">
           <Eyebrow className="mb-5">02 / Work</Eyebrow>
           <SplitHeading

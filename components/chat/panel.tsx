@@ -138,9 +138,14 @@ export default function ChatPanel({
     };
   }, [initialPrompt, send]);
 
+  // Escape closes even when focus has not landed inside the panel yet (e.g. offline mode).
   useEffect(() => {
-    field.current?.focus();
-  }, [mode]);
+    const onDocKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onDocKey);
+    return () => document.removeEventListener("keydown", onDocKey);
+  }, [onClose]);
 
   // Esc closes; Tab stays inside the dialog.
   const onKeyDown = (e: React.KeyboardEvent) => {
@@ -187,6 +192,13 @@ export default function ChatPanel({
   };
 
   const offline = available === false || problem?.kind === "offline";
+
+  // Focus the text box when there is one, otherwise the dialog itself, so keyboard and
+  // screen-reader users always land inside it.
+  useEffect(() => {
+    (field.current ?? root.current)?.focus();
+  }, [mode, offline, available]);
+
   const atLimit = messages.length >= MAX_TURNS;
   const fitResult = mode === "fit" && messages.length > 0;
 
@@ -196,9 +208,10 @@ export default function ChatPanel({
       role="dialog"
       aria-modal="true"
       aria-labelledby={titleId}
+      tabIndex={-1}
       data-lenis-prevent
       onKeyDown={onKeyDown}
-      className={`border-line bg-bg/95 fixed z-[110] flex flex-col overflow-hidden border shadow-2xl backdrop-blur-xl ${
+      className={`border-line bg-bg/95 fixed z-[110] flex flex-col overflow-hidden border shadow-2xl backdrop-blur-xl outline-none ${
         full
           ? "inset-2 rounded-[var(--radius-lg)] sm:inset-6"
           : "inset-x-2 bottom-2 h-[min(82svh,680px)] rounded-[var(--radius-lg)] sm:inset-x-auto sm:right-5 sm:bottom-5 sm:w-[430px]"
@@ -313,7 +326,7 @@ export default function ChatPanel({
               onChange={(e) => setJd(e.target.value)}
               rows={9}
               placeholder="Paste the job description here..."
-              className="border-line bg-surface text-fg placeholder:text-fg-muted focus:border-accent mt-4 w-full resize-none rounded-[var(--radius)] border p-3 text-sm"
+              className="border-line bg-surface text-fg placeholder:text-fg-muted focus:border-accent mt-4 w-full resize-none rounded-[var(--radius)] border p-3 text-base sm:text-sm"
             />
             <div className="mt-2 flex items-center justify-between">
               <span className="text-fg-muted font-mono text-[11px]">
@@ -443,7 +456,7 @@ export default function ChatPanel({
                   }
                 }}
                 placeholder={fitResult ? "Ask a follow-up..." : "Ask about his work..."}
-                className="border-line bg-surface text-fg placeholder:text-fg-muted focus:border-accent max-h-32 min-h-10 flex-1 resize-none rounded-[var(--radius)] border px-3 py-2 text-sm disabled:opacity-60"
+                className="border-line bg-surface text-fg placeholder:text-fg-muted focus:border-accent max-h-32 min-h-10 flex-1 resize-none rounded-[var(--radius)] border px-3 py-2 text-base disabled:opacity-60 sm:text-sm"
               />
               <button
                 type="submit"

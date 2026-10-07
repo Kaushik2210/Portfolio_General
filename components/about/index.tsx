@@ -48,7 +48,13 @@ export function About() {
       world="lime"
       label="About"
       shape={
-        <Float3D variant="crystal" className="top-[clamp(380px,34vw,560px)] right-[3%]" />
+        <>
+          <Float3D
+            variant="crystal"
+            className="top-[clamp(380px,34vw,560px)] right-[3%]"
+          />
+          <Float3D variant="rings" className="top-[5%] right-[24%]" />
+        </>
       }
     >
       <div className="grid gap-[clamp(40px,8vw,120px)] lg:grid-cols-12">
