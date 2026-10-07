@@ -5,7 +5,16 @@ import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 export type Variant =
-  "crystal" | "skyline" | "gyro" | "prism" | "knot" | "helix" | "orbit" | "drift";
+  | "crystal"
+  | "skyline"
+  | "gyro"
+  | "prism"
+  | "knot"
+  | "helix"
+  | "orbit"
+  | "drift"
+  | "galaxy"
+  | "waves";
 
 const pointer = { x: 0, y: 0 };
 
@@ -305,7 +314,87 @@ function Drift() {
   );
 }
 
+/** A spiral galaxy of coloured points that turns with the page. */
+function Galaxy() {
+  const g = useRef<THREE.Group>(null);
+  const { positions, colors } = useMemo(() => {
+    const rand = seeded(777);
+    const N = 1700;
+    const positions = new Float32Array(N * 3);
+    const colors = new Float32Array(N * 3);
+    const palette = ["#c6ff3d", "#ff3d9a", "#8b5cf6", "#f4f0e6"].map(
+      (c) => new THREE.Color(c),
+    );
+    for (let i = 0; i < N; i++) {
+      const arm = i % 3;
+      const r = Math.pow(rand(), 0.7) * 3.1;
+      const a = r * 1.6 + (arm * Math.PI * 2) / 3 + (rand() - 0.5) * 0.5;
+      positions[i * 3] = Math.cos(a) * r;
+      positions[i * 3 + 1] = (rand() - 0.5) * 0.35 * (1 - r / 3.4);
+      positions[i * 3 + 2] = Math.sin(a) * r;
+      const c = palette[(arm + (rand() > 0.85 ? 1 : 0)) % palette.length];
+      colors.set([c.r, c.g, c.b], i * 3);
+    }
+    return { positions, colors };
+  }, []);
+  useFrame((_, dt) => {
+    if (!g.current) return;
+    g.current.rotation.y += dt * 0.12 + Math.abs(Math.sin(scrollPhase())) * dt * 0.3;
+    g.current.rotation.x = 0.9 + pointer.y * 0.2;
+    g.current.rotation.z = pointer.x * 0.15;
+  });
+  return (
+    <group ref={g}>
+      <points frustumCulled={false}>
+        <bufferGeometry>
+          <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+          <bufferAttribute attach="attributes-color" args={[colors, 3]} />
+        </bufferGeometry>
+        <pointsMaterial size={0.075} vertexColors sizeAttenuation />
+      </points>
+      <mesh>
+        <sphereGeometry args={[0.16, 16, 16]} />
+        <meshBasicMaterial color="#f4f0e6" />
+      </mesh>
+    </group>
+  );
+}
+
+/** A rolling wireframe sea that swells with the scroll. */
+function Waves() {
+  const mesh = useRef<THREE.Mesh>(null);
+  const geo = useMemo(() => {
+    const g = new THREE.PlaneGeometry(14, 6, 48, 18);
+    g.rotateX(-Math.PI / 2);
+    return g;
+  }, []);
+  useFrame((state) => {
+    const m = mesh.current;
+    if (!m) return;
+    const pos = (m.geometry as THREE.PlaneGeometry).attributes.position;
+    const t = state.clock.elapsedTime;
+    const amp = 0.9 + Math.abs(Math.sin(scrollPhase())) * 0.6;
+    for (let i = 0; i < pos.count; i++) {
+      const x = pos.getX(i);
+      const z = pos.getZ(i);
+      pos.setY(
+        i,
+        (Math.sin(x * 0.8 + t * 1.1) * 0.6 + Math.cos(z * 1.1 + t * 1.3) * 0.4) * amp,
+      );
+    }
+    pos.needsUpdate = true;
+    m.rotation.y = pointer.x * 0.15;
+  });
+  return (
+    <mesh ref={mesh} geometry={geo} position={[0, -1.1, 1]} rotation={[0, 0, 0]}>
+      <meshBasicMaterial color="#c6ff3d" wireframe transparent opacity={0.75} />
+    </mesh>
+  );
+}
+
 const SCENES = {
+  galaxy: Galaxy,
+  waves: Waves,
   drift: Drift,
   helix: Helix,
   orbit: Orbit,

@@ -56,6 +56,10 @@ export default function Home() {
             data-hud="Tape"
             className="bg-bg relative overflow-x-clip py-[clamp(48px,8vw,120px)]"
           >
+            <Float3D
+              variant="waves"
+              className="bottom-0 left-0 !z-10 !h-[clamp(160px,18vw,300px)] !w-full opacity-70"
+            />
             <Float3D variant="helix" className="top-[4%] left-[3%] !z-20" />
             <Float3D variant="orbit" className="right-[3%] bottom-[8%] !z-20" />
             <Marquee

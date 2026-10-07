@@ -18,6 +18,10 @@ export function Contact() {
       label="Contact"
     >
       <Float3D variant="knot" className="top-16 right-[8%]" />
+      <Float3D
+        variant="galaxy"
+        className="top-4 left-[34%] !h-[clamp(240px,26vw,420px)] !w-[clamp(240px,26vw,420px)]"
+      />
       <div className="relative z-10 grid gap-14 lg:grid-cols-12">
         <div className="lg:col-span-5">
           <p className="reveal text-fg-muted max-w-md">
