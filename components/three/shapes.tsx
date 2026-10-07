@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 export type Variant =
-  "crystal" | "skyline" | "gyro" | "prism" | "knot" | "helix" | "orbit";
+  "crystal" | "skyline" | "gyro" | "prism" | "knot" | "helix" | "orbit" | "drift";
 
 const pointer = { x: 0, y: 0 };
 
@@ -246,7 +246,67 @@ function Orbit() {
   );
 }
 
+/** Deterministic random numbers, so the field is identical on every render. */
+function seeded(start: number) {
+  let seed = start;
+  return () => {
+    seed = (seed * 16807) % 2147483647;
+    return (seed - 1) / 2147483646;
+  };
+}
+
+/** A field of small solids drifting upward and tumbling, deep behind a panel cover. */
+function Drift() {
+  const ref = useRef<THREE.InstancedMesh>(null);
+  const N = 46;
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+  const seeds = useMemo(() => {
+    const rand = seeded(4242);
+    return Array.from({ length: N }, () => ({
+      x: (rand() - 0.5) * 7,
+      y: rand() * 6,
+      z: (rand() - 0.5) * 3 - 1,
+      s: 0.08 + rand() * 0.2,
+      v: 0.15 + rand() * 0.35,
+      r: rand() * Math.PI,
+      c: Math.floor(rand() * 4),
+    }));
+  }, []);
+  const colors = useMemo(
+    () => ["#0b0b10", "#c6ff3d", "#ff3d9a", "#f4f0e6"].map((c) => new THREE.Color(c)),
+    [],
+  );
+  useEffect(() => {
+    const m = ref.current;
+    if (!m) return;
+    seeds.forEach((d, i) => m.setColorAt(i, colors[d.c]));
+    if (m.instanceColor) m.instanceColor.needsUpdate = true;
+  }, [seeds, colors]);
+  useFrame((state) => {
+    const m = ref.current;
+    if (!m) return;
+    const t = state.clock.elapsedTime;
+    const lift = scrollPhase() * 0.8;
+    seeds.forEach((d, i) => {
+      const y = ((d.y + t * d.v + lift) % 6) - 3;
+      dummy.position.set(d.x + Math.sin(t * 0.5 + i) * 0.15 + pointer.x * 0.3, y, d.z);
+      dummy.rotation.set(d.r + t * d.v, d.r * 2 + t * 0.4, 0);
+      dummy.scale.setScalar(d.s);
+      dummy.updateMatrix();
+      m.setMatrixAt(i, dummy.matrix);
+    });
+    m.instanceMatrix.needsUpdate = true;
+  });
+  return (
+    <instancedMesh ref={ref} args={[undefined, undefined, N]}>
+      <octahedronGeometry args={[1, 0]} />
+      <meshStandardMaterial roughness={0.4} flatShading />
+    </instancedMesh>
+  );
+}
+
 const SCENES = {
+  drift: Drift,
   helix: Helix,
   orbit: Orbit,
   knot: Knot,

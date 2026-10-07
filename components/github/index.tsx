@@ -53,7 +53,7 @@ export function GitHubSection() {
               href={SITE.github}
               target="_blank"
               rel="noopener"
-              className="text-fg-muted hover:text-accent font-mono text-xs tracking-widest uppercase"
+              className="text-fg-muted hover:text-accent -my-3 inline-block py-3 font-mono text-xs tracking-widest uppercase"
             >
               @{profile.login} <span aria-hidden="true">↗</span>
             </a>
@@ -95,7 +95,7 @@ export function GitHubSection() {
                   href={`https://github.com/${a.repo}`}
                   target="_blank"
                   rel="noopener"
-                  className="hover:text-accent min-w-0 truncate"
+                  className="hover:text-accent -my-2.5 min-w-0 truncate py-2.5"
                 >
                   {a.repo.split("/")[1]}
                 </a>

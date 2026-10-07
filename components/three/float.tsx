@@ -75,10 +75,10 @@ export function Float3D({
             idle(() => startTransition(() => setNear(true)), { timeout: 800 }),
           );
       },
-      { rootMargin: "600px" },
+      { rootMargin: "450px" },
     );
     const farIo = new IntersectionObserver(([e]) => !e.isIntersecting && setNear(false), {
-      rootMargin: "1800px",
+      rootMargin: "750px",
     });
     const seenIo = new IntersectionObserver(([e]) => setVisible(e.isIntersecting));
     nearIo.observe(el);

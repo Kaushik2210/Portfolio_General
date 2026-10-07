@@ -81,6 +81,7 @@ function ProjectPanel({
         {num}
       </span>
 
+      <Float3D variant="drift" className="top-[8%] right-[3%] !h-[84%] !w-[40%]" />
       <Float3D
         variant={SHAPES[index % SHAPES.length]}
         className="top-[16%] right-[2%] !z-20 !h-[clamp(150px,16vw,260px)] !w-[clamp(150px,16vw,260px)]"
