@@ -69,8 +69,8 @@ All nine case studies are written from what each repo's README states.
   chat shows its offline state and the contact form points to email.
 - **Verify the Resend sender**: the default `onboarding@resend.dev` only delivers to
   your own account email until you verify a domain.
-- **GitHub auto-deploy**: add a GitHub Login Connection to your Vercel account, then
-  `vercel git connect`.
+- **GitHub auto-deploy**: done. The repo is connected to the Vercel project, so every push to
+  `main` deploys to production (the CI deploy job stays inert unless a `VERCEL_TOKEN` secret is added).
 - **Custom domain**: none provided. Currently `portfolio-general-ten.vercel.app`.
 - Your GitHub `blog` field points at an older Vercel portfolio. Update it
   (GitHub -> Settings -> Public profile -> Website, or
