@@ -8,6 +8,8 @@ export interface TimelineItem {
   period: string;
   summary?: string;
   highlights: string[];
+  /** Verification link (certifications only). */
+  url?: string;
   /** YYYY-MM, used only for sorting (newest first). */
   sortKey: string;
 }
@@ -64,6 +66,7 @@ export function buildTimeline(data: LinkedInData): TimelineItem[] {
       title: c.name,
       org: isReal(c.issuer) ? c.issuer : "",
       period: isReal(c.issued) ? fmt(c.issued) : "",
+      url: isReal(c.url) ? c.url : undefined,
       highlights: [],
       sortKey: isReal(c.issued) ? c.issued : "0000-00",
     });

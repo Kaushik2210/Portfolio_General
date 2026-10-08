@@ -5,7 +5,7 @@
     "tagline": "Was that spacecraft anomaly a broken sensor, a solar storm, a failing bearing, or an attack?",
     "weight": { "sde": 0.6, "data": 0.95, "ai": 0.9 },
     "problem": "Spacecraft anomalies have look-alike causes. Stale data from a stuck sensor looks like a replay attack, radiation bit-flips look like injected glitches, and a vanished signal could be jamming. Telling them apart is the hard part, and a wrong call is expensive.",
-    "role": "TODO_VERIFY",
+    "role": "Solo project. Sole contributor on GitHub.",
     "approach": [
       "Treat the spacecraft as a distributed system: ingest a telemetry stream and run a layered detection engine.",
       "Classify each event into one of five outcomes: mechanical failure, environmental upset, sensor malfunction, cyberattack, or nothing.",
@@ -38,7 +38,7 @@
     "tagline": "Deepfake detection that reports a calibrated probability and the evidence, never a bare verdict.",
     "weight": { "sde": 0.6, "data": 0.55, "ai": 1 },
     "problem": "Detectors degrade hard on generators they were not trained on, so a model with a strong benchmark score can be much weaker on real-world media. A tool that returns one word asks users to trust a black box.",
-    "role": "TODO_VERIFY",
+    "role": "Solo project. Sole contributor on GitHub.",
     "approach": [
       "Return a calibrated probability with an explicit uncertainty band and a plain-language label, never a FAKE or REAL stamp.",
       "Ship visual evidence with every number: a Grad-CAM heatmap, a per-frame timeline and a frequency-spectrum plot.",
@@ -74,7 +74,7 @@
     "tagline": "A prompt-injection detection gateway for LLM apps. Think WAF, but the payloads are natural language.",
     "weight": { "sde": 0.65, "data": 0.55, "ai": 1 },
     "problem": "LLM applications are exposed to adversarial prompts that target the model's instruction hierarchy, and most teams have no equivalent of a web application firewall in front of the model.",
-    "role": "TODO_VERIFY",
+    "role": "Solo project. Sole contributor on GitHub.",
     "approach": [
       "Put a real-time gateway in front of the model that scores each request through a layered cascade: rule matching, a nearest-known-attack (kNN) sidecar and score fusion.",
       "Expose three dashboard surfaces: live traffic, a decision inspector showing matched rules and per-layer fusion arithmetic, and a red-team console.",
@@ -88,7 +88,7 @@
       { "label": "Detection rate at fixed FPR", "value": "TODO_VERIFY" }
     ],
     "links": { "repo": "https://github.com/Kaushik2210/PORTCULLIS" },
-    "visual": "TODO_SCREENSHOT",
+    "visual": "/projects/portcullis.jpg",
     "architecture": [
       "Request",
       "L1 rules",
@@ -103,7 +103,7 @@
     "tagline": "An autonomous SOC where every verdict is reproducible and re-adjudicable.",
     "weight": { "sde": 0.85, "data": 0.35, "ai": 0.9 },
     "problem": "Agentic SOC products let a language model read telemetry and write a verdict, so re-running the process after a model upgrade or new data gives a different answer. The audit trail is a transcript, not a proof.",
-    "role": "TODO_VERIFY",
+    "role": "Solo project. Sole contributor on GitHub.",
     "approach": [
       "Split reasoning from deciding: an LLM only proposes typed, evidence-cited claims.",
       "A pure Adjudication Kernel turns the admitted claims into a verdict under a versioned policy, so the same inputs give byte-identical output.",
@@ -120,7 +120,7 @@
       }
     ],
     "links": { "repo": "https://github.com/Kaushik2210/ATTESTA---AI-powered-SOC-" },
-    "visual": "TODO_SCREENSHOT",
+    "visual": "/projects/attesta.jpg",
     "architecture": [
       "Evidence corpus (content-addressed)",
       "LLM claim proposals",
@@ -135,7 +135,7 @@
     "tagline": "An explainable network digital twin for threat detection and attack reconstruction.",
     "weight": { "sde": 0.5, "data": 0.85, "ai": 0.7 },
     "problem": "Alert-centric tools say that something fired, but rarely why, what evidence supports it, or how activity evolved over time.",
-    "role": "TODO_VERIFY",
+    "role": "Solo project. Sole contributor on GitHub.",
     "approach": [
       "Turn network telemetry into per-device behavioural baselines and transparent risk scores that list their contributing factors.",
       "Correlate detections into attack chains mapped to MITRE ATT&CK, keeping rule hits, behavioural anomalies, ML anomalies and incidents distinct.",
@@ -146,7 +146,7 @@
     "outcome": "An MCA research project with a public playground where visitors can tune detectors and see what is flagged and why.",
     "metrics": [{ "label": "Detection results", "value": "TODO_VERIFY" }],
     "links": { "repo": "https://github.com/Kaushik2210/Net-Sentinel" },
-    "visual": "TODO_SCREENSHOT"
+    "visual": "/projects/net-sentinel.jpg"
   },
   {
     "slug": "overrank",
@@ -154,7 +154,7 @@
     "tagline": "A live house-competition platform for campuses with a leaderboard that reacts in real time.",
     "weight": { "sde": 1, "data": 0.3, "ai": 0.1 },
     "problem": "Campus house and team competitions are tracked in spreadsheets, so nobody can watch the standings move or trust how points were awarded.",
-    "role": "TODO_VERIFY",
+    "role": "Solo project. Sole contributor on GitHub.",
     "approach": [
       "Make the leaderboard, team pages, player profiles and events public and read-only so students never need to sign in.",
       "Restrict sign-in to faculty, who award points, run events and manage the roster.",
@@ -191,7 +191,7 @@
     "tagline": "Paste a GitHub link, get an interactive, narrated architecture tour of the repo.",
     "weight": { "sde": 0.95, "data": 0.3, "ai": 0.4 },
     "problem": "Onboarding onto a codebase means reading a hundred files to learn what talks to what. Hand-drawn architecture diagrams go stale.",
-    "role": "TODO_VERIFY",
+    "role": "Creator and main author (85 of 104 commits on GitHub).",
     "approach": [
       "Analyse a repository and generate an animated, click-through map of how it works, entirely in the browser with no server or API keys.",
       "Ship the same engine as a website, a CLI, an agent skill and a GitHub Action.",
@@ -216,7 +216,7 @@
     "tagline": "A DSA visualisation and interview-prep platform with a real step-through debugger for every algorithm.",
     "weight": { "sde": 1, "data": 0.25, "ai": 0 },
     "problem": "Most DSA visualisers either look dated or bury the learning under gimmicks, and every topic ends up with its own one-off animation code.",
-    "role": "TODO_VERIFY",
+    "role": "Solo project. Sole contributor on GitHub.",
     "approach": [
       "Drive every visualisation from one reusable step-sequence engine with play, pause, step, scrub and speed controls.",
       "Use a consistent visual language where colour always means something (active pointer, visited, found).",
@@ -248,7 +248,7 @@
     "tagline": "A GPU-native ASCII art engine that matches glyph shapes instead of using a brightness ramp.",
     "weight": { "sde": 0.85, "data": 0.35, "ai": 0.2 },
     "problem": "Nearly every image-to-ASCII converter indexes a fixed character ramp by tile brightness, so the output reads as scratchy noise rather than a picture.",
-    "role": "TODO_VERIFY",
+    "role": "Solo project. Sole contributor on GitHub.",
     "approach": [
       "Choose each character by structure-correlated glyph matching, not brightness lookup.",
       "Do colour work in linear light and cluster colours perceptually in Oklab.",

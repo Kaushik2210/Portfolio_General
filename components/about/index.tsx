@@ -93,7 +93,21 @@ export function About() {
                 key={`${c.title}-${c.period}`}
                 className="reveal border-ink rounded-[var(--radius)] border-2 px-4 py-3"
               >
-                <p className="font-medium">{c.title}</p>
+                <p className="font-medium">
+                  {c.url ? (
+                    <a
+                      href={c.url}
+                      target="_blank"
+                      rel="noopener"
+                      className="-my-2 inline-block py-2 underline-offset-4 hover:underline"
+                    >
+                      {c.title} <span aria-hidden="true">↗</span>
+                      <span className="sr-only"> (opens the credential)</span>
+                    </a>
+                  ) : (
+                    c.title
+                  )}
+                </p>
                 <p className="font-mono text-xs opacity-70">
                   {[c.org, c.period].filter(Boolean).join(" / ")}
                 </p>

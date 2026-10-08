@@ -13,9 +13,10 @@ entries (two Google Student Ambassador stints, Cybernetics Association, Sanskrit
 both degrees (MCA at Christ University, BCA at St Joseph's University) and nine certifications.
 The profile has no About or honours section, so `about` and `achievements` stay unfilled.
 
-**Still open:** `about` (a few sentences in your voice), `education[].grade`,
-`certifications[].url` (credential links), `achievements[]`, and 2-4 highlights with real
-numbers per role. Original guidance below.
+Credential links for all nine certificates were also copied from LinkedIn.
+
+**Still open:** `about` (a few sentences in your voice), `education[].grade`, `achievements[]`,
+and 2-4 highlights with real numbers per role. Original guidance below.
 
 LinkedIn export: Settings -> Data privacy -> Get a copy of your data.
 
@@ -34,15 +35,15 @@ Empty sections hide their counter and the timeline instead of showing zero.
 
 All nine case studies are written from what each repo's README states.
 
-- **`role`** on every project: solo or team, and what did you own?
+- **`role`**: filled from GitHub contributor data (sole contributor on eight repos; 85 of 104
+  commits on gitVisualise). Edit if you want to say more about what you owned.
 - **Metrics marked `TODO_VERIFY`**: Orbital Sentinel detection accuracy, VeriFrame
   benchmark results, PORTCULLIS detection rate at a fixed false-positive rate,
   NetSentinel detection results, Overrank real-world usage, GLYPHFORGE performance numbers.
-- **`visual`**: done for the five projects with a live demo (Orbital Sentinel, Overrank,
-  gitVisualise, AlgoVerse, GLYPHFORGE), captured from the live demos into
-  `public/projects/<slug>.jpg`. Still generated art: VeriFrame, PORTCULLIS, ATTESTA and
-  NetSentinel (no public demo). Add `public/projects/<slug>.jpg` and set the path, or reuse a
-  screenshot from the repo README.
+- **`visual`**: real images for eight projects: five captured from live demos and three
+  (ATTESTA, NetSentinel, PORTCULLIS) taken from the repos' own screenshots and demo GIF, in
+  `public/projects/<slug>.jpg`. Only VeriFrame is still generated art (its repo has no
+  screenshots and no public demo).
 - **Order and weights** (`weight.sde/data/ai`) are my judgement of which role each
   project best supports. Adjust freely.
 
@@ -60,7 +61,9 @@ All nine case studies are written from what each repo's README states.
 
 ## 4. Things only you can do
 
-- **Resume**: add `public/resume.pdf` (and optionally `data/resume.txt` for the assistant).
+- **Resume**: `public/resume.pdf` was generated from the verified data on this site (LinkedIn
+  details, certificates, projects, evidence-based skills) with no invented content. Replace it with
+  your own resume whenever you like; the hero Resume button picks up whatever is there.
 - **Production env vars** in Vercel: `ANTHROPIC_API_KEY`, `RESEND_API_KEY`,
   `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`, optionally the Upstash pair. Until then the
   chat shows its offline state and the contact form points to email.
