@@ -29,9 +29,11 @@ All nine case studies are written from what each repo's README states.
 - **Metrics marked `TODO_VERIFY`**: Orbital Sentinel detection accuracy, VeriFrame
   benchmark results, PORTCULLIS detection rate at a fixed false-positive rate,
   NetSentinel detection results, Overrank real-world usage, GLYPHFORGE performance numbers.
-- **`visual`**: every project is `TODO_SCREENSHOT`, so covers are generated art.
-  Add images under `public/projects/<slug>.jpg` and set the path. READMEs for
-  Overrank, PORTCULLIS and GLYPHFORGE already have screenshots you can reuse.
+- **`visual`**: done for the five projects with a live demo (Orbital Sentinel, Overrank,
+  gitVisualise, AlgoVerse, GLYPHFORGE), captured from the live demos into
+  `public/projects/<slug>.jpg`. Still generated art: VeriFrame, PORTCULLIS, ATTESTA and
+  NetSentinel (no public demo). Add `public/projects/<slug>.jpg` and set the path, or reuse a
+  screenshot from the repo README.
 - **Order and weights** (`weight.sde/data/ai`) are my judgement of which role each
   project best supports. Adjust freely.
 
@@ -58,6 +60,8 @@ All nine case studies are written from what each repo's README states.
 - **GitHub auto-deploy**: add a GitHub Login Connection to your Vercel account, then
   `vercel git connect`.
 - **Custom domain**: none provided. Currently `portfolio-general-ten.vercel.app`.
-- Your GitHub `blog` field points at an older Vercel portfolio. Update it.
+- Your GitHub `blog` field points at an older Vercel portfolio. Update it
+  (GitHub -> Settings -> Public profile -> Website, or
+  `gh api -X PATCH user -f blog=https://portfolio-general-ten.vercel.app`).
 - Several repos (`Learn_python-`, `100-days-of-java`, `learn-os`, the FSD lab repos)
   are deliberately not featured. They still appear in the live GitHub section.

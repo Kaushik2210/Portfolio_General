@@ -23,7 +23,7 @@
       "repo": "https://github.com/Kaushik2210/ORBITAL-SENTINEL",
       "demo": "https://web-production-ddd02.up.railway.app"
     },
-    "visual": "TODO_SCREENSHOT",
+    "visual": "/projects/orbital-sentinel.jpg",
     "architecture": [
       "Telemetry ingest",
       "Layered detectors",
@@ -177,7 +177,7 @@
       "repo": "https://github.com/Kaushik2210/Overrank",
       "demo": "https://overrank.vercel.app"
     },
-    "visual": "TODO_SCREENSHOT",
+    "visual": "/projects/overrank.jpg",
     "architecture": [
       "Faculty console",
       "Append-only ledger (Postgres + RLS)",
@@ -208,7 +208,7 @@
       "repo": "https://github.com/Kaushik2210/gitVisualise",
       "demo": "https://kaushik2210.github.io/gitVisualise/"
     },
-    "visual": "TODO_SCREENSHOT"
+    "visual": "/projects/gitvisualise.jpg"
   },
   {
     "slug": "algoverse",
@@ -240,7 +240,7 @@
       "repo": "https://github.com/Kaushik2210/AlgoVerse",
       "demo": "https://algoverse-lovat-seven.vercel.app"
     },
-    "visual": "TODO_SCREENSHOT"
+    "visual": "/projects/algoverse.jpg"
   },
   {
     "slug": "glyphforge",
@@ -264,6 +264,6 @@
       "repo": "https://github.com/Kaushik2210/GLYPHFORGE",
       "demo": "https://glyphforge-web.vercel.app"
     },
-    "visual": "TODO_SCREENSHOT"
+    "visual": "/projects/glyphforge.jpg"
   }
 ]
