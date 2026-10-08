@@ -1,33 +1,116 @@
 {
-  "$comment": "Schema: lib/types.ts (LinkedInData). Every value 'TODO_VERIFY' is unverified and must be filled from LinkedIn, the LinkedIn data export, or the resume. Nothing here was scraped from LinkedIn. Skills below are evidenced by the public GitHub repos (languages and topics), not by LinkedIn.",
-  "headline": "TODO_VERIFY",
+  "$comment": "Schema: lib/types.ts (LinkedInData). Headline, experience, education and certifications were copied on 2026-10-08 from the owner's own LinkedIn profile pages. Every value still \"TODO_VERIFY\" is unverified and hidden on the site. Skills below are evidenced by the public GitHub repos (languages and topics), not by LinkedIn.",
+  "headline": "Google Student Ambassador @Christ University | MCA Student at Christ University | Passionate about cybersecurity & AI",
   "about": "TODO_VERIFY",
   "experience": [
     {
-      "company": "TODO_VERIFY",
-      "title": "TODO_VERIFY",
-      "start": "TODO_VERIFY",
-      "end": "TODO_VERIFY",
-      "location": "TODO_VERIFY",
-      "summary": "TODO_VERIFY",
+      "company": "Google",
+      "title": "Google Student Ambassador",
+      "start": "2026-04",
+      "end": "2026-09",
+      "location": "Bengaluru, Karnataka, India (Remote)",
+      "summary": "Internship with Google. Skills listed: leadership and product marketing.",
+      "highlights": []
+    },
+    {
+      "company": "Google",
+      "title": "Google Student Ambassador",
+      "start": "2025-08",
+      "end": "2026-01",
+      "location": "St Joseph's University (Hybrid)",
+      "summary": "Conducted tech sessions and hackathons, promoting Google tools and helping students bring technology into their academics.",
+      "highlights": []
+    },
+    {
+      "company": "St Joseph's University",
+      "title": "Head of Information Technology, Cybernetics Association",
+      "start": "2024-04",
+      "end": "2025-03",
+      "location": "India (On-site)",
+      "summary": "Organised cybersecurity and IT workshops, coordinated teams and encouraged innovation. Also General Secretary of the association.",
+      "highlights": []
+    },
+    {
+      "company": "St Joseph's University",
+      "title": "President, Sanskrit Association",
+      "start": "2024-04",
+      "end": "2025-03",
+      "location": "India (On-site)",
+      "summary": "Promoted Sanskrit language and culture through workshops and events.",
       "highlights": []
     }
   ],
   "education": [
     {
-      "school": "TODO_VERIFY",
-      "degree": "TODO_VERIFY",
-      "field": "TODO_VERIFY",
-      "start": "TODO_VERIFY",
-      "end": "TODO_VERIFY",
+      "school": "Christ University, Bangalore",
+      "degree": "Master of Computer Applications (MCA)",
+      "field": "Information Technology",
+      "start": "2026-05",
+      "end": "2028-05",
+      "grade": "TODO_VERIFY"
+    },
+    {
+      "school": "St Joseph's University",
+      "degree": "BCA",
+      "field": "Computer Science",
+      "start": "2023-06",
+      "end": "2026-05",
       "grade": "TODO_VERIFY"
     }
   ],
   "certifications": [
     {
-      "name": "TODO_VERIFY",
-      "issuer": "TODO_VERIFY",
-      "issued": "TODO_VERIFY",
+      "name": "Pre Security Certificate",
+      "issuer": "TryHackMe",
+      "issued": "2026-06",
+      "url": "TODO_VERIFY"
+    },
+    {
+      "name": "IBM Cybersecurity Analyst Specialization",
+      "issuer": "IBM",
+      "issued": "2025-10",
+      "url": "TODO_VERIFY"
+    },
+    {
+      "name": "Cybersecurity Job Search, Resume, and Interview Prep",
+      "issuer": "IBM",
+      "issued": "2025-10",
+      "url": "TODO_VERIFY"
+    },
+    {
+      "name": "Generative AI: Boost Your Cybersecurity Career",
+      "issuer": "IBM",
+      "issued": "2025-10",
+      "url": "TODO_VERIFY"
+    },
+    {
+      "name": "Cybersecurity Case Studies and Capstone Project",
+      "issuer": "IBM",
+      "issued": "2025-10",
+      "url": "TODO_VERIFY"
+    },
+    {
+      "name": "Incident Response and Digital Forensics",
+      "issuer": "IBM",
+      "issued": "2025-09",
+      "url": "TODO_VERIFY"
+    },
+    {
+      "name": "Penetration Testing, Threat Hunting, and Cryptography",
+      "issuer": "IBM",
+      "issued": "2025-09",
+      "url": "TODO_VERIFY"
+    },
+    {
+      "name": "Cybersecurity Compliance Framework, Standards & Regulations",
+      "issuer": "IBM",
+      "issued": "2025-09",
+      "url": "TODO_VERIFY"
+    },
+    {
+      "name": "AWS Academy Graduate - AWS Academy Cloud Foundations",
+      "issuer": "Amazon Web Services (AWS)",
+      "issued": "2025-08",
       "url": "TODO_VERIFY"
     }
   ],

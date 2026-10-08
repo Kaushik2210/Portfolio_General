@@ -5,7 +5,8 @@ let pass = 0,
   fail = 0;
 const ok = (n, v, x = "") => {
   console.log((v ? "PASS " : "FAIL ") + n + (x ? "  " + x : ""));
-  v ? pass++ : fail++;
+  if (v) pass++;
+  else fail++;
 };
 const post = (body, headers = {}) =>
   fetch(base + "/api/chat", {

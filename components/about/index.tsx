@@ -10,7 +10,10 @@ import { Timeline } from "./timeline";
 const fmtInt = (n: number) => n.toLocaleString("en-US");
 
 export function About() {
-  const timeline = buildTimeline(linkedin);
+  const all = buildTimeline(linkedin);
+  // Roles and degrees form the timeline; certificates get their own compact list.
+  const timeline = all.filter((i) => i.kind !== "certification");
+  const certList = all.filter((i) => i.kind === "certification");
   const certs = linkedin.certifications.filter((c) => isReal(c.name)).length;
   const wins = linkedin.achievements.filter((a) => isReal(a.title)).length;
   const calendar = github.contributions;
@@ -77,13 +80,34 @@ export function About() {
           </h3>
           <Timeline items={timeline} />
         </div>
-      ) : (
-        process.env.NODE_ENV !== "production" && (
-          <p className="border-line text-fg-muted mt-16 rounded-[var(--radius)] border border-dashed p-6 font-mono text-xs">
-            dev only: the timeline is hidden because data/linkedin.json has no verified
-            experience, education or certifications yet. See docs/TODO-content.md.
-          </p>
-        )
+      ) : null}
+
+      {certList.length > 0 && (
+        <div className="mt-[clamp(56px,9vw,120px)]">
+          <h3 className="reveal text-fg-muted mb-8 font-mono text-xs tracking-widest uppercase">
+            Certifications
+          </h3>
+          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {certList.map((c) => (
+              <li
+                key={`${c.title}-${c.period}`}
+                className="reveal border-ink rounded-[var(--radius)] border-2 px-4 py-3"
+              >
+                <p className="font-medium">{c.title}</p>
+                <p className="font-mono text-xs opacity-70">
+                  {[c.org, c.period].filter(Boolean).join(" / ")}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {timeline.length === 0 && process.env.NODE_ENV !== "production" && (
+        <p className="border-line text-fg-muted mt-16 rounded-[var(--radius)] border border-dashed p-6 font-mono text-xs">
+          dev only: the timeline is hidden because data/linkedin.json has no verified
+          experience, education or certifications yet. See docs/TODO-content.md.
+        </p>
       )}
     </Section>
   );

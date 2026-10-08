@@ -6,7 +6,16 @@ string `"TODO_VERIFY"` and is **hidden from the live site**, not shown. Run
 `npm run check:content` for the live list, and `npm run check:content -- --strict`
 to fail while any remain.
 
-## 1. `data/linkedin.json` (fill from LinkedIn, your resume, or the LinkedIn data export)
+## 1. `data/linkedin.json`
+
+**Done (copied from the owner's own LinkedIn pages on 2026-10-08):** headline, four experience
+entries (two Google Student Ambassador stints, Cybernetics Association, Sanskrit Association),
+both degrees (MCA at Christ University, BCA at St Joseph's University) and nine certifications.
+The profile has no About or honours section, so `about` and `achievements` stay unfilled.
+
+**Still open:** `about` (a few sentences in your voice), `education[].grade`,
+`certifications[].url` (credential links), `achievements[]`, and 2-4 highlights with real
+numbers per role. Original guidance below.
 
 LinkedIn export: Settings -> Data privacy -> Get a copy of your data.
 
@@ -39,8 +48,8 @@ All nine case studies are written from what each repo's README states.
 
 ## 3. Facts I inferred
 
-- **Full name** "Sodagum Venkata Kaushik" comes from your LinkedIn URL slug; GitHub
-  shows "S V Kaushik". Confirm spelling and which to show.
+- **Full name** "Sodagum Venkata Kaushik" is confirmed by the LinkedIn profile; GitHub shows
+  "S V Kaushik", which the site uses as the short display name.
 - **Location** "Bengaluru, India": GitHub says "Bangalore".
 - **Skills** are evidenced by repo languages and topics only. The **Data** group is
   thin (Python, time-series anomaly detection, telemetry analysis, data
