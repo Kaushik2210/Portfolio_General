@@ -1,7 +1,7 @@
 {
   "$comment": "Schema: lib/types.ts (LinkedInData). Headline, experience, education and certifications were copied on 2026-10-08 from the owner's own LinkedIn profile pages. Every value still \"TODO_VERIFY\" is unverified and hidden on the site. Skills below are evidenced by the public GitHub repos (languages and topics), not by LinkedIn.",
   "headline": "Google Student Ambassador @Christ University | MCA Student at Christ University | Passionate about cybersecurity & AI",
-  "about": "TODO_VERIFY",
+  "about": "I'm an MCA student at Christ University in Bengaluru, with a BCA in Computer Science from St Joseph's University, and a Google Student Ambassador. I build full-stack products in TypeScript and Python, and detection systems that show their evidence instead of a bare verdict, most of it in the open on GitHub. At St Joseph's I ran the Cybernetics Association's IT side and its cybersecurity workshops, and served as President of the Sanskrit Association.",
   "experience": [
     {
       "company": "Google",

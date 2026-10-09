@@ -11,11 +11,13 @@ to fail while any remain.
 **Done (copied from the owner's own LinkedIn pages on 2026-10-08):** headline, four experience
 entries (two Google Student Ambassador stints, Cybernetics Association, Sanskrit Association),
 both degrees (MCA at Christ University, BCA at St Joseph's University) and nine certifications.
-The profile has no About or honours section, so `about` and `achievements` stay unfilled.
+The profile has no About section, so the About text on the site was written from the verified
+facts above and approved by the owner (2026-10-09); edit `about` in `data/linkedin.json` to change it.
+There is no honours section, so `achievements` stays unfilled.
 
 Credential links for all nine certificates were also copied from LinkedIn.
 
-**Still open:** `about` (a few sentences in your voice), `education[].grade`, `achievements[]`,
+**Still open:** `education[].grade`, `achievements[]`,
 and 2-4 highlights with real numbers per role. Original guidance below.
 
 LinkedIn export: Settings -> Data privacy -> Get a copy of your data.
