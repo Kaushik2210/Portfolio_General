@@ -10,6 +10,7 @@ import { GitHubSection } from "@/components/github";
 import { Hero } from "@/components/hero";
 import { linkedin, SITE } from "@/lib/data";
 import { siteUrl } from "@/lib/site";
+import { isReal } from "@/lib/verified";
 import { Skills } from "@/components/skills";
 import { Work } from "@/components/work";
 
@@ -32,6 +33,20 @@ const personJsonLd = {
   },
   sameAs: [SITE.github, SITE.linkedin],
   knowsAbout: linkedin.skills.map((s) => s.name),
+  ...(isReal(linkedin.headline) ? { description: linkedin.headline } : {}),
+  alumniOf: linkedin.education
+    .filter((e) => isReal(e.school))
+    .map((e) => ({ "@type": "CollegeOrUniversity", name: e.school })),
+  hasCredential: linkedin.certifications
+    .filter((c) => isReal(c.name))
+    .map((c) => ({
+      "@type": "EducationalOccupationalCredential",
+      name: c.name,
+      ...(isReal(c.url) ? { url: c.url } : {}),
+      ...(isReal(c.issuer)
+        ? { recognizedBy: { "@type": "Organization", name: c.issuer } }
+        : {}),
+    })),
 };
 
 export default function Home() {
