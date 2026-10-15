@@ -90,7 +90,7 @@ export function BackToTop() {
     <button
       type="button"
       onClick={() => scrollTo(0)}
-      className="border-line hover:border-accent rounded-full border px-5 py-2.5 text-sm transition-colors"
+      className="border-line hover:border-accent inline-flex min-h-11 items-center rounded-full border px-5 text-sm transition-colors"
     >
       Back to top <span aria-hidden="true">↑</span>
     </button>
@@ -102,7 +102,7 @@ export function TerminalLink() {
     <button
       type="button"
       onClick={() => window.dispatchEvent(new CustomEvent("terminal:open"))}
-      className="text-fg-muted hover:text-accent -my-3 py-3 font-mono text-xs underline-offset-4 hover:underline"
+      className="text-fg-muted hover:text-accent -my-3.5 py-3.5 font-mono text-xs underline-offset-4 hover:underline"
     >
       Open terminal mode (press ~)
     </button>

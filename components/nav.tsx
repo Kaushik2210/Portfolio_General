@@ -35,7 +35,7 @@ function ThemeToggle() {
       type="button"
       onClick={() => setTheme(next)}
       aria-label={`Switch to ${next} theme`}
-      className="border-line text-fg-muted hover:border-accent hover:text-fg grid size-9 place-items-center rounded-full border transition-colors"
+      className="border-line text-fg-muted hover:border-accent hover:text-fg grid size-11 place-items-center rounded-full border transition-colors md:size-9 pointer-coarse:size-11"
     >
       <svg
         viewBox="0 0 24 24"
@@ -182,7 +182,7 @@ export function Nav() {
             aria-expanded={open}
             aria-controls="mobile-menu"
             onClick={() => setOpen((o) => !o)}
-            className="border-line rounded-full border px-4 py-2 text-sm md:hidden"
+            className="border-line inline-flex min-h-11 items-center rounded-full border px-4 text-sm md:hidden"
           >
             {open ? "Close" : "Menu"}
           </button>

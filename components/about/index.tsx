@@ -99,7 +99,7 @@ export function About() {
                       href={c.url}
                       target="_blank"
                       rel="noopener"
-                      className="-my-2 inline-block py-2 underline-offset-4 hover:underline"
+                      className="-my-3 inline-block py-3 underline-offset-4 hover:underline"
                     >
                       {c.title} <span aria-hidden="true">↗</span>
                       <span className="sr-only"> (opens the credential)</span>

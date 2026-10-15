@@ -67,7 +67,7 @@ export function RoleSwitcher({
             aria-checked={role === r}
             tabIndex={role === r ? 0 : -1}
             onClick={() => setRole(r)}
-            className={`relative z-10 rounded-full px-4 py-1.5 text-sm font-medium transition-colors duration-[var(--dur-base)] ${
+            className={`relative z-10 inline-flex min-h-11 items-center justify-center rounded-full px-4 text-sm font-medium transition-colors duration-[var(--dur-base)] md:min-h-0 md:py-1.5 pointer-coarse:min-h-11 ${
               shown === r && chosen ? "text-accent-ink" : "text-fg-muted hover:text-fg"
             }`}
           >

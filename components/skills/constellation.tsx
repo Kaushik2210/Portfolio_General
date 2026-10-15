@@ -250,7 +250,7 @@ export function Constellation({ skills, edges, titles }: Props) {
                         onFocus={() => setHover(s.name)}
                         onBlur={() => setHover(null)}
                         onClick={() => setLocked((l) => (l === s.name ? null : s.name))}
-                        className={`rounded-full border px-3.5 py-1.5 text-sm transition-colors ${
+                        className={`inline-flex min-h-11 items-center rounded-full border px-3.5 text-sm transition-colors md:min-h-0 md:py-1.5 pointer-coarse:min-h-11 ${
                           active === s.name || locked === s.name
                             ? "border-accent bg-accent text-accent-ink"
                             : "border-line text-fg-muted hover:border-accent hover:text-fg"
