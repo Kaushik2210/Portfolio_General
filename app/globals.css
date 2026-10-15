@@ -357,3 +357,9 @@ html[data-intro-seen] .hero-fade {
     opacity: 0;
   }
 }
+
+/* Light theme: the hero name is plain ink, not a difference blend over a dark field. */
+:root[data-theme="light"] .hero-name {
+  color: var(--fg);
+  mix-blend-mode: normal;
+}

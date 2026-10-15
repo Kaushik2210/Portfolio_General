@@ -8,6 +8,14 @@ import { sceneState } from "./scene-state";
 
 const pointer = { x: 0, y: 0 };
 
+/** The scene's "ink" colour: cream on the dark theme, near-black on the light one. */
+function setInk(mat: THREE.Material & { color: THREE.Color }) {
+  const light = document.documentElement.dataset.theme === "light";
+  if (mat.userData.light === light) return;
+  mat.userData.light = light;
+  mat.color.set(light ? "#15171c" : "#f4f0e6");
+}
+
 /** Star dust: a thin shell of points around the crystal. */
 function dust(count: number) {
   // Seeded so the shell is identical on every load and render stays pure.
@@ -78,7 +86,10 @@ function Crystal() {
 
     if (ringA.current) ringA.current.rotation.z += delta * 0.35;
     if (ringB.current) ringB.current.rotation.x += delta * 0.28;
-    if (stars.current) stars.current.rotation.y -= delta * 0.03;
+    if (stars.current) {
+      stars.current.rotation.y -= delta * 0.03;
+      setInk(stars.current.material as THREE.PointsMaterial);
+    }
   });
 
   return (
@@ -290,6 +301,7 @@ function Burst() {
     }
     const m = shards.current;
     if (!m) return;
+    setInk(m.material as THREE.MeshBasicMaterial);
     m.visible = live;
     if (!live) return;
     vel.forEach((v, i) => {
@@ -331,6 +343,7 @@ function Cage() {
     m.scale.setScalar(
       1 + Math.sin(state.clock.elapsedTime * 1.1) * 0.04 + sceneState.scroll * 1.2,
     );
+    setInk(m.material as THREE.MeshBasicMaterial);
     (m.material as THREE.MeshBasicMaterial).opacity = 0.22 * (1 - sceneState.scroll);
   });
   return (

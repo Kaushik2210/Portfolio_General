@@ -257,7 +257,7 @@ export function HeroClient({
                 type="button"
                 data-ripple
                 onClick={() => window.dispatchEvent(new CustomEvent("chat:open"))}
-                className={`${btn} hover:text-ink border-2 border-[#f4f0e6] text-[#f4f0e6] hover:bg-[#f4f0e6]`}
+                className={`${btn} border-fg text-fg hover:bg-fg hover:text-bg border-2`}
               >
                 Talk to my AI
               </button>
