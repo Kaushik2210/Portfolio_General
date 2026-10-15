@@ -9,6 +9,8 @@ export function createPersistedStore<T extends string>(
   key: string,
   fallback: T,
   valid: readonly T[],
+  /** Client-only default used while nothing is stored (e.g. the system appearance). */
+  resolveDefault?: () => T,
 ) {
   const listeners = new Set<() => void>();
   let cached: T | null = null;
@@ -17,6 +19,11 @@ export function createPersistedStore<T extends string>(
   const get = (): T => {
     if (cached !== null) return cached;
     let value: T = fallback;
+    try {
+      if (resolveDefault) value = resolveDefault();
+    } catch {
+      // keep the fallback
+    }
     try {
       const raw = localStorage.getItem(key);
       if (raw && (valid as readonly string[]).includes(raw)) {

@@ -55,7 +55,7 @@ export const metadata: Metadata = {
 };
 
 /** Runs before paint: applies the stored theme/role, skips a repeat intro, and skips it on phones. */
-const bootScript = `try{var d=document.documentElement,l=localStorage;var t=l.getItem('theme');if(t==='light'||t==='dark')d.dataset.theme=t;var r=l.getItem('role');if(r==='sde'||r==='data'||r==='ai')d.dataset.role=r;if(sessionStorage.getItem('intro-seen'))d.dataset.introSeen='1';if(innerWidth<768||matchMedia('(pointer:coarse)').matches)d.dataset.noIntro='1'}catch(e){}`;
+const bootScript = `try{var d=document.documentElement,l=localStorage;var t=l.getItem('theme');if(t==='light'||t==='dark')d.dataset.theme=t;else if(matchMedia('(prefers-color-scheme: light)').matches)d.dataset.theme='light';var r=l.getItem('role');if(r==='sde'||r==='data'||r==='ai')d.dataset.role=r;if(sessionStorage.getItem('intro-seen'))d.dataset.introSeen='1';if(innerWidth<768||matchMedia('(pointer:coarse)').matches)d.dataset.noIntro='1'}catch(e){}`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   const resume = hasResume();
@@ -80,7 +80,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         <a
           href="#main"
-          className="bg-accent text-accent-ink fixed top-3 left-3 z-[200] -translate-y-20 rounded-full px-4 py-2 text-sm font-medium focus:translate-y-0"
+          className="bg-accent text-accent-ink fixed top-3 left-3 z-[200] inline-flex min-h-11 -translate-y-20 items-center rounded-full px-5 text-sm font-medium focus:translate-y-0"
         >
           Skip to content
         </a>

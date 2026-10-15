@@ -4,7 +4,16 @@ import type { Role } from "./types";
 export const THEMES = ["dark", "light"] as const;
 export type Theme = (typeof THEMES)[number];
 
-export const themeStore = createPersistedStore<Theme>("theme", "dark", THEMES);
+/** Until the visitor chooses, follow the device's light or dark appearance. */
+const systemTheme = (): Theme =>
+  window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+
+export const themeStore = createPersistedStore<Theme>(
+  "theme",
+  "dark",
+  THEMES,
+  systemTheme,
+);
 
 export const ROLE_IDS = ["sde", "data", "ai"] as const satisfies readonly Role[];
 export const roleStore = createPersistedStore<Role>("role", "sde", ROLE_IDS);
