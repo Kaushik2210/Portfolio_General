@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { sendMessage, type ContactState } from "./actions";
 
 const initial: ContactState = { status: "idle" };
@@ -11,6 +11,16 @@ const input =
 export function ContactForm() {
   const [state, action, pending] = useActionState(sendMessage, initial);
   const err = state.fieldErrors ?? {};
+
+  // A failed submit puts focus on the first field that needs attention, so keyboard and
+  // screen-reader users land on the problem instead of hunting for it.
+  useEffect(() => {
+    if (state.status !== "error" || !state.fieldErrors) return;
+    const first = (["name", "email", "message"] as const).find(
+      (k) => state.fieldErrors?.[k],
+    );
+    if (first) document.getElementById(`c-${first}`)?.focus();
+  }, [state]);
 
   if (state.status === "ok") {
     return (
