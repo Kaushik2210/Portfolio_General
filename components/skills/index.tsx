@@ -27,8 +27,10 @@ export function Skills() {
       }
     >
       <p className="text-fg-muted mb-12 max-w-xl">
-        Pick a role and its group comes forward. Hover or focus a skill to see which case
-        studies it appears in.
+        Pick a role and its group comes forward.{" "}
+        <span className="pointer-coarse:hidden">Hover or focus</span>
+        <span className="hidden pointer-coarse:inline">Tap</span> a skill to see which
+        case studies it appears in.
       </p>
       <div className="reveal mb-12">
         <RoleSwitcher />

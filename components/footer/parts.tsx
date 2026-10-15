@@ -104,7 +104,7 @@ export function TerminalLink() {
       onClick={() => window.dispatchEvent(new CustomEvent("terminal:open"))}
       className="text-fg-muted hover:text-accent -my-3.5 py-3.5 font-mono text-xs underline-offset-4 hover:underline"
     >
-      Open terminal mode (press ~)
+      Open terminal mode <span className="pointer-coarse:hidden">(press ~)</span>
     </button>
   );
 }

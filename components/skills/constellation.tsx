@@ -302,8 +302,13 @@ export function Constellation({ skills, edges, titles }: Props) {
             )
           ) : (
             <p className="text-fg-muted">
-              Hover or focus a skill to see where it shows up. Click to hold the
-              selection.
+              <span className="pointer-coarse:hidden">
+                Hover or focus a skill to see where it shows up. Click to hold the
+                selection.
+              </span>
+              <span className="hidden pointer-coarse:inline">
+                Tap a skill to see where it shows up. Tap it again to let go.
+              </span>
             </p>
           )}
         </div>
